@@ -1,10 +1,10 @@
 package bg.deplan.Grohe.service;
 
+import bg.deplan.Grohe.model.AddArticleDTO;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OrderService {
+public interface OrderService {
 
-    //TODO:
-
+    long createOrder(AddArticleDTO addArticleDTO);
 }

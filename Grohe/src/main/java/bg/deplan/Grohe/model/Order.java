@@ -21,6 +21,7 @@ public class Order extends BaseEntity{
     private String orderReason;
     @Column( name = "comments")
     private String comment;
+
     @OneToMany
     private List<Article> articles;
 
@@ -29,9 +30,7 @@ public class Order extends BaseEntity{
     private OrderStatus orderStatus;
 
 
-    public Order(List<Article> articles) {
-        this.articles = new ArrayList<>(articles);
-    }
+    public Order() {}
 
     public Instant getDataOfRequest() {
         return dataOfRequest;
@@ -65,19 +64,19 @@ public class Order extends BaseEntity{
         this.comment = comment;
     }
 
-    public List<Article> getArticles() {
-        return articles;
-    }
-
-    public void setArticles(List<Article> articles) {
-        this.articles = articles;
-    }
-
     public OrderStatus getOrderStatus() {
         return orderStatus;
     }
 
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public List<Article> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
     }
 }

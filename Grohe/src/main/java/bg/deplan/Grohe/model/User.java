@@ -1,9 +1,6 @@
 package bg.deplan.Grohe.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -19,7 +16,7 @@ public class User extends BaseEntity {
 
     private String lastName;
 
-    @ManyToMany
-    private List<Order> orders;
+    @ManyToOne
+    private Order orders;
 
 }

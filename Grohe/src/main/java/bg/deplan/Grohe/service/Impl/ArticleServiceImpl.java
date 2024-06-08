@@ -30,15 +30,7 @@ public class ArticleServiceImpl implements ArticleService {
         return 0;
     }
 
-    @Override
-    public long addArticle(AddArticleDTO addArticleDTO) {
 
-        Article mappedArticle = modelMapper.map(addArticleDTO, Article.class);
-
-        articleRepository.save(mappedArticle);
-
-        return 1;
-    }
 
 
 
