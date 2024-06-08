@@ -3,6 +3,8 @@ package bg.deplan.Grohe.model;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Entity
@@ -22,11 +24,60 @@ public class Order extends BaseEntity{
     @OneToMany
     private List<Article> articles;
 
-    @ManyToOne
-    private User user;
-
     @Column(name = "order_status")
     @Enumerated(value = EnumType.STRING)
     private OrderStatus orderStatus;
 
+
+    public Order(List<Article> articles) {
+        this.articles = new ArrayList<>(articles);
+    }
+
+    public Instant getDataOfRequest() {
+        return dataOfRequest;
+    }
+
+    public void setDataOfRequest(Instant dataOfRequest) {
+        this.dataOfRequest = dataOfRequest;
+    }
+
+    public Instant getDateOfOrder() {
+        return dateOfOrder;
+    }
+
+    public void setDateOfOrder(Instant dateOfOrder) {
+        this.dateOfOrder = dateOfOrder;
+    }
+
+    public String getOrderReason() {
+        return orderReason;
+    }
+
+    public void setOrderReason(String orderReason) {
+        this.orderReason = orderReason;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public List<Article> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 }

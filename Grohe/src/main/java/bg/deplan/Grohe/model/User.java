@@ -1,6 +1,7 @@
 package bg.deplan.Grohe.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -18,7 +19,7 @@ public class User extends BaseEntity {
 
     private String lastName;
 
-    @OneToMany
+    @ManyToMany
     private List<Order> orders;
 
 }
