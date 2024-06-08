@@ -1,12 +1,12 @@
-package bg.deplan.Grohe.model;
+package bg.deplan.Grohe.service.Impl;
 
-public class ArticleDTO {
+public class AddArticleDTO {
 
     private String artNum;
 
     private int quantityForOrder;
 
-    public ArticleDTO() {}
+    public AddArticleDTO() {}
 
     public String getArtNum() {
         return artNum;

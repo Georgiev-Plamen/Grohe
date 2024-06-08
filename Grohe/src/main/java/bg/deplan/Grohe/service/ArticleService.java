@@ -1,15 +1,12 @@
 package bg.deplan.Grohe.service;
 
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.annotation.SessionScope;
+import bg.deplan.Grohe.model.AddArticleDTO;
 
-@Component
-@SessionScope
-public class ArticleService {
-
+public interface ArticleService {
 
     // TODO:
+    long addArticle(AddArticleDTO addArticleDTO);
 
-
+    long addArticle (bg.deplan.Grohe.service.Impl.AddArticleDTO addArticleDTO);
 }
