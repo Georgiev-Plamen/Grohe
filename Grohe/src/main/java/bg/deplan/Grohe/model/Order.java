@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
 
 @Entity
 @Table(name ="orders")
@@ -23,14 +23,34 @@ public class Order extends BaseEntity{
     private String comment;
 
     @OneToMany
-    private List<Article> articles;
+    private List<Article> article;
+
+    @OneToMany
+    private List<User> users;
+
+    @Column(name = "order_name")
+    private String orderName;
+
+    public int getArticleQuantity() {
+        return articleQuantity;
+    }
+
+    public void setArticleQuantity(int articleQuantity) {
+        this.articleQuantity = articleQuantity;
+    }
+
+    @Column( name = "article_quantity")
+    private int articleQuantity;
 
     @Column(name = "order_status")
     @Enumerated(value = EnumType.STRING)
     private OrderStatus orderStatus;
 
 
-    public Order() {}
+    public Order(List<User> users, List<Article> article) {
+        this.users = new ArrayList<>();
+        this.article = new ArrayList<>();
+    }
 
     public Instant getDataOfRequest() {
         return dataOfRequest;
@@ -72,11 +92,27 @@ public class Order extends BaseEntity{
         this.orderStatus = orderStatus;
     }
 
-    public List<Article> getArticles() {
-        return articles;
+    public List<Article> getArticle() {
+        return article;
     }
 
-    public void setArticles(List<Article> articles) {
-        this.articles = articles;
+    public void setArticle(List<Article> article) {
+        this.article = article;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public String getOrderName() {
+        return orderName;
+    }
+
+    public void setOrderName(String orderName) {
+        this.orderName = orderName;
     }
 }

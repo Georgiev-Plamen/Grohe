@@ -1,8 +1,6 @@
 package bg.deplan.Grohe.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table (name = "articles")
@@ -21,9 +19,6 @@ public class Article extends BaseEntity{
 
     @Column(name = "quantity_in_pallet")
     private int quantityInPallet;
-
-    @Column(name = "quantityForOrder")
-    private int quantityForOrder;
 
 
     public Article() {
@@ -69,11 +64,5 @@ public class Article extends BaseEntity{
         this.quantityInPallet = quantityInPallet;
     }
 
-    public int getQuantityForOrder() {
-        return quantityForOrder;
-    }
 
-    public void setQuantityForOrder(int quantityForOrder) {
-        this.quantityForOrder = quantityForOrder;
-    }
 }
