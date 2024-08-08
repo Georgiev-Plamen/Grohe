@@ -24,7 +24,7 @@ public class OrderServiceImpl implements OrderService {
     private final ModelMapper modelMapper;
     private final OrderRepository orderRepository;
     private final ArticleRepository articleRepository;
-//    private final LocalDate todayDate;
+
 
 
     public OrderServiceImpl(ModelMapper modelMapper, OrderRepository orderRepository, ArticleRepository articleRepository) {
@@ -36,26 +36,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public long createOrder(AddArticleDTO addArticleDTO) {
-
-        Article mappedArticle = modelMapper.map(addArticleDTO, Article.class);
-
-
-        Article article = articleRepository.findByArtNum(mappedArticle.getArtNum());
-
-        List<Article> articles = new ArrayList<>();
-        articles.add(article);
-
-        User user = new User();
-        user.setUserName("Test");
-
-        List<User> users = new ArrayList<>();
-        users.add(user);
-
-
-        Order order = new Order(users, articles);
-
-        orderRepository.save(order);
-
-        return 0;
+                return 0;
     }
 }

@@ -1,24 +1,106 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>Form Example</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+<!--    <link rel="stylesheet" href="../static/css/styles.css">-->
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
 </head>
 <body>
-<h1>Grohe order test</h1>
-<form th:action="@{/submitForm}" method="post">
-    <div>
-        <label for="artNum">Article number:</label>
-        <input type="text" id="artNum" name="artNum" th:value="${artNum}">
-    </div>
-    <div>
-        <label for="quantityForOrder">Quantity for order: </label>
-        <input type="text" id="quantityForOrder" name="quantityForOrder" th:value="${quantityForOrder}">
-    </div>
+<div>
+    <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"/>
+</div>
+<div class="home-container">
+    <h1 th:text="#{index_welcome}">Welcome to Elevator Registry!</h1>
+    <!--    <div sec:authorize="isAuthenticated()">Welcome : <span th:text="${userData}"></span></div>-->
+    <div>Welcome : <span th:text="${userData}"></span></div>
 
-    <div>
-        <button type="submit">Submit</button>
+    <div class="section-container">
+        <div class="max-width-container">
+
+            <div class="home-container08">
+                <!--                <div class="blog-post-card-blog-post-card blog-post-card-root-class-name">-->
+                <!--Users:-->
+                <div sec:authorize="!isAuthenticated()" class="blog-post-card-blog-post-card">
+                    <div class="blog-post-header">
+                            <span class="blog-post-card-text">
+                            <span><h3>Потребителски панел:</h3></span>
+                            </span>
+                    </div>
+                    <div class="blog-post-card-container">
+                        <a href="/users/register">Регистрация</a>
+                        <a href="/users/login">Вход</a>
+                    </div>
+                </div>
+
+                <div sec:authorize="hasRole('ADMIN')" class="blog-post-card-blog-post-card">
+                    <div class="blog-post-header">
+                        <span class="blog-post-card-text">
+                            <h3 th:text="#{index_user_control}">Users control:</h3>
+                        </span>
+                    </div>
+                    <div class="blog-post-card-container">
+                        <a href="/users/all">Users management</a>
+
+                    </div>
+                </div>
+                <!--Customers-->
+                <div sec:authorize="isAuthenticated()" class="blog-post-card-blog-post-card">
+                    <div class="blog-post-header">
+                        <span class="blog-post-card-text">
+                            <span><h3 th:text="#{index_customer}">Customers:</h3></span>
+                        </span>
+                    </div>
+                    <div class="blog-post-card-container">
+                        <a href="/customer/addCustomer" th:text="#{index_add_new_customer}">Add new customer</a>
+                        <a href="/customer/allCustomers" th:text="#{index_all_customer}">All customers</a>
+                    </div>
+                </div>
+                <!--Inspections-->
+                <div sec:authorize="isAuthenticated()" class="blog-post-card-blog-post-card">
+                    <div class="blog-post-header">
+                        <span class="blog-post-card-text">
+                            <span><h3 th:text="#{index_inspections}">Inspections:</h3></span>
+                        </span>
+                    </div>
+                    <div class="blog-post-card-container">
+                        <a href="/inspection/add-single-inspection" th:text="#{index_add_new_inspections}">Add new inspection</a>
+                        <a href="/inspection/allInspections" th:text="#{index_all_inspections}">All inspection</a>
+                    </div>
+                </div>
+                <!--GAS-->
+                <div sec:authorize="isAuthenticated()" class="blog-post-card-blog-post-card">
+                    <div class="blog-post-header">
+                        <span class="blog-post-card-text">
+                            <span><h3 th:text="#{index_gas_installation}">Gas installation:</h3></span>
+                        </span>
+                    </div>
+                    <div class="blog-post-card-container">
+                        <a href="/gas/addGasInstallation" th:text="#{index_add_gas_installation}">Add new gas installation</a>
+                        <a href="/gas/allGasInstallations" th:text="#{index_all_gas_installation}">All gas installation</a>
+                        <br>
+                    </div>
+                </div>
+                <!--Elevators-->
+                <div sec:authorize="isAuthenticated()" class="blog-post-card-blog-post-card">
+                    <div class="blog-post-header">
+                        <span class="blog-post-card-text">
+                            <span><h3 th:text="#{index_elevators}">Elevators:</h3></span>
+                        </span>
+                    </div>
+                    <div class="blog-post-card-container">
+                        <a href="/elevator/addElevator" th:text="#{index_add_new_elevator}">Add new elevator</a>
+                        <a href="/elevator/allElevators" th:text="#{index_all_elevator}">Elevator registry</a>
+                        <br>
+                        <a href="/inspection/selectCustomer" th:text="#{index_add_inspection_by_customer}">Add inspection by customer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</form>
+</div>
 </body>
 </html>
