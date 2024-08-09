@@ -15,7 +15,7 @@ public class UserController {
 
     @ModelAttribute("registerData")
     public UserRegisterDTO userRegisterDTO(){
-        return new UserRegisterDTO(null, null, null, null);
+        return new UserRegisterDTO(null, null, null,null, null);
     }
 
 

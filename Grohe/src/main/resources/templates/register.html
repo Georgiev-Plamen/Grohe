@@ -36,6 +36,10 @@
                     <input th:field="*{lastName}"
                            type="text" required>
 
+                    <label class="login-text" th:for="email">Email:</label>
+                    <input th:field="*{email}"
+                           type="email" required>
+
                     <label class="login-text" th:for="password">Парола:</label>
                     <input th:field="*{password}"
                        type="password" required>
