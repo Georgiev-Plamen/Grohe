@@ -14,9 +14,9 @@
     <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"/>
 </div>
 <div class="home-container">
-    <h1 th:text="#{index_welcome}">Welcome to Elevator Registry!</h1>
+    <h1>Страница за заявки</h1>
     <!--    <div sec:authorize="isAuthenticated()">Welcome : <span th:text="${userData}"></span></div>-->
-    <div>Welcome : <span th:text="${userData}"></span></div>
+    <div>Здравей: <span th:text="${userData}"></span></div>
 
     <div class="section-container">
         <div class="max-width-container">

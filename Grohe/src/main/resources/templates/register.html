@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <!--    <link rel="stylesheet" href="../static/css/styles.css">-->
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
+</head>
+<body>
+<div>
+    <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"/>
+</div>
+<div class="home-container">
+    <!--Users:-->
+    <div sec:authorize="!isAuthenticated()" class="blog-post-card-blog-post-card">
+        <div class="blog-post-header">
+            <h1>Регистрация</h1>
+            <form th:action="@{/users/register}"
+                  th:method="post"
+                  th:object="${registerData}">
+
+                <div class="login-form">
+                    <label class="login-text" th:for="username">Потребителско име:</label>
+                    <input type="text" th:field="*{username}"
+                       id="username" name="username" required>
+                    <!--        <div th:text="${loginData.}">-->
+
+                    <label class="login-text" th:for="firstName">Име:</label>
+                    <input th:field="*{firstName}"
+                           type="text" required>
+
+                    <label class="login-text" th:for="lastName">Фамилия:</label>
+                    <input th:field="*{lastName}"
+                           type="text" required>
+
+                    <label class="login-text" th:for="password">Парола:</label>
+                    <input th:field="*{password}"
+                       type="password" required>
+
+                    <label class="login-text" th:for="password">Потвърди паролата:</label>
+                    <input th:field="*{password}"
+                           type="password" required>
+
+                </div>
+
+
+                <div class="login-submit-buttons">
+                    <button type="submit">Вход</button>
+                    <a class="back-to-home" href="/">Върни се до началната страница</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
