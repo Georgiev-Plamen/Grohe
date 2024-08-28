@@ -28,10 +28,10 @@
                 Elevators</a>
             <a sec:authorize="isAuthenticated()" href="/customer/allCustomers" th:text="#{nav_bar_allCustomers}">All
                 Customers</a>
-            <a sec:authorize="isAuthenticated()" href="/gas/allGasInstallations"
-               th:text="#{nav_bar_allGasInstallations}">All Gas Installations</a>
-            <a sec:authorize="isAuthenticated()" href="/inspection/allInspections" th:text="#{nav_bar_allInspections}">All
-                Inspections</a>
+<!--            <a sec:authorize="isAuthenticated()" href="/gas/allGasInstallations"-->
+<!--               th:text="#{nav_bar_allGasInstallations}">All Gas Installations</a>-->
+<!--&lt;!&ndash;            <a sec:authorize="isAuthenticated()" href="/inspection/allInspections" th:text="#{nav_bar_allInspections}">All&ndash;&gt;-->
+<!--                Inspections</a>-->
             <div sec:authorize="isAuthenticated()">
                 <form class="text-white"
                       th:method="post"

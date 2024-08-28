@@ -8,8 +8,8 @@ import bg.deplan.Grohe.model.User;
 import bg.deplan.Grohe.model.UserRoleEnum;
 import bg.deplan.Grohe.service.UserService;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,16 +42,21 @@ public class UserServiceImpl implements UserService {
 
         User user = map(userRegisterDTO);
 
-        List<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.findByName(UserRoleEnum.USER));
-
-        user.setRole(roles);
         userRepository.save(user);
     }
 
     private User map(UserRegisterDTO userRegisterDTO) {
-        User mappedEntity = modelMapper.map(userRegisterDTO, User.class);
+        User mappedEntity = new User();
+        mappedEntity.setUsername(userRegisterDTO.username());
+        mappedEntity.setFirstName(userRegisterDTO.firstName());
+        mappedEntity.setLastName(userRegisterDTO.lastName());
+        mappedEntity.setEmail(userRegisterDTO.email());
         mappedEntity.setPassword(passwordEncoder.encode(userRegisterDTO.password()));
+
+        List<Role> roles = new ArrayList<>();
+        roles.add(roleRepository.findByName(UserRoleEnum.USER));
+
+        mappedEntity.setRole(roles);
 
         return mappedEntity;
     }

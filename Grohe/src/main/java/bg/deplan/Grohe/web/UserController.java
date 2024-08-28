@@ -7,11 +7,13 @@ import bg.deplan.Grohe.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/users")
@@ -45,7 +47,14 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String doRegister(@Valid UserRegisterDTO userRegisterDTO) {
+    public String doRegister(@Valid UserRegisterDTO userRegisterDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
+        if(bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("registerData", userRegisterDTO);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.registerData", bindingResult);
+
+            return "redirect:/users/register";
+        }
 
         userService.registerUser(userRegisterDTO);
 
