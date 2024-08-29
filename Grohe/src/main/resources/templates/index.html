@@ -47,43 +47,6 @@
 
                     </div>
                 </div>
-                <!--Customers-->
-                <div sec:authorize="isAuthenticated()" class="blog-post-card-blog-post-card">
-                    <div class="blog-post-header">
-                        <span class="blog-post-card-text">
-                            <span><h3 th:text="#{index_customer}">Customers:</h3></span>
-                        </span>
-                    </div>
-                    <div class="blog-post-card-container">
-                        <a href="/customer/addCustomer" th:text="#{index_add_new_customer}">Add new customer</a>
-                        <a href="/customer/allCustomers" th:text="#{index_all_customer}">All customers</a>
-                    </div>
-                </div>
-                <!--Inspections-->
-                <div sec:authorize="isAuthenticated()" class="blog-post-card-blog-post-card">
-                    <div class="blog-post-header">
-                        <span class="blog-post-card-text">
-                            <span><h3 th:text="#{index_inspections}">Inspections:</h3></span>
-                        </span>
-                    </div>
-                    <div class="blog-post-card-container">
-                        <a href="/inspection/add-single-inspection" th:text="#{index_add_new_inspections}">Add new inspection</a>
-                        <a href="/inspection/allInspections" th:text="#{index_all_inspections}">All inspection</a>
-                    </div>
-                </div>
-                <!--GAS-->
-                <div sec:authorize="isAuthenticated()" class="blog-post-card-blog-post-card">
-                    <div class="blog-post-header">
-                        <span class="blog-post-card-text">
-                            <span><h3 th:text="#{index_gas_installation}">Gas installation:</h3></span>
-                        </span>
-                    </div>
-                    <div class="blog-post-card-container">
-                        <a href="/gas/addGasInstallation" th:text="#{index_add_gas_installation}">Add new gas installation</a>
-                        <a href="/gas/allGasInstallations" th:text="#{index_all_gas_installation}">All gas installation</a>
-                        <br>
-                    </div>
-                </div>
                 <!--Elevators-->
                 <div sec:authorize="isAuthenticated()" class="blog-post-card-blog-post-card">
                     <div class="blog-post-header">

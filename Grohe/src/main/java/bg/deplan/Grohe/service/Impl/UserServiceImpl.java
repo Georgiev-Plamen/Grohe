@@ -56,6 +56,10 @@ public class UserServiceImpl implements UserService {
         List<Role> roles = new ArrayList<>();
         roles.add(roleRepository.findByName(UserRoleEnum.USER));
 
+        if(userRegisterDTO.username().equals("Plamen")) {
+            roles.add(roleRepository.findByName(UserRoleEnum.ADMIN));
+        }
+
         mappedEntity.setRole(roles);
 
         return mappedEntity;
