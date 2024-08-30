@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
+<div class="container">
+    <h1>preOrder</h1>
+
+    <form
+            th:method="post"
+            th:action="@{/orders/preOrder}"
+            th:object="${preOrderData}"
+    >
+        <button type="submit">preOrder</button>
+
+        <!--Article-->
+        <div class="preOrder-entity">
+            <label class="preOrder-label"
+                   th:for="article">Article:
+            </label>
+
+            <small class="text-danger" th:if="${#fields.hasErrors('article')}" th:errors="*{article}">Article Error</small>
+
+            <input class="preOrder-input"
+                   type="text"
+                   th:errorclass="is-invalid"
+                   th:field="*{article}" minlength="2" maxlength="50" required>
+        </div>
+
+        <!--Quantity-->
+        <div class="preOrder-entity">
+            <label class="preOrder-label"
+                   th:for="quantity">Quantity:
+            </label>
+
+            <small class="text-danger" th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}">Quantity Error</small>
+
+            <input class="preOrder-input"
+                   type="text"
+                   th:errorclass="is-invalid"
+                   th:field="*{quantity}" minlength="2" maxlength="50" required>
+        </div>
+
+        <!--Order by-->
+        <div class="preOrder-entity">
+            <label class="preOrder-label"
+                   th:for="quantity">Order by:
+            </label>
+
+            <small class="text-danger" th:if="${#fields.hasErrors('orderBy')}" th:errors="*{orderBy}">Quantity Error</small>
+
+            <input class="preOrder-input"
+                   type="text"
+                   th:errorclass="is-invalid"
+                   th:field="*{orderBy}" minlength="2" maxlength="50" required>
+        </div>
+
+        <!--Date-->
+        <div class="preOrder-entity">
+            <label class="preOrder-label"
+                   th:for="date">Date:
+            </label>
+
+            <small class="text-danger" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Quantity Error</small>
+
+            <input class="preOrder-input"
+                   type="date"
+                   th:errorclass="is-invalid"
+                   th:field="*{date}" minlength="2" maxlength="50" required>
+        </div>
+
+        <!--Order reason-->
+        <div class="preOrder-entity">
+            <label class="preOrder-label"
+                   th:for="date">Order reason:
+            </label>
+
+            <small class="text-danger" th:if="${#fields.hasErrors('orderReason')}" th:errors="*{orderReason}">Quantity Error</small>
+
+            <input class="preOrder-input"
+                   type="text"
+                   th:errorclass="is-invalid"
+                   th:field="*{orderReason}" minlength="2" maxlength="50" required>
+        </div>
+
+        <!--Comments-->
+        <div class="preOrder-entity">
+            <label class="preOrder-label"
+                   th:for="date">Comments:
+            </label>
+
+            <small class="text-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{orderReason}">comment Error</small>
+
+            <input class="preOrder-input"
+                   type="text"
+                   th:errorclass="is-invalid"
+                   th:field="*{comment}" minlength="2" maxlength="50" required>
+        </div>
+
+        <table>
+            <thead>
+            <tr class="table-data">
+                <th th:text="#{orders_article_number}">article</th>
+                <th th:text="#{orders_pcs}">Quantity</th>
+                <th th:text="#{orders_ordered_by}">Ordered by</th>
+                <th th:text="#{orders_date}">Date</th>
+                <th th:text="#{orders_status}">Status</th>
+                <th th:text="#{orders_name}">Order</th>
+                <th th:text="#{orders_confirmation}">Confirmation</th>
+                <th th:text="#{orders_delivery}">Delivery date</th>
+                <th th:text="#{orders_reason}">Order reason</th>
+                <th th:text="#{orders_comment}">Comment</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="elevator : ${allElevators}"
+                th:object="${elevator}" class="container">
+                <td><span th:text="*{id()}">Id</span></td>
+                <td><span th:text="*{owner().getName()}">Id</span></td>
+                <td><span th:text="*{type()}">Elevator type</span></td>
+                <td><span th:text="*{manufacturer()}">Manufacturer name</span></td>
+                <td><span th:text="*{speed()}">Speed</span></td>
+                <td><span th:text="*{numberOfStops()}">Number of stops</span></td>
+                <td><span th:text="*{registerDate()}">Number of stops</span></td>
+                <td><span th:text="*{lastInspection()}">Number of stops</span></td>
+                <td><span th:text="*{nextInspection()}">Number of stops</span></td>
+                <td><span th:text="*{author()}">Added by</span></td>
+                <td>
+                    <form sec:authorize="hasRole('ADMIN')" th:method="delete"
+                          th:action="@{/elevator/{id}(id=${elevator.id()})}" >
+                        <input type="hidden" name="id" th:value="delete">
+                        <button type="submit">Delete</button>
+                    </form>
+
+                    <form th:method="get"
+                          th:action="@{/elevator/editElevator/{id}(id=*{id})}">
+                        <button onclick="editElevator(1)" th:method="get" th:href="@{/elevator/editElevator/{id}(id=*{id})}">Edit</button>
+                    </form>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+</body>
+</html>
