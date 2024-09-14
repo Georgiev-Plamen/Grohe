@@ -17,6 +17,9 @@ public class Article extends BaseEntity{
     @Column(name = "barcodes")
     private String barcode;
 
+    @Column(name = "orderQuantity")
+    private int orderQuantity;
+
     @Column(name = "quantity_in_pallet")
     private int quantityInPallet;
 
@@ -64,5 +67,11 @@ public class Article extends BaseEntity{
         this.quantityInPallet = quantityInPallet;
     }
 
+    public int getOrderQuantity() {
+        return orderQuantity;
+    }
 
+    public void setOrderQuantity(int orderQuantity) {
+        this.orderQuantity = orderQuantity;
+    }
 }

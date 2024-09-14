@@ -35,21 +35,21 @@
         <!--Quantity-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
-                   th:for="quantity">Quantity:
+                   th:for="orderQuantity">Quantity:
             </label>
 
-            <small class="text-danger" th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}">Quantity Error</small>
+            <small class="text-danger" th:if="${#fields.hasErrors('orderQuantity')}" th:errors="*{orderQuantity}">Quantity Error</small>
 
             <input class="preOrder-input"
                    type="text"
                    th:errorclass="is-invalid"
-                   th:field="*{quantity}" minlength="2" maxlength="50" required>
+                   th:field="*{orderQuantity}" minlength="1" maxlength="50" required>
         </div>
 
         <!--Order by-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
-                   th:for="quantity">Order by:
+                   th:for="orderBy">Order by:
             </label>
 
             <small class="text-danger" th:if="${#fields.hasErrors('orderBy')}" th:errors="*{orderBy}">Quantity Error</small>
@@ -77,7 +77,7 @@
         <!--Order reason-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
-                   th:for="date">Order reason:
+                   th:for="orderReason">Order reason:
             </label>
 
             <small class="text-danger" th:if="${#fields.hasErrors('orderReason')}" th:errors="*{orderReason}">Quantity Error</small>
@@ -91,10 +91,10 @@
         <!--Comments-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
-                   th:for="date">Comments:
+                   th:for="comment">Comments:
             </label>
 
-            <small class="text-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{orderReason}">comment Error</small>
+            <small class="text-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}">comment Error</small>
 
             <input class="preOrder-input"
                    type="text"

@@ -2,21 +2,15 @@ package bg.deplan.Grohe.service.Impl;
 
 import bg.deplan.Grohe.data.ArticleRepository;
 import bg.deplan.Grohe.data.OrderRepository;
-import bg.deplan.Grohe.model.AddArticleDTO;
 import bg.deplan.Grohe.model.Article;
+import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
+import bg.deplan.Grohe.model.DTOs.OrderDTO;
 import bg.deplan.Grohe.model.Order;
-import bg.deplan.Grohe.model.User;
 import bg.deplan.Grohe.service.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-
-import static com.fasterxml.jackson.databind.type.LogicalType.Map;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -35,7 +29,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public long createOrder(AddArticleDTO addArticleDTO) {
-                return 0;
+    public boolean createOrder(OrderDTO orderDTO) {
+
+        Optional<Article> optionalArticle = articleRepository.findByArtNum(orderDTO.article());
+
+        Optional<Order> optionalOrder = Optional.ofNullable(modelMapper.map(orderDTO, Order.class));
+
+        orderRepository.save(modelMapper.map(orderDTO, Order.class));
+
+        return true;
     }
 }

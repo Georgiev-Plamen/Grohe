@@ -22,25 +22,38 @@ public class Order extends BaseEntity{
     @Column( name = "comments")
     private String comment;
 
-    @OneToMany
+    @ManyToMany
+    @JoinTable(
+            name = "order_article",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "article_id")
+    )
     private List<Article> article;
 
-    @OneToMany
+    @ManyToMany
+    @JoinTable (
+            name = "order_article",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "article_id")
+    )
     private List<User> users;
 
     @Column(name = "order_name")
     private String orderName;
 
-    public int getArticleQuantity() {
-        return articleQuantity;
+    public Order() {
     }
 
-    public void setArticleQuantity(int articleQuantity) {
-        this.articleQuantity = articleQuantity;
+    public int getOrderQuantity() {
+        return orderQuantity;
     }
 
-    @Column( name = "article_quantity")
-    private int articleQuantity;
+    public void setOrderQuantity(int orderQuantity) {
+        this.orderQuantity = orderQuantity;
+    }
+
+    @Column( name = "order_quantity")
+    private int orderQuantity;
 
     @Column(name = "order_status")
     @Enumerated(value = EnumType.STRING)

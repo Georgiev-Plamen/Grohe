@@ -2,6 +2,7 @@ package bg.deplan.Grohe.service.Impl;
 
 import bg.deplan.Grohe.data.ArticleRepository;
 import bg.deplan.Grohe.model.Article;
+import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
 import bg.deplan.Grohe.service.ArticleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     @Override
-    public long addArticle(bg.deplan.Grohe.model.AddArticleDTO addArticleDTO) {
+    public long addArticle(AddArticleDTO addArticleDTO) {
         Article mappedArticle = modelMapper.map(addArticleDTO, Article.class);
 
         articleRepository.save(mappedArticle);

@@ -2,9 +2,9 @@ package bg.deplan.Grohe.model.DTOs;
 
 import java.time.LocalDate;
 
-public record PreOrderDTO (
+public record OrderDTO(
         String article,
-        int quantity,
+        int orderQuantity,
         String orderBy,
         LocalDate date,
 //        String status,
