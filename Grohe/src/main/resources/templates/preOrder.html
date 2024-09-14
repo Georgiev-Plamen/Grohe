@@ -18,6 +18,8 @@
     >
         <button type="submit">preOrder</button>
 
+
+    <div class="add-container">
         <!--Article-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
@@ -101,7 +103,7 @@
                    th:errorclass="is-invalid"
                    th:field="*{comment}" minlength="2" maxlength="50" required>
         </div>
-
+    </div>
         <table>
             <thead>
             <tr class="table-data">
@@ -110,9 +112,6 @@
                 <th th:text="#{orders_ordered_by}">Ordered by</th>
                 <th th:text="#{orders_date}">Date</th>
                 <th th:text="#{orders_status}">Status</th>
-                <th th:text="#{orders_name}">Order</th>
-                <th th:text="#{orders_confirmation}">Confirmation</th>
-                <th th:text="#{orders_delivery}">Delivery date</th>
                 <th th:text="#{orders_reason}">Order reason</th>
                 <th th:text="#{orders_comment}">Comment</th>
             </tr>

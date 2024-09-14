@@ -79,6 +79,11 @@ body {
     overflow-x: auto;
 }
 
+.add-container {
+    display:flex;
+    flex-direction: row;
+}
+
 h1 {
     margin-bottom: 20px;
     font-size: 24px;
