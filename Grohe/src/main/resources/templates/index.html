@@ -51,14 +51,14 @@
                 <div sec:authorize="isAuthenticated()" class="blog-post-card-blog-post-card">
                     <div class="blog-post-header">
                         <span class="blog-post-card-text">
-                            <span><h3 th:text="#{index_elevators}">Elevators:</h3></span>
+                            <span><h3 th:text="#{index_orders_menu}">Заявки:</h3></span>
                         </span>
                     </div>
                     <div class="blog-post-card-container">
-                        <a href="/elevator/addElevator" th:text="#{index_add_new_elevator}">Add new elevator</a>
-                        <a href="/elevator/allElevators" th:text="#{index_all_elevator}">Elevator registry</a>
-                        <br>
-                        <a href="/inspection/selectCustomer" th:text="#{index_add_inspection_by_customer}">Add inspection by customer</a>
+                        <a href="/orders/all" th:text="#{index_order_list}">Add new elevator</a>
+                        <a href="/orders/preOrder" th:text="#{index_preOrder_list}">Elevator registry</a>
+<!--                        <br>-->
+<!--                        <a href="/inspection/selectCustomer" th:text="#{index_add_inspection_by_customer}">Add inspection by customer</a>-->
                     </div>
                 </div>
             </div>

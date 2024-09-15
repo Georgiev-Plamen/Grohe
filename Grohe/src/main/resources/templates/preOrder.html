@@ -43,7 +43,7 @@
             <small class="text-danger" th:if="${#fields.hasErrors('orderQuantity')}" th:errors="*{orderQuantity}">Quantity Error</small>
 
             <input class="preOrder-input"
-                   type="text"
+                   type="number"
                    th:errorclass="is-invalid"
                    th:field="*{orderQuantity}" minlength="1" maxlength="50" required>
         </div>

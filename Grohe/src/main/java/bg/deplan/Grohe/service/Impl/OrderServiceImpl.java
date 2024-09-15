@@ -6,10 +6,14 @@ import bg.deplan.Grohe.model.Article;
 import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
 import bg.deplan.Grohe.model.DTOs.OrderDTO;
 import bg.deplan.Grohe.model.Order;
+import bg.deplan.Grohe.model.PreOrder;
+import bg.deplan.Grohe.model.PreOrderItem;
 import bg.deplan.Grohe.service.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,15 +22,24 @@ public class OrderServiceImpl implements OrderService {
     private final ModelMapper modelMapper;
     private final OrderRepository orderRepository;
     private final ArticleRepository articleRepository;
+    private final PreOrder preOrder;
+    private final PreOrderItem preOrderItem;
 
 
 
-    public OrderServiceImpl(ModelMapper modelMapper, OrderRepository orderRepository, ArticleRepository articleRepository) {
+
+
+    public OrderServiceImpl(ModelMapper modelMapper, OrderRepository orderRepository, ArticleRepository articleRepository, PreOrder preOrder, PreOrderItem preOrderItem) {
         this.modelMapper = modelMapper;
         this.orderRepository = orderRepository;
         this.articleRepository = articleRepository;
+        this.preOrder = preOrder;
 //        this.todayDate = LocalDate.now();
+        this.preOrderItem = preOrderItem;
     }
+
+
+    private List<PreOrderItem> items = new ArrayList<>();
 
     @Override
     public boolean createOrder(OrderDTO orderDTO) {
@@ -39,4 +52,6 @@ public class OrderServiceImpl implements OrderService {
 
         return true;
     }
+
+
 }

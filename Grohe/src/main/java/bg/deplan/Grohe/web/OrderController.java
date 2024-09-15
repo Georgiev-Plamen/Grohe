@@ -1,7 +1,12 @@
 package bg.deplan.Grohe.web;
 
+import bg.deplan.Grohe.data.OrderRepository;
+import bg.deplan.Grohe.data.PreOrderRepository;
+import bg.deplan.Grohe.model.Article;
 import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
 import bg.deplan.Grohe.model.DTOs.OrderDTO;
+import bg.deplan.Grohe.model.PreOrder;
+import bg.deplan.Grohe.service.ArticleService;
 import bg.deplan.Grohe.service.OrderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +24,9 @@ import java.time.LocalDate;
 public class OrderController {
 
     private final OrderService orderService;
+    private ArticleService articleService;
+
+    private PreOrderRepository preOrderRepository;
 
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
@@ -27,10 +35,15 @@ public class OrderController {
 
     @ModelAttribute("preOrderData")
     public OrderDTO preOrderDTO() {
-        return new OrderDTO("",0,"", LocalDate.now(),"","");
+        return new OrderDTO("",1,"", LocalDate.now(),"","");
     }
 
-    @GetMapping("/orders")
+    @ModelAttribute("preOrder")
+    public PreOrder preOrder() {
+        return new PreOrder();
+    }
+
+    @GetMapping("/all")
     public String orders(){
         return "orders";
     }
@@ -46,7 +59,8 @@ public class OrderController {
     @PostMapping("/preOrder")
     public String preOrder(OrderDTO orderDTO) {
 
-        orderService.createOrder(orderDTO);
+        Article article = articleService.
+        orderService.addToPreOrder(orderDTO);
 
         return "preOrder";
     }
