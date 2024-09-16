@@ -11,6 +11,8 @@ public class Article extends BaseEntity{
     @Column(name = "art_num")
     private String artNum;
 
+    private String description;
+
     @Column(name = "image_urls")
     private String imageUrl;
 
