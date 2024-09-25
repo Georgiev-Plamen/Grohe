@@ -17,17 +17,6 @@ public class PreOrderItem extends BaseEntity{
     private String comment;
     private LocalDate date;
 
-    @ManyToOne
-    @JoinColumn(name = "pre_order_id")
-    private PreOrder preOrder;
-
-    public PreOrder getPreOrder() {
-        return preOrder;
-    }
-
-    public void setPreOrder(PreOrder preOrder) {
-        this.preOrder = preOrder;
-    }
     public PreOrderItem() {
     }
 

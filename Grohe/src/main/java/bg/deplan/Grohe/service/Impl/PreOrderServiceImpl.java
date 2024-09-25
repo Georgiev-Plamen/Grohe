@@ -1,11 +1,15 @@
 package bg.deplan.Grohe.service.Impl;
 
 import bg.deplan.Grohe.data.ArticleRepository;
-import bg.deplan.Grohe.data.PreOrderRepository;
+import bg.deplan.Grohe.data.OrderRepository;
+
+import bg.deplan.Grohe.data.PreOrderItemRepository;
 import bg.deplan.Grohe.model.Article;
 import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
-import bg.deplan.Grohe.model.PreOrder;
+import bg.deplan.Grohe.model.PreOrderItem;
+import bg.deplan.Grohe.service.ArticleService;
 import bg.deplan.Grohe.service.PreOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,26 +17,53 @@ import java.util.Optional;
 @Service
 public class PreOrderServiceImpl implements PreOrderService {
 
+    @Autowired
     private ArticleRepository articleRepository;
 
-    private PreOrderRepository preOrderRepository;
+    @Autowired
+    private ArticleService articleService;
+    @Autowired
+    private PreOrderItemRepository preOrderRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
-    public PreOrder addItemToPreOrder(PreOrder preOrder, AddArticleDTO addArticleDTO) {
+    public PreOrderItem savePreOrder(PreOrderItem preOrder) {
+        return preOrderRepository.save(preOrder);
+    }
+
+
+    public void addItem(AddArticleDTO addArticleDTO) {
+        PreOrderItem preOrderItem = new PreOrderItem();
+
         Optional<Article> optionalArticle = articleRepository.findByArtNum(addArticleDTO.getArtNum());
 
-        Article article;
-
         if(optionalArticle.isEmpty()) {
-            article = new Article();
-            article.setArtNum(addArticleDTO.getArtNum());
-            articleRepository.save(article);
+            articleService.addArticle(addArticleDTO);
         }
+//        preOrderItem.setArticle(optionalArticle.get());
+        preOrderItem.setQuantity(addArticleDTO.getQuantityForOrder());
+        preOrderItem.setOrderBy(addArticleDTO.getOrderReason());
+        preOrderItem.setDate(addArticleDTO.getDate());
+        preOrderItem.setOrderReason(addArticleDTO.getOrderReason());
+        preOrderItem.setComment(addArticleDTO.getComment());
+//        preOrderItem.setPreOrder(this);  // Set association back to PreOrder
 
-        article = optionalArticle.get();
-
-        preOrder.addItem(article, addArticleDTO.getQuantityForOrder(), addArticleDTO.getOrderReason(), addArticleDTO.getDate(),addArticleDTO.getOrderReason(),addArticleDTO.getComment());
-
-        return preOrderRepository.save(preOrder);
+        preOrderRepository.save(preOrderItem);
 
     }
+
+//    public Order finalizeOrder(PreOrder preOrder) {
+//        Order finalOrder = new Order();
+//
+//        finalOrder.setItems(preOrder.getItems());
+//
+//        // Save the final order
+//        orderRepository.save(finalOrder);
+//
+//        // Clear the pre-order
+//        preOrder.clearItems();
+//        preOrderRepository.save(preOrder);  // Update the pre-order in DB
+//
+//        return finalOrder;
+//    }
 }

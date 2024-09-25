@@ -1,11 +1,10 @@
 package bg.deplan.Grohe.web;
 
-import bg.deplan.Grohe.data.PreOrderRepository;
-import bg.deplan.Grohe.model.Article;
+import bg.deplan.Grohe.data.PreOrderItemRepository;
 import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
 import bg.deplan.Grohe.model.DTOs.OrderDTO;
-import bg.deplan.Grohe.model.PreOrder;
 import bg.deplan.Grohe.service.PreOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +17,10 @@ import java.time.LocalDate;
 @Controller
 @RequestMapping("/orders")
 public class PreOrderController {
+    @Autowired
     private PreOrderService preOrderService;
-    private PreOrderRepository preOrderRepository;
+    @Autowired
+    private PreOrderItemRepository preOrderRepository;
 
     @ModelAttribute("preOrderData")
     public OrderDTO preOrderDTO() {
@@ -35,13 +36,10 @@ public class PreOrderController {
     }
 
     @PostMapping("/preOrder")
-    public String addToPreOrder(Long preOrderId, @ModelAttribute AddArticleDTO addArticleDTO) {
-
-        PreOrder preOrder = preOrderRepository.findById(preOrderId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid PreOrder ID"));
+    public String addToPreOrder(@ModelAttribute AddArticleDTO addArticleDTO) {
 
 //        preOrderService.addItemToPreOrder(preOrder, addArticleDTO);
-        preOrderService.addItemToPreOrder(preOrder, addArticleDTO);
+        preOrderService.addItem(addArticleDTO);
 
         return "preOrder";
     }

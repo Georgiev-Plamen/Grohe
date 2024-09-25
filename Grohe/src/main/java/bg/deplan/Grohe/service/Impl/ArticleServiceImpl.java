@@ -24,7 +24,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public long addArticle(AddArticleDTO addArticleDTO) {
-        Article mappedArticle = modelMapper.map(addArticleDTO, Article.class);
+        Article mappedArticle = new Article();
+        mappedArticle.setArtNum(addArticleDTO.getArtNum());
 
         articleRepository.save(mappedArticle);
 

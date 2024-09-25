@@ -16,22 +16,24 @@
             th:action="@{/orders/preOrder}"
             th:object="${preOrderData}"
     >
-        <button type="submit">preOrder</button>
+
 
 
     <div class="add-container">
+
+
         <!--Article-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
-                   th:for="article">Article:
+                   th:for="artNum">Article:
             </label>
 
-            <small class="text-danger" th:if="${#fields.hasErrors('article')}" th:errors="*{article}">Article Error</small>
+            <small class="text-danger" th:if="${#fields.hasErrors('artNum')}" th:errors="*{artNum}">Article Error</small>
 
             <input class="preOrder-input"
                    type="text"
                    th:errorclass="is-invalid"
-                   th:field="*{article}" minlength="2" maxlength="50" required>
+                   th:field="*{artNum}" minlength="2" maxlength="50" required>
         </div>
 
         <!--Quantity-->
@@ -103,6 +105,9 @@
                    th:errorclass="is-invalid"
                    th:field="*{comment}" minlength="2" maxlength="50" required>
         </div>
+
+        <button type="submit">preOrder</button>
+
     </div>
         <table>
             <thead>
