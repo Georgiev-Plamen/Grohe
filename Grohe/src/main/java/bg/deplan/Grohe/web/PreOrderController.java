@@ -31,6 +31,7 @@ public class PreOrderController {
     public String preOrder(Model model) {
 
         model.addAttribute("preOrderData", preOrderDTO());
+        model.addAttribute("allArticle", preOrderService.getAllArticle());
 
         return "preOrder";
     }
@@ -41,6 +42,6 @@ public class PreOrderController {
 //        preOrderService.addItemToPreOrder(preOrder, addArticleDTO);
         preOrderService.addItem(addArticleDTO);
 
-        return "preOrder";
+        return "redirect:/orders/preOrder";
     }
 }

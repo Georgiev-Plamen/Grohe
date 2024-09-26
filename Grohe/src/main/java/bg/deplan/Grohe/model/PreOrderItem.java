@@ -11,7 +11,7 @@ public class PreOrderItem extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "article_id")
     private Article article;
-    private int quantity;
+    private int quantityForOrder;
     private String orderBy;
     private String orderReason;
     private String comment;
@@ -32,12 +32,12 @@ public class PreOrderItem extends BaseEntity{
         this.article = article;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getQuantityForOrder() {
+        return quantityForOrder;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setQuantityForOrder(int quantityForOrder) {
+        this.quantityForOrder = quantityForOrder;
     }
 
     public String getOrderBy() {

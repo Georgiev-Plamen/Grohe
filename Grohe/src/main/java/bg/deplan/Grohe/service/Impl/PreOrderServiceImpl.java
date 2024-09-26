@@ -6,12 +6,14 @@ import bg.deplan.Grohe.data.OrderRepository;
 import bg.deplan.Grohe.data.PreOrderItemRepository;
 import bg.deplan.Grohe.model.Article;
 import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
+import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.PreOrderItem;
 import bg.deplan.Grohe.service.ArticleService;
 import bg.deplan.Grohe.service.PreOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,9 +41,10 @@ public class PreOrderServiceImpl implements PreOrderService {
 
         if(optionalArticle.isEmpty()) {
             articleService.addArticle(addArticleDTO);
+            optionalArticle = articleRepository.findByArtNum(addArticleDTO.getArtNum());
         }
-//        preOrderItem.setArticle(optionalArticle.get());
-        preOrderItem.setQuantity(addArticleDTO.getQuantityForOrder());
+        preOrderItem.setArticle(optionalArticle.get());
+        preOrderItem.setQuantityForOrder(addArticleDTO.getQuantityForOrder());
         preOrderItem.setOrderBy(addArticleDTO.getOrderReason());
         preOrderItem.setDate(addArticleDTO.getDate());
         preOrderItem.setOrderReason(addArticleDTO.getOrderReason());
@@ -50,6 +53,24 @@ public class PreOrderServiceImpl implements PreOrderService {
 
         preOrderRepository.save(preOrderItem);
 
+    }
+
+    @Override
+    public List<ArticleDTO> getAllArticle() {
+        return preOrderRepository.findAll()
+                .stream()
+                .map(PreOrderServiceImpl::toAllItem)
+                .toList();
+    }
+
+    private static ArticleDTO toAllItem(PreOrderItem preOrderItem) {
+        return new ArticleDTO(
+                preOrderItem.getArticle().getArtNum(),
+                preOrderItem.getQuantityForOrder(),
+                preOrderItem.getDate(),
+                preOrderItem.getOrderReason(),
+                preOrderItem.getComment()
+        );
     }
 
 //    public Order finalizeOrder(PreOrder preOrder) {

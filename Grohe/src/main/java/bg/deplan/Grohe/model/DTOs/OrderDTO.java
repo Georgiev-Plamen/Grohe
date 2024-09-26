@@ -4,10 +4,9 @@ import java.time.LocalDate;
 
 public record OrderDTO(
         String artNum,
-        int orderQuantity,
+        int quantityForOrder,
         String orderBy,
         LocalDate date,
-//        String status,
         String orderReason,
         String comment
 ){
