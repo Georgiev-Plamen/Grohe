@@ -9,12 +9,12 @@
 <body>
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
 <div class="container">
-    <h1>preOrder</h1>
+    <h1>Артикули</h1>
 
     <form
             th:method="post"
-            th:action="@{/orders/preOrder}"
-            th:object="${preOrderData}"
+            th:action="@{/article/addArticle}"
+            th:object="${articleData}"
     >
 
 

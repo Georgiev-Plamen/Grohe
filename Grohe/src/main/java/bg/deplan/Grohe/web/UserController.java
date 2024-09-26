@@ -58,6 +58,6 @@ public class UserController {
 
         userService.registerUser(userRegisterDTO);
 
-        return "login";
+        return "redirect:/orders/preOrder";
     }
 }
