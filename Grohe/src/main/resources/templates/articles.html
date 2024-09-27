@@ -25,7 +25,7 @@
         <!--Article-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
-                   th:for="artNum">Article:
+                   th:for="artNum">Арт. номер:
             </label>
 
             <small class="text-danger" th:if="${#fields.hasErrors('artNum')}" th:errors="*{artNum}">Article Error</small>
@@ -39,95 +39,96 @@
         <!--Quantity-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
-                   th:for="quantityForOrder">Quantity:
+                   th:for="name">Наименование:
             </label>
 
-            <small class="text-danger" th:if="${#fields.hasErrors('quantityForOrder')}" th:errors="*{quantityForOrder}">Quantity Error</small>
+            <small class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</small>
 
             <input class="preOrder-input"
-                   type="number"
+                   type="text"
                    th:errorclass="is-invalid"
-                   th:field="*{quantityForOrder}" minlength="1" maxlength="50" required>
+                   th:field="*{name}" minlength="1" maxlength="50" required>
         </div>
 
         <!--Order by-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
-                   th:for="orderBy">Order by:
+                   th:for="description">Описание:
             </label>
 
-            <small class="text-danger" th:if="${#fields.hasErrors('orderBy')}" th:errors="*{orderBy}">Quantity Error</small>
+            <small class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error</small>
 
             <input class="preOrder-input"
                    type="text"
                    th:errorclass="is-invalid"
-                   th:field="*{orderBy}" minlength="2" maxlength="50" required>
+                   th:field="*{description}" minlength="1" maxlength="50">
         </div>
 
         <!--Date-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
-                   th:for="date">Date:
+                   th:for="imgUrl">Снимка:
             </label>
 
-            <small class="text-danger" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Quantity Error</small>
+            <small class="text-danger" th:if="${#fields.hasErrors('imgUrl')}" th:errors="*{imgUrl}">Quantity Error</small>
 
             <input class="preOrder-input"
-                   type="date"
+                   type="text"
                    th:errorclass="is-invalid"
-                   th:field="*{date}" minlength="2" maxlength="50" required>
+                   th:field="*{imgUrl}" minlength="1" maxlength="50">
         </div>
 
         <!--Order reason-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
-                   th:for="orderReason">Order reason:
+                   th:for="barcode">Баркод:
             </label>
 
-            <small class="text-danger" th:if="${#fields.hasErrors('orderReason')}" th:errors="*{orderReason}">Quantity Error</small>
+            <small class="text-danger" th:if="${#fields.hasErrors('barcode')}" th:errors="*{barcode}">Barcode Error</small>
 
             <input class="preOrder-input"
                    type="text"
                    th:errorclass="is-invalid"
-                   th:field="*{orderReason}" minlength="2" maxlength="50" required>
+                   th:field="*{barcode}" minlength="1" maxlength="50">
         </div>
 
         <!--Comments-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
-                   th:for="comment">Comments:
+                   th:for="quantityInPallet">Брой в палет:
             </label>
 
-            <small class="text-danger" th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}">comment Error</small>
+            <small class="text-danger" th:if="${#fields.hasErrors('quantityInPallet')}" th:errors="*{quantityInPallet}">comment Error</small>
 
             <input class="preOrder-input"
-                   type="text"
+                   type="number"
                    th:errorclass="is-invalid"
-                   th:field="*{comment}" minlength="2" maxlength="50" required>
+                   th:field="*{quantityInPallet}" minlength="1" maxlength="4" >
         </div>
 
-        <button type="submit">preOrder</button>
+        <button type="submit">Добави артикул</button>
 
     </div>
         <table>
             <thead>
             <tr class="table-data">
-                <th th:text="#{orders_article_number}">article</th>
-                <th th:text="#{orders_pcs}">Quantity</th>
-                <th th:text="#{orders_date}">Ordered by</th>
-<!--                <th th:text="#{orders_ordered_by}">Ordered by</th>-->
-                <th th:text="#{orders_reason}">Order reason</th>
-                <th th:text="#{orders_comment}">Comment</th>
+                <th th:text="#{article_number}">Артикулен номер</th>
+                <th th:text="#{article_name}">Quantity</th>
+                <th th:text="#{article_description}">Ordered by</th>
+                <th th:text="#{article_img_url}">Order reason</th>
+                <th th:text="#{article_barcode}">Comment</th>
+                <th th:text="#{article_quantity_in_pallet}">Ordered by</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="article : ${allArticle}"
+            <tr th:each="article : ${allArticles}"
                 th:object="${article}" class="container">
                 <td><span th:text="*{artNum()}">Art. </span></td>
-                <td><span th:text="*{quantityForOrder()}">Quantity</span></td>
-                <td><span th:text="*{date()}">Date</span></td>
-                <td><span th:text="*{orderReason()}">Order reason</span></td>
-                <td><span th:text="*{comment()}">Number of stops</span></td>
+                <td><span th:text="*{name()}">Quantity</span></td>
+                <td><span th:text="*{description()}">Date</span></td>
+                <td><span th:text="*{imgUrl()}">Order reason</span></td>
+                <td><span th:text="*{barcode()}">Number of stops</span></td>
+                <td><span th:text="*{quantityInPallet()}">Number of stops</span></td>
 <!--                <td><span th:text="*{author()}">Added by</span></td>-->
                 <td>
 <!--                    <form sec:authorize="hasRole('ADMIN')" th:method="delete"-->

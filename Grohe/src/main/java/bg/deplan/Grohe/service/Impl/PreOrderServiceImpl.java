@@ -5,7 +5,6 @@ import bg.deplan.Grohe.data.OrderRepository;
 
 import bg.deplan.Grohe.data.PreOrderItemRepository;
 import bg.deplan.Grohe.model.Article;
-import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
 import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.PreOrderItem;
 import bg.deplan.Grohe.service.ArticleService;
@@ -21,7 +20,6 @@ public class PreOrderServiceImpl implements PreOrderService {
 
     @Autowired
     private ArticleRepository articleRepository;
-
     @Autowired
     private ArticleService articleService;
     @Autowired
@@ -34,21 +32,24 @@ public class PreOrderServiceImpl implements PreOrderService {
     }
 
 
-    public void addItem(AddArticleDTO addArticleDTO) {
+    public void addItem(ArticleDTO articleDTO) {
         PreOrderItem preOrderItem = new PreOrderItem();
 
-        Optional<Article> optionalArticle = articleRepository.findByArtNum(addArticleDTO.getArtNum());
+        Optional<Article> optionalArticle = articleRepository.findByArtNum(articleDTO.artNum());
 
         if(optionalArticle.isEmpty()) {
-            articleService.addArticle(addArticleDTO);
-            optionalArticle = articleRepository.findByArtNum(addArticleDTO.getArtNum());
+            Article article = new Article();
+            article.setArtNum(articleDTO.artNum());
+            articleRepository.save(article);
+            optionalArticle = articleRepository.findByArtNum(articleDTO.artNum());
         }
         preOrderItem.setArticle(optionalArticle.get());
-        preOrderItem.setQuantityForOrder(addArticleDTO.getQuantityForOrder());
-        preOrderItem.setOrderBy(addArticleDTO.getOrderReason());
-        preOrderItem.setDate(addArticleDTO.getDate());
-        preOrderItem.setOrderReason(addArticleDTO.getOrderReason());
-        preOrderItem.setComment(addArticleDTO.getComment());
+        preOrderItem.setQuantityForOrder(articleDTO.quantityForOrder());
+        preOrderItem.setOrderBy(articleDTO.orderBy());
+        preOrderItem.setOrderBy(articleDTO.orderReason());
+        preOrderItem.setDate(articleDTO.date());
+        preOrderItem.setOrderReason(articleDTO.orderReason());
+        preOrderItem.setComment(articleDTO.comment());
 //        preOrderItem.setPreOrder(this);  // Set association back to PreOrder
 
         preOrderRepository.save(preOrderItem);
@@ -67,24 +68,10 @@ public class PreOrderServiceImpl implements PreOrderService {
         return new ArticleDTO(
                 preOrderItem.getArticle().getArtNum(),
                 preOrderItem.getQuantityForOrder(),
+                preOrderItem.getOrderBy(),
                 preOrderItem.getDate(),
                 preOrderItem.getOrderReason(),
                 preOrderItem.getComment()
         );
     }
-
-//    public Order finalizeOrder(PreOrder preOrder) {
-//        Order finalOrder = new Order();
-//
-//        finalOrder.setItems(preOrder.getItems());
-//
-//        // Save the final order
-//        orderRepository.save(finalOrder);
-//
-//        // Clear the pre-order
-//        preOrder.clearItems();
-//        preOrderRepository.save(preOrder);  // Update the pre-order in DB
-//
-//        return finalOrder;
-//    }
 }

@@ -1,11 +1,15 @@
 package bg.deplan.Grohe.service;
 
 
+
 import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
+
+import java.util.List;
 
 public interface ArticleService {
 
     // TODO:
-    long addArticle(AddArticleDTO addArticleDTO);
+    void addArticle(AddArticleDTO addArticleDTO);
 
+    List<AddArticleDTO> getAllArticle();
 }

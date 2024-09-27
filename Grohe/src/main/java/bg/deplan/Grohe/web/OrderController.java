@@ -9,14 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/orders")
 public class OrderController {
 
-    private ArticleService articleService;
-
-
-//    @ModelAttribute("preOrder")
-//    public PreOrder preOrder() {
-//        return new PreOrder();
-//    }
-
     @GetMapping("/all")
     public String orders(){
         return "orders";

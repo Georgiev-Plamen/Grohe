@@ -2,6 +2,7 @@ package bg.deplan.Grohe.web;
 
 import bg.deplan.Grohe.data.PreOrderItemRepository;
 import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
+import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.DTOs.OrderDTO;
 import bg.deplan.Grohe.service.PreOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +38,9 @@ public class PreOrderController {
     }
 
     @PostMapping("/preOrder")
-    public String addToPreOrder(@ModelAttribute AddArticleDTO addArticleDTO) {
+    public String addToPreOrder(@ModelAttribute ArticleDTO articleDTO) {
 
-//        preOrderService.addItemToPreOrder(preOrder, addArticleDTO);
-        preOrderService.addItem(addArticleDTO);
+        preOrderService.addItem(articleDTO);
 
         return "redirect:/orders/preOrder";
     }

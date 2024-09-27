@@ -106,7 +106,7 @@
                    th:field="*{comment}" minlength="2" maxlength="50" required>
         </div>
 
-        <button type="submit">preOrder</button>
+        <button type="submit">Добави</button>
 
     </div>
         <table>
@@ -114,8 +114,8 @@
             <tr class="table-data">
                 <th th:text="#{orders_article_number}">article</th>
                 <th th:text="#{orders_pcs}">Quantity</th>
-                <th th:text="#{orders_date}">Ordered by</th>
-<!--                <th th:text="#{orders_ordered_by}">Ordered by</th>-->
+                <th th:text="#{orders_ordered_by}">Ordered by</th>
+                <th th:text="#{orders_date}">Date</th>
                 <th th:text="#{orders_reason}">Order reason</th>
                 <th th:text="#{orders_comment}">Comment</th>
             </tr>
@@ -125,6 +125,7 @@
                 th:object="${article}" class="container">
                 <td><span th:text="*{artNum()}">Art. </span></td>
                 <td><span th:text="*{quantityForOrder()}">Quantity</span></td>
+                <td><span th:text="*{orderBy()}">Поръчано от</span></td>
                 <td><span th:text="*{date()}">Date</span></td>
                 <td><span th:text="*{orderReason()}">Order reason</span></td>
                 <td><span th:text="*{comment()}">Number of stops</span></td>

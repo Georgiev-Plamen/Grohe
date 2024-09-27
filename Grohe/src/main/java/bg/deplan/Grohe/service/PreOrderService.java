@@ -8,7 +8,8 @@ import java.util.List;
 public interface PreOrderService {
 //    Order finalizeOrder(PreOrder preOrder);
 
-    void addItem(AddArticleDTO addArticleDTO);
+    void addItem(ArticleDTO articleDTO);
 
     List<ArticleDTO> getAllArticle();
+
 }

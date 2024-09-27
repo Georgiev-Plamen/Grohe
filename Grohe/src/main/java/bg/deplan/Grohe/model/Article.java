@@ -11,6 +11,7 @@ public class Article extends BaseEntity{
     @Column(name = "art_num")
     private String artNum;
 
+    @Column
     private String description;
 
     @Column(name = "image_urls")
@@ -64,5 +65,13 @@ public class Article extends BaseEntity{
 
     public void setQuantityInPallet(int quantityInPallet) {
         this.quantityInPallet = quantityInPallet;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
