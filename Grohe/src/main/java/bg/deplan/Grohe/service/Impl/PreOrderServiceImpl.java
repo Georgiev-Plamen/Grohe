@@ -66,9 +66,11 @@ public class PreOrderServiceImpl implements PreOrderService {
 
     private static ArticleDTO toAllItem(PreOrderItem preOrderItem) {
         return new ArticleDTO(
+                preOrderItem.getId(),
                 preOrderItem.getArticle().getArtNum(),
                 preOrderItem.getQuantityForOrder(),
                 preOrderItem.getOrderBy(),
+                preOrderItem.getArticle().getArtUrl(),
                 preOrderItem.getDate(),
                 preOrderItem.getOrderReason(),
                 preOrderItem.getComment()

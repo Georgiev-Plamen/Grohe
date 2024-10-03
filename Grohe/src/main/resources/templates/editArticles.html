@@ -12,12 +12,10 @@
     <h1>Артикули</h1>
 
     <form
-            th:method="post"
-            th:action="@{/articles/addArticle}"
+            th:method="PUT"
             th:object="${articleData}"
+            th:action="@{/articles/editArticle}/{artNum}(artNum=*{artNum})"
     >
-
-
 
     <div class="add-container">
 
@@ -33,6 +31,7 @@
             <input class="preOrder-input"
                    type="text"
                    th:errorclass="is-invalid"
+                   th:value="*{artNum}"
                    th:field="*{artNum}" minlength="2" maxlength="50" required>
         </div>
 
@@ -47,6 +46,7 @@
             <input class="preOrder-input"
                    type="text"
                    th:errorclass="is-invalid"
+                   th:value="*{name}"
                    th:field="*{name}" minlength="1" maxlength="50" required>
         </div>
 
@@ -61,6 +61,7 @@
             <input class="preOrder-input"
                    type="text"
                    th:errorclass="is-invalid"
+                   th:value="*{description}"
                    th:field="*{description}" minlength="1" maxlength="50">
         </div>
 
@@ -75,6 +76,7 @@
             <input class="preOrder-input"
                    type="text"
                    th:errorclass="is-invalid"
+                   th:value="*{imgUrl}"
                    th:field="*{imgUrl}" minlength="1" maxlength="50">
         </div>
 
@@ -89,6 +91,7 @@
             <input class="preOrder-input"
                    type="text"
                    th:errorclass="is-invalid"
+                   th:value="*{barcode}"
                    th:field="*{barcode}" minlength="1" maxlength="50">
         </div>
 
@@ -103,51 +106,12 @@
             <input class="preOrder-input"
                    type="number"
                    th:errorclass="is-invalid"
+                   th:value="*{quantityInPallet}"
                    th:field="*{quantityInPallet}" minlength="1" maxlength="4" >
         </div>
 
-        <button type="submit">Добави артикул</button>
+        <button type="submit">Промени артикул</button>
     </div>
-
-        <table>
-            <thead>
-            <tr class="table-data">
-                <th th:text="#{article_number}">Артикулен номер</th>
-                <th th:text="#{article_name}">Quantity</th>
-                <th th:text="#{article_description}">Ordered by</th>
-                <th th:text="#{article_img_url}">Order reason</th>
-                <th th:text="#{article_barcode}">Comment</th>
-                <th th:text="#{article_quantity_in_pallet}">Ordered by</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="article : ${allArticles}"
-                th:object="${article}" class="container">
-                <td><span th:text="*{artNum()}">Art. </span></td>
-                <td><span th:text="*{name()}">Quantity</span></td>
-                <td><span th:text="*{description()}">Date</span></td>
-                <td><span th:text="*{imgUrl()}">Order reason</span></td>
-                <td><span th:text="*{barcode()}">Number of stops</span></td>
-                <td><span th:text="*{quantityInPallet()}">Number of stops</span></td>
-<!--                <td><span th:text="*{author()}">Added by</span></td>-->
-                <td>
-                    <form th:method="GET"
-                          th:action="@{/articles/{artNum}(artNum=*{artNum()})}" >
-<!--                        <input type="hidden" name="id" th:value="get">-->
-<!--                        <button onclick="editArticle" th:method="get" th:href="@{/article/editArticle/{id}(id=*{id})}">Edit</button>-->
-                        <button type="submit"><img src="../static/images/edit.svg?height=24" aria-hidden="true">
-                            Edit</button>
-                    </form>
-
-<!--                    <form th:method="get"-->
-<!--                          th:action="@{/elevator/editElevator/{id}(id=*{id})}">-->
-<!--                        <button onclick="editElevator(1)" th:method="get" th:href="@{/elevator/editElevator/{id}(id=*{id})}">Edit</button>-->
-<!--                    </form>-->
-
-                </td>
-            </tr>
-            </tbody>
-        </table>
     </form>
 </div>
 </body>

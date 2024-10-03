@@ -1,20 +1,14 @@
 package bg.deplan.Grohe.web;
 
-import bg.deplan.Grohe.model.AppUserDetails;
 import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
-import bg.deplan.Grohe.model.DTOs.OrderDTO;
+import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.time.LocalDate;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/articles")
@@ -41,8 +35,16 @@ public class ArticleController {
     @PostMapping("/addArticle")
     public String addArticle(AddArticleDTO addArticleDTO) {
 
-            articleService.addArticle(addArticleDTO);
+        articleService.addArticle(addArticleDTO);
 
-            return "redirect:/articles/articles";
+        return "redirect:/articles/articles";
+    }
+
+    @GetMapping("/{artNum}")
+    public String editArticle(@PathVariable("artNum") String artNum, Model model) {
+
+        model.addAttribute("articleData",articleService.getArticleData(artNum));
+
+        return "editArticle";
     }
 }

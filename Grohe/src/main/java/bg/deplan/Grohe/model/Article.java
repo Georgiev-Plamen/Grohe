@@ -17,6 +17,9 @@ public class Article extends BaseEntity{
     @Column(name = "image_urls")
     private String imageUrl;
 
+    @Column(name = "art_urls")
+    private String artUrl;
+
     @Column(name = "barcodes")
     private String barcode;
 
@@ -73,5 +76,13 @@ public class Article extends BaseEntity{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getArtUrl() {
+        return artUrl;
+    }
+
+    public void setArtUrl(String artUrl) {
+        this.artUrl = artUrl;
     }
 }

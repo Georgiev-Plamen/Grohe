@@ -31,8 +31,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="elevator : ${allElevators}"
-            th:object="${elevator}" class="container">
+        <tr th:each="order : ${allOrders}"
+            th:object="${order}" class="container">
             <td><span th:text="*{id()}">Id</span></td>
             <td><span th:text="*{owner().getName()}">Id</span></td>
             <td><span th:text="*{type()}">Elevator type</span></td>
