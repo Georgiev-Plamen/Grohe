@@ -14,4 +14,6 @@ public interface ArticleService {
     List<AddArticleDTO> getAllArticle();
 
     AddArticleDTO getArticleData(String artNum);
+
+    void editArticle(AddArticleDTO addArticleDTO);
 }

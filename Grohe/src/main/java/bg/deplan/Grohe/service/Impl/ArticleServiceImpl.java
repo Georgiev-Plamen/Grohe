@@ -3,13 +3,12 @@ package bg.deplan.Grohe.service.Impl;
 import bg.deplan.Grohe.data.ArticleRepository;
 import bg.deplan.Grohe.model.Article;
 import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
-import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.service.ArticleService;
-import jdk.dynalink.Operation;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -48,7 +47,20 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public AddArticleDTO getArticleData(String artNum) {
 
-        return modelMapper.map(articleRepository.findByArtNum(artNum).get(), AddArticleDTO.class);
+//        return modelMapper.map(articleRepository.findByArtNum(artNum).get(), AddArticleDTO.class);
+        return articleRepository.findByArtNum(artNum).stream().map(ArticleServiceImpl::toAllArticle).toList().stream().findFirst().get();
+    }
+
+    @Override
+    public void editArticle(AddArticleDTO addArticleDTO) {
+        Article article = articleRepository.findByArtNum(addArticleDTO.artNum()).get();
+        article.setArtNum(addArticleDTO.artNum());
+        article.setName(addArticleDTO.name());article.setDescription(addArticleDTO.description());
+        article.setImageUrl(addArticleDTO.imgUrl());
+        article.setBarcode(addArticleDTO.barcode());
+        article.setQuantityInPallet(addArticleDTO.quantityInPallet());
+
+        articleRepository.save(article);
     }
 
     private static AddArticleDTO toAllArticle(Article article) {

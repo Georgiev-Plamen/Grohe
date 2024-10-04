@@ -12,9 +12,9 @@
     <h1>Артикули</h1>
 
     <form
-            th:method="PUT"
             th:object="${articleData}"
-            th:action="@{/articles/editArticle}/{artNum}(artNum=*{artNum})"
+            th:action="@{/articles/{artNum}(artNum=*{artNum})}"
+            th:method="PUT"
     >
 
     <div class="add-container">

@@ -45,6 +45,14 @@ public class ArticleController {
 
         model.addAttribute("articleData",articleService.getArticleData(artNum));
 
-        return "editArticle";
+        return "editArticles";
+    }
+
+    @PutMapping("/{artNum}")
+    public String editArticle(@PathVariable("artNum") String artNum, AddArticleDTO addArticleDTO) {
+
+        articleService.editArticle(addArticleDTO);
+
+        return "redirect:/articles/articles";
     }
 }
