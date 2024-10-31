@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orders</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <script>
+         window.addEventListener('DOMContentLoaded', (event) => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById("currentDate").value = today;
+            });
+    </script>
 </head>
 <body>
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
@@ -70,10 +76,12 @@
                    th:for="date">Date:
             </label>
 
-            <small class="text-danger" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Quantity Error</small>
+            <small class="text-danger" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Date error</small>
 
             <input class="preOrder-input"
                    type="date"
+                   id="currentDate"
+                   name="currentDate"
                    th:errorclass="is-invalid"
                    th:field="*{date}" minlength="2" maxlength="50" required>
         </div>
