@@ -11,13 +11,10 @@
 <div class="container">
     <h1>Orders</h1>
 
-    <form th:method="get" th:action="@{/orders/addElevator}">
-        <button type="submit">Add new elevator</button>
-    </form><br>
-
     <table>
         <thead>
         <tr class="table-data">
+            <th th:text="#{orders_name}">article</th>
             <th th:text="#{orders_article_number}">article</th>
             <th th:text="#{orders_pcs}">Quantity</th>
             <th th:text="#{orders_ordered_by}">Ordered by</th>
@@ -33,29 +30,26 @@
         <tbody>
         <tr th:each="order : ${allOrders}"
             th:object="${order}" class="container">
-            <td><span th:text="*{id()}">Id</span></td>
-            <td><span th:text="*{owner().getName()}">Id</span></td>
-            <td><span th:text="*{type()}">Elevator type</span></td>
-            <td><span th:text="*{manufacturer()}">Manufacturer name</span></td>
-            <td><span th:text="*{speed()}">Speed</span></td>
-            <td><span th:text="*{numberOfStops()}">Number of stops</span></td>
-            <td><span th:text="*{registerDate()}">Number of stops</span></td>
-            <td><span th:text="*{lastInspection()}">Number of stops</span></td>
-            <td><span th:text="*{nextInspection()}">Number of stops</span></td>
-            <td><span th:text="*{author()}">Added by</span></td>
-            <td>
-                <form sec:authorize="hasRole('ADMIN')" th:method="delete"
-                      th:action="@{/elevator/{id}(id=${elevator.id()})}" >
-                    <input type="hidden" name="id" th:value="delete">
-                    <button type="submit">Delete</button>
-                </form>
+            <td><span th:text="*{orderName()}">Order name</span></td>
+            <td><span th:text="*{artNum()}">Id</span></td>
+            <td><span th:text="*{quantityForOrder()}">Id</span></td>
+            <td><span th:text="*{orderBy}">Elevator type</span></td>
+            <td><span th:text="*{date()}">Manufacturer name</span></td>
+            <td><span th:text="*{orderReason()}">Speed</span></td>
+            <td><span th:text="*{orderComment()}">Number of stops</span></td>
+<!--            <td>-->
+<!--                <form sec:authorize="hasRole('ADMIN')" th:method="delete"-->
+<!--                      th:action="@{/elevator/{id}(id=${elevator.id()})}" >-->
+<!--                    <input type="hidden" name="id" th:value="delete">-->
+<!--                    <button type="submit">Delete</button>-->
+<!--                </form>-->
 
-                <form th:method="get"
-                      th:action="@{/elevator/editElevator/{id}(id=*{id})}">
-                    <button onclick="editElevator(1)" th:method="get" th:href="@{/elevator/editElevator/{id}(id=*{id})}">Edit</button>
-                </form>
+<!--                <form th:method="get"-->
+<!--                      th:action="@{/elevator/editElevator/{id}(id=*{id})}">-->
+<!--                    <button onclick="editElevator(1)" th:method="get" th:href="@{/elevator/editElevator/{id}(id=*{id})}">Edit</button>-->
+<!--                </form>-->
 
-            </td>
+<!--            </td>-->
         </tr>
         </tbody>
     </table>
