@@ -1,9 +1,11 @@
 package bg.deplan.Grohe.web;
 
 import bg.deplan.Grohe.data.PreOrderItemRepository;
+import bg.deplan.Grohe.model.Article;
 import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
 import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.DTOs.OrderDTO;
+import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
 import bg.deplan.Grohe.service.PreOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 @RequestMapping("/orders")
@@ -24,8 +27,8 @@ public class PreOrderController {
     private PreOrderItemRepository preOrderRepository;
 
     @ModelAttribute("preOrderData")
-    public OrderDTO preOrderDTO() {
-        return new OrderDTO("","",1, "", LocalDate.now(),"", "");
+    public PreOrderDTO preOrderDTO() {
+        return new PreOrderDTO("",LocalDate.now(), List.of(new Article()));
     }
 
     @GetMapping("/preOrder")

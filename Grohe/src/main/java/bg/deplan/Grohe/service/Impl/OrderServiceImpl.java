@@ -31,12 +31,9 @@ public class OrderServiceImpl implements OrderService {
     private static OrderDTO toAllOrders(Order order) {
         return new OrderDTO(
                 order.getOrderName(),
-                order.getArticle().getArtNum(),
-                order.getQuantityForOrder(),
-                order.getOrderBy(),
                 order.getDate(),
-                order.getOrderReason(),
-                order.getComment());
+                order.getItems().stream().map(i -> i.getArticle()).toList()
+                );
     }
 
 

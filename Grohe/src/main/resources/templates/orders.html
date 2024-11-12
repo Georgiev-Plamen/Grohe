@@ -14,29 +14,30 @@
     <table>
         <thead>
         <tr class="table-data">
-            <th th:text="#{orders_name}">article</th>
-            <th th:text="#{orders_article_number}">article</th>
-            <th th:text="#{orders_pcs}">Quantity</th>
-            <th th:text="#{orders_ordered_by}">Ordered by</th>
-            <th th:text="#{orders_date}">Date</th>
-            <th th:text="#{orders_status}">Status</th>
-            <th th:text="#{orders_name}">Order</th>
-            <th th:text="#{orders_confirmation}">Confirmation</th>
-            <th th:text="#{orders_delivery}">Delivery date</th>
-            <th th:text="#{orders_reason}">Order reason</th>
+            <th th:text="#{orders_name}">Order name</th>
+            <th th:text="#{orders_date}">Order data</th>
             <th th:text="#{orders_comment}">Comment</th>
+            <th th:text="#{orders_article_number}">Article</th>
+            <th th:text="#{orders_pcs}">Quantity</th>
+            <th th:text="#{orders_ordered_by}">Order by</th>
+            <th th:text="#{orders_reason}">Order reason</th>
+<!--            <th th:text="#{orders_confirmation}">Confirmation</th>-->
+<!--            <th th:text="#{orders_delivery}">Delivery date</th>-->
+<!--            <th th:text="#{orders_reason}">Order reason</th>-->
+<!--            <th th:text="#{orders_comment}">Comment</th>-->
         </tr>
         </thead>
         <tbody>
         <tr th:each="order : ${allOrders}"
             th:object="${order}" class="container">
-            <td><span th:text="*{orderName()}">Order name</span></td>
+            <th><span th:text="*{orderName()}">Order name</span></th>
+            <th><span th:text="*{date()}">Order date</span></th>
+            <th><span th:text="*{comment()}">Comments</span></th>
+
             <td><span th:text="*{artNum()}">Id</span></td>
             <td><span th:text="*{quantityForOrder()}">Id</span></td>
-            <td><span th:text="*{orderBy}">Elevator type</span></td>
-            <td><span th:text="*{date()}">Manufacturer name</span></td>
-            <td><span th:text="*{orderReason()}">Speed</span></td>
-            <td><span th:text="*{comment()}">Number of stops</span></td>
+            <td><span th:text="*{orderBy}">Order by</span></td>
+            <td><span th:text="*{orderReason()}">Order reason</span></td>
 <!--            <td>-->
 <!--                <form sec:authorize="hasRole('ADMIN')" th:method="delete"-->
 <!--                      th:action="@{/elevator/{id}(id=${elevator.id()})}" >-->
