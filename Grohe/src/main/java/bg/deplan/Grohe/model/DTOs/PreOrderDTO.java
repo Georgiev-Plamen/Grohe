@@ -6,7 +6,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record PreOrderDTO (
-        String orderName,
+
+        String artNum,
+
+        int quantityForOrder,
+        String orderBy,
         LocalDate date,
-        List<Article> articleList){
+        String orderReason,
+        String comment
+){
 }
