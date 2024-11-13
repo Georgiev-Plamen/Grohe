@@ -1,10 +1,7 @@
 package bg.deplan.Grohe.web;
 
 import bg.deplan.Grohe.data.PreOrderItemRepository;
-import bg.deplan.Grohe.model.Article;
-import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
 import bg.deplan.Grohe.model.DTOs.ArticleDTO;
-import bg.deplan.Grohe.model.DTOs.OrderDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
 import bg.deplan.Grohe.service.PreOrderService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -8,7 +8,6 @@ import java.util.List;
 public record PreOrderDTO (
 
         String artNum,
-
         int quantityForOrder,
         String orderBy,
         LocalDate date,

@@ -46,11 +46,9 @@ public class PreOrderServiceImpl implements PreOrderService {
         preOrderItem.setArticle(optionalArticle.get());
         preOrderItem.setQuantityForOrder(articleDTO.quantityForOrder());
         preOrderItem.setOrderBy(articleDTO.orderBy());
-        preOrderItem.setOrderBy(articleDTO.orderReason());
         preOrderItem.setDate(articleDTO.date());
         preOrderItem.setOrderReason(articleDTO.orderReason());
         preOrderItem.setComment(articleDTO.comment());
-//        preOrderItem.setPreOrder(this);  // Set association back to PreOrder
 
         preOrderRepository.save(preOrderItem);
 
