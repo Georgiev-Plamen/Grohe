@@ -16,11 +16,11 @@
         <tr class="table-data">
             <th th:text="#{orders_name}">Order name</th>
             <th th:text="#{orders_date}">Order data</th>
-            <th th:text="#{orders_comment}">Comment</th>
-            <th th:text="#{orders_article_number}">Article</th>
-            <th th:text="#{orders_pcs}">Quantity</th>
-            <th th:text="#{orders_ordered_by}">Order by</th>
-            <th th:text="#{orders_reason}">Order reason</th>
+<!--            <th th:text="#{orders_comment}">Comment</th>-->
+<!--            <th th:text="#{orders_article_number}">Article</th>-->
+<!--            <th th:text="#{orders_pcs}">Quantity</th>-->
+<!--            <th th:text="#{orders_ordered_by}">Order by</th>-->
+<!--            <th th:text="#{orders_reason}">Order reason</th>-->
 <!--            <th th:text="#{orders_confirmation}">Confirmation</th>-->
 <!--            <th th:text="#{orders_delivery}">Delivery date</th>-->
 <!--            <th th:text="#{orders_reason}">Order reason</th>-->
@@ -28,16 +28,30 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="order : ${allOrders}"
-            th:object="${order}" class="container">
-            <th><span th:text="*{orderName()}">Order name</span></th>
-            <th><span th:text="*{date()}">Order date</span></th>
-            <th><span th:text="*{comment()}">Comments</span></th>
+        <tr th:each="order : ${allOrders}" class="container">
+            <th><span th:text="${order.orderName}">Order name</span></th>
+            <th><span th:text="${order.date}">Order date</span></th>
+        </tr>
+        <tr th:each="order : ${allOrders}">
+            <td colspan="2"> <!-- Span two columns to align with order headers -->
+                <table> <!-- Inner table for articles, if desired -->
+                    <tr th:each="article : ${order.articleList}">
+                        <td><span th:text="${article.getArticle.artNum}"></span></td>
+                        <td><span th:text="${article.quantity}"></span> </td>
+                        <td><span th:text="${article.orderBy}"></span> </td>
+                        <td><span th:text="${article.orderReason}"></span> </td>
+                        <td><span th:text="${article.dateOfOrder}"></span> </td>
+                        <td><span th:text="${article.dateOfDelivery}"></span> </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+<!--            <th><span th:text="*{comment()}">Comments</span></th>-->
 
-            <td><span th:text="*{artNum()}">Id</span></td>
-            <td><span th:text="*{quantityForOrder()}">Id</span></td>
-            <td><span th:text="*{orderBy}">Order by</span></td>
-            <td><span th:text="*{orderReason()}">Order reason</span></td>
+<!--            <td><span th:text="*{artNum()}">Id</span></td>-->
+<!--            <td><span th:text="*{quantityForOrder()}">Id</span></td>-->
+<!--            <td><span th:text="*{orderBy}">Order by</span></td>-->
+<!--            <td><span th:text="*{orderReason()}">Order reason</span></td>-->
 <!--            <td>-->
 <!--                <form sec:authorize="hasRole('ADMIN')" th:method="delete"-->
 <!--                      th:action="@{/elevator/{id}(id=${elevator.id()})}" >-->
@@ -51,7 +65,6 @@
 <!--                </form>-->
 
 <!--            </td>-->
-        </tr>
         </tbody>
     </table>
 </div>

@@ -2,6 +2,8 @@ package bg.deplan.Grohe.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name ="order_items")
 public class OrderItem extends BaseEntity{
@@ -22,6 +24,16 @@ public class OrderItem extends BaseEntity{
 
     @Column(name = "order_by")
     private String orderBy;
+
+    @Column(name = "order_reason")
+    private String orderReason;
+
+    @Column(name = "date_of_order")
+    private LocalDate dateOfOrder;
+
+    @Column(name = "date_of_delivery")
+    private LocalDate dateOfDelivery;
+
 
     public OrderItem() {}
 
@@ -63,5 +75,29 @@ public class OrderItem extends BaseEntity{
 
     public void setOrderBy(String orderBy) {
         this.orderBy = orderBy;
+    }
+
+    public String getOrderReason() {
+        return orderReason;
+    }
+
+    public void setOrderReason(String orderReason) {
+        this.orderReason = orderReason;
+    }
+
+    public LocalDate getDateOfOrder() {
+        return dateOfOrder;
+    }
+
+    public void setDateOfOrder(LocalDate dateOfOrder) {
+        this.dateOfOrder = dateOfOrder;
+    }
+
+    public LocalDate getDateOfDelivery() {
+        return dateOfDelivery;
+    }
+
+    public void setDateOfDelivery(LocalDate dateOfDelivery) {
+        this.dateOfDelivery = dateOfDelivery;
     }
 }
