@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
+<div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
 <div class="container">
     <h1>Orders</h1>
 
@@ -15,56 +15,41 @@
         <thead>
         <tr class="table-data">
             <th th:text="#{orders_name}">Order name</th>
-            <th th:text="#{orders_date}">Order data</th>
-<!--            <th th:text="#{orders_comment}">Comment</th>-->
-<!--            <th th:text="#{orders_article_number}">Article</th>-->
-<!--            <th th:text="#{orders_pcs}">Quantity</th>-->
-<!--            <th th:text="#{orders_ordered_by}">Order by</th>-->
-<!--            <th th:text="#{orders_reason}">Order reason</th>-->
-<!--            <th th:text="#{orders_confirmation}">Confirmation</th>-->
-<!--            <th th:text="#{orders_delivery}">Delivery date</th>-->
-<!--            <th th:text="#{orders_reason}">Order reason</th>-->
-<!--            <th th:text="#{orders_comment}">Comment</th>-->
+            <th th:text="#{orders_date}">Order date</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="order : ${allOrders}" class="container">
-            <th><span th:text="${order.orderName}">Order name</span></th>
-            <th><span th:text="${order.date}">Order date</span></th>
-        </tr>
-        <tr th:each="order : ${allOrders}">
-            <td colspan="2"> <!-- Span two columns to align with order headers -->
-                <table> <!-- Inner table for articles, if desired -->
+        <!-- Loop through allOrders and display order details -->
+        <tr th:each="order : ${allOrders}" class="order-row">
+            <!-- Order information row -->
+            <td><span th:text="${order.orderName}">Order name</span></td>
+            <td><span th:text="${order.date}">Order date</span></td>
+            <td th:each="order : ${allOrders}">
+                <td colspan="2"> <!-- Span two columns to align with the order headers -->
+                <table class="article-table"> <!-- Inner table for articles -->
+                    <thead>
+                    <tr>
+                        <th>Article Number</th>
+                        <th>Quantity</th>
+                        <th>Ordered By</th>
+                        <th>Order Reason</th>
+                        <th>Date of Order</th>
+                        <th>Date of Delivery</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     <tr th:each="article : ${order.articleList}">
                         <td><span th:text="${article.getArticle.artNum}"></span></td>
-                        <td><span th:text="${article.quantity}"></span> </td>
-                        <td><span th:text="${article.orderBy}"></span> </td>
-                        <td><span th:text="${article.orderReason}"></span> </td>
-                        <td><span th:text="${article.dateOfOrder}"></span> </td>
-                        <td><span th:text="${article.dateOfDelivery}"></span> </td>
+                        <td><span th:text="${article.quantity}"></span></td>
+                        <td><span th:text="${article.orderBy}"></span></td>
+                        <td><span th:text="${article.orderReason}"></span></td>
+                        <td><span th:text="${article.dateOfOrder}"></span></td>
+                        <td><span th:text="${article.dateOfDelivery}"></span></td>
                     </tr>
+                    </tbody>
                 </table>
             </td>
         </tr>
-<!--            <th><span th:text="*{comment()}">Comments</span></th>-->
-
-<!--            <td><span th:text="*{artNum()}">Id</span></td>-->
-<!--            <td><span th:text="*{quantityForOrder()}">Id</span></td>-->
-<!--            <td><span th:text="*{orderBy}">Order by</span></td>-->
-<!--            <td><span th:text="*{orderReason()}">Order reason</span></td>-->
-<!--            <td>-->
-<!--                <form sec:authorize="hasRole('ADMIN')" th:method="delete"-->
-<!--                      th:action="@{/elevator/{id}(id=${elevator.id()})}" >-->
-<!--                    <input type="hidden" name="id" th:value="delete">-->
-<!--                    <button type="submit">Delete</button>-->
-<!--                </form>-->
-
-<!--                <form th:method="get"-->
-<!--                      th:action="@{/elevator/editElevator/{id}(id=*{id})}">-->
-<!--                    <button onclick="editElevator(1)" th:method="get" th:href="@{/elevator/editElevator/{id}(id=*{id})}">Edit</button>-->
-<!--                </form>-->
-
-<!--            </td>-->
         </tbody>
     </table>
 </div>
