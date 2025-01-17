@@ -6,6 +6,7 @@ import bg.deplan.Grohe.data.OrderRepository;
 import bg.deplan.Grohe.data.PreOrderItemRepository;
 import bg.deplan.Grohe.model.Article;
 import bg.deplan.Grohe.model.DTOs.ArticleDTO;
+import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
 import bg.deplan.Grohe.model.PreOrderItem;
 import bg.deplan.Grohe.service.ArticleService;
 import bg.deplan.Grohe.service.PreOrderService;
@@ -60,6 +61,12 @@ public class PreOrderServiceImpl implements PreOrderService {
                 .stream()
                 .map(PreOrderServiceImpl::toAllItem)
                 .toList();
+    }
+
+    @Override
+    public void makeOrder(PreOrderDTO preOrderDTO) {
+
+        preOrderRepository.deleteAll();
     }
 
     private static ArticleDTO toAllItem(PreOrderItem preOrderItem) {

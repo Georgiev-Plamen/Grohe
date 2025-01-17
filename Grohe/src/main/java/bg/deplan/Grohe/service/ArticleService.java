@@ -2,6 +2,7 @@ package bg.deplan.Grohe.service;
 
 
 
+import bg.deplan.Grohe.model.Article;
 import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
 import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 
@@ -16,4 +17,6 @@ public interface ArticleService {
     AddArticleDTO getArticleData(String artNum);
 
     void editArticle(AddArticleDTO addArticleDTO);
+
+    Article findById(Long id);
 }

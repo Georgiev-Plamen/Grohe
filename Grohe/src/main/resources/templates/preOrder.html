@@ -11,6 +11,45 @@
             document.getElementById("currentDate").value = today;
             });
     </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const table = document.querySelector('table');
+        table.addEventListener('input', (event) => {
+            if (event.target.classList.contains('editable')) {
+                const row = event.target.closest('tr');
+                const field = event.target.dataset.field;
+                const value = event.target.textContent.trim();
+                const id = row.dataset.id; // Assuming each row has a unique ID
+
+                // Send update to server
+                updateArticle(id, field, value);
+            }
+        });
+
+        function updateArticle(id, field, value) {
+            fetch(`/orders/updateArticle/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ field, value }),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Failed to update article');
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log('Update successful', data);
+                })
+                .catch((error) => {
+                    console.error('Error updating article:', error);
+                });
+        }
+    });
+</script>
+
 </head>
 <body>
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
@@ -131,12 +170,18 @@
             <tbody>
             <tr th:each="article : ${allArticle}"
                 th:object="${article}" class="container">
-                <td><span th:text="*{artNum()}">Art. </span></td>
-                <td><span th:text="*{quantityForOrder()}">Quantity</span></td>
-                <td><span th:text="*{orderBy()}">Поръчано от</span></td>
-                <td><span th:text="*{date()}">Date</span></td>
-                <td><span th:text="*{orderReason()}">Order reason</span></td>
-                <td><span th:text="*{comment()}">Number of stops</span></td>
+<!--                <td><span th:text="*{artNum()}">Art. </span></td>-->
+<!--                <td><span th:text="*{quantityForOrder()}">Quantity</span></td>-->
+<!--                <td><span th:text="*{orderBy()}">Поръчано от</span></td>-->
+<!--                <td><span th:text="*{date()}">Date</span></td>-->
+<!--                <td><span th:text="*{orderReason()}">Order reason</span></td>-->
+<!--                <td><span th:text="*{comment()}">Number of stops</span></td>-->
+                <td contenteditable="true" class="editable" data-field="artNum" th:text="*{artNum()}"></td>
+                <td contenteditable="true" class="editable" data-field="quantityForOrder" th:text="*{quantityForOrder()}"></td>
+                <td contenteditable="true" class="editable" data-field="orderBy" th:text="*{orderBy()}"></td>
+                <td contenteditable="true" class="editable" data-field="date" th:text="*{date()}"></td>
+                <td contenteditable="true" class="editable" data-field="orderReason" th:text="*{orderReason()}"></td>
+                <td contenteditable="true" class="editable" data-field="comment" th:text="*{comment()}"></td>
 <!--                <td><span th:text="*{author()}">Added by</span></td>-->
                 <td>
 <!--                    <form sec:authorize="hasRole('ADMIN')" th:method="delete"-->

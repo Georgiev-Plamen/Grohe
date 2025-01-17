@@ -63,6 +63,11 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.save(article);
     }
 
+    @Override
+    public Article findById(Long id) {
+        return articleRepository.findById(id).get();
+    }
+
     private static AddArticleDTO toAllArticle(Article article) {
         return new AddArticleDTO(
                 article.getArtNum(),
