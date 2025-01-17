@@ -11,8 +11,11 @@ import bg.deplan.Grohe.model.PreOrderItem;
 import bg.deplan.Grohe.service.ArticleService;
 import bg.deplan.Grohe.service.PreOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,8 +55,54 @@ public class PreOrderServiceImpl implements PreOrderService {
         preOrderItem.setComment(articleDTO.comment());
 
         preOrderRepository.save(preOrderItem);
-
     }
+
+    @Override
+    public void updateItems(ArticleDTO articleDTO, Long id) {
+//        try {
+//            String field = updates.get("field");
+//            String value = updates.get("value");
+//
+//            PreOrderItem preOrderItem = preOrderService.findById(id);
+//            if (field.equals("artNum")) {
+//                preOrderService.updateItems(value);
+//            } else if (field.equals("quantityForOrder")) {
+//                article.s(Integer.parseInt(value));
+//            } else if (field.equals("orderBy")) {
+//                article.setOrderBy(value);
+//            } else if (field.equals("date")) {
+//                article.setDate(LocalDate.parse(value));
+//            } else if (field.equals("orderReason")) {
+//                article.setOrderReason(value);
+//            } else if (field.equals("comment")) {
+//                article.setComment(value);
+//            }
+//            articleService.save(article);
+//
+//            return ResponseEntity.ok().body("Update successful");
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update");
+//        }
+
+        PreOrderItem preOrderItem = preOrderRepository.getReferenceById(id);
+
+        Optional<Article> optionalArticle = articleRepository.findByArtNum(articleDTO.artNum());
+
+        preOrderItem.setArticle(optionalArticle.get());
+        preOrderItem.setQuantityForOrder(articleDTO.quantityForOrder());
+        preOrderItem.setOrderBy(articleDTO.orderBy());
+        preOrderItem.setDate(articleDTO.date());
+        preOrderItem.setOrderReason(articleDTO.orderReason());
+        preOrderItem.setComment(articleDTO.comment());
+
+        preOrderRepository.save(preOrderItem);
+    }
+
+    @Override
+    public PreOrderItem findById(Long id) {
+        return preOrderRepository.findById(id).get();
+    }
+
 
     @Override
     public List<ArticleDTO> getAllArticle() {

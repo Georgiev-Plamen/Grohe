@@ -237,3 +237,12 @@ select {
     font-size: 14px;
 }
 
+.editable {
+    border: 1px solid #ccc;
+    padding: 5px;
+    cursor: text;
+}
+.editable:focus {
+    background-color: #f0f8ff;
+}
+
