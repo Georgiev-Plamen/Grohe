@@ -10,43 +10,44 @@
             const today = new Date().toISOString().split('T')[0];
             document.getElementById("currentDate").value = today;
             });
+
+         let debounceTimer;
+         table.addEventListener('input', (event) => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+        // Form submission logic
+            }, 500); // 500ms delay});
     </script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const table = document.querySelector('table');
+
         table.addEventListener('input', (event) => {
             if (event.target.classList.contains('editable')) {
-                const row = event.target.closest('tr');
-                const field = event.target.dataset.field;
-                const value = event.target.textContent.trim();
-                const id = row.dataset.id; // Assuming each row has a unique ID
+                const cell = event.target;
+                const row = cell.closest('tr');
+                const id = row.dataset.id; // Get the row ID
+                const field = cell.dataset.field; // Get the field name
+                const value = cell.textContent.trim(); // Get the new value
 
-                // Send update to server
-                updateArticle(id, field, value);
+                // Create a form dynamically
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/orders/updateArticle/${id}`; // Thymeleaf-friendly URL
+
+                // Add the field name and value as inputs
+                const fieldInput = document.createElement('input');
+                fieldInput.type = 'hidden';
+                fieldInput.name = field;
+                fieldInput.value = value;
+
+                form.appendChild(fieldInput);
+                document.body.appendChild(form);
+
+                // Submit the form
+                form.submit();
             }
         });
-
-        function updateArticle(id, field, value) {
-            fetch(`/orders/updateArticle/${id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ field, value }),
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error('Failed to update article');
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    console.log('Update successful', data);
-                })
-                .catch((error) => {
-                    console.error('Error updating article:', error);
-                });
-        }
     });
 </script>
 
@@ -169,7 +170,7 @@
             </thead>
             <tbody>
             <tr th:each="article : ${allArticle}"
-                th:object="${article}" class="container">
+                th:object="${article}" class="container" data-id="*{id}">
 <!--                <td><span th:text="*{artNum()}">Art. </span></td>-->
 <!--                <td><span th:text="*{quantityForOrder()}">Quantity</span></td>-->
 <!--                <td><span th:text="*{orderBy()}">Поръчано от</span></td>-->
@@ -199,6 +200,8 @@
             </tbody>
         </table>
     </form>
+<!--    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>-->
+<!--    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>-->
 </div>
 </body>
 </html>
