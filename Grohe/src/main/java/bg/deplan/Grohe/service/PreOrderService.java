@@ -16,7 +16,7 @@ public interface PreOrderService {
 
     void makeOrder(PreOrderDTO preOrderDTO);
 
-    void updateItems(ArticleDTO articleDTO, Long id);
+    void updateItems(PreOrderDTO preOrderDTO, Long id);
 
     PreOrderItem findById(Long id);
 }

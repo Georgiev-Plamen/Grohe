@@ -7,6 +7,7 @@ import java.util.List;
 
 public record PreOrderDTO (
 
+        Long id,
         String artNum,
         int quantityForOrder,
         String orderBy,

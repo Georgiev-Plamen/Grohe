@@ -10,6 +10,7 @@ import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
 import bg.deplan.Grohe.model.PreOrderItem;
 import bg.deplan.Grohe.service.ArticleService;
 import bg.deplan.Grohe.service.PreOrderService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,42 +59,22 @@ public class PreOrderServiceImpl implements PreOrderService {
     }
 
     @Override
-    public void updateItems(ArticleDTO articleDTO, Long id) {
-//        try {
-//            String field = updates.get("field");
-//            String value = updates.get("value");
-//
-//            PreOrderItem preOrderItem = preOrderService.findById(id);
-//            if (field.equals("artNum")) {
-//                preOrderService.updateItems(value);
-//            } else if (field.equals("quantityForOrder")) {
-//                article.s(Integer.parseInt(value));
-//            } else if (field.equals("orderBy")) {
-//                article.setOrderBy(value);
-//            } else if (field.equals("date")) {
-//                article.setDate(LocalDate.parse(value));
-//            } else if (field.equals("orderReason")) {
-//                article.setOrderReason(value);
-//            } else if (field.equals("comment")) {
-//                article.setComment(value);
-//            }
-//            articleService.save(article);
-//
-//            return ResponseEntity.ok().body("Update successful");
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update");
-//        }
+    public void updateItems(PreOrderDTO preOrderDTO, Long id) {
 
         PreOrderItem preOrderItem = preOrderRepository.getReferenceById(id);
 
-        Optional<Article> optionalArticle = articleRepository.findByArtNum(articleDTO.artNum());
+        if (preOrderItem == null) {
+            throw new EntityNotFoundException("PreOrderItem not found with id: " + id);
+        }
+
+        Optional<Article> optionalArticle = articleRepository.findByArtNum(preOrderDTO.artNum());
 
         preOrderItem.setArticle(optionalArticle.get());
-        preOrderItem.setQuantityForOrder(articleDTO.quantityForOrder());
-        preOrderItem.setOrderBy(articleDTO.orderBy());
-        preOrderItem.setDate(articleDTO.date());
-        preOrderItem.setOrderReason(articleDTO.orderReason());
-        preOrderItem.setComment(articleDTO.comment());
+        preOrderItem.setQuantityForOrder(preOrderDTO.quantityForOrder());
+        preOrderItem.setOrderBy(preOrderDTO.orderBy());
+        preOrderItem.setDate(preOrderDTO.date());
+        preOrderItem.setOrderReason(preOrderDTO.orderReason());
+        preOrderItem.setComment(preOrderDTO.comment());
 
         preOrderRepository.save(preOrderItem);
     }

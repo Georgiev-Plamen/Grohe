@@ -68,6 +68,10 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.findById(id).get();
     }
 
+    public Article findByArtNum(String s) {
+        return articleRepository.findByArtNum(s).get();
+    }
+
     private static AddArticleDTO toAllArticle(Article article) {
         return new AddArticleDTO(
                 article.getArtNum(),

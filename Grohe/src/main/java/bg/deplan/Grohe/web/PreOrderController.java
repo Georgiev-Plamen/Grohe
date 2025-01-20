@@ -25,13 +25,14 @@ public class PreOrderController {
 
     @ModelAttribute("preOrderData")
     public PreOrderDTO preOrderDTO() {
-        return new PreOrderDTO("",0,"",LocalDate.now(), "","");
+        return new PreOrderDTO(0L,"",0,"",LocalDate.now(), "","");
     }
 
     @GetMapping("/preOrder")
     public String preOrder(Model model) {
 
         model.addAttribute("preOrderData", preOrderDTO());
+        model.addAttribute("preOrderUpdateData", preOrderDTO());
         model.addAttribute("allArticle", preOrderService.getAllArticle());
 
         return "preOrder";
@@ -45,9 +46,10 @@ public class PreOrderController {
         return "redirect:/orders/preOrder";
     }
 
-    @PostMapping("/orders/updateArticle/{id}")
-    public String updateArticle(@PathVariable Long id, @RequestBody ArticleDTO articleDTO) {
-       preOrderService.updateItems(articleDTO, id);
+    @PutMapping("/updatePreOrder/{id}")
+    public String updateArticle(@PathVariable ("id") Long id, @ModelAttribute PreOrderDTO preOrderDTO) {
+
+       preOrderService.updateItems(preOrderDTO, id);
 
         return "redirect:/orders/preOrder";
     }
