@@ -6,17 +6,26 @@
     <title>Orders</title>
     <link rel="stylesheet" href="/css/styles.css">
     <script>
-         window.addEventListener('DOMContentLoaded', (event) => {
+        // Set today's date on page load
+        window.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById("currentDate").value = today;
-            });
-    </script>
+        });
 
+        // Function to sync contenteditable divs with hidden inputs
+        function updateHiddenInput(div) {
+            const hiddenInput = div.nextElementSibling;
+            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                hiddenInput.value = div.textContent.trim();
+            }
+        }
+    </script>
 </head>
 <body>
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
 <div class="container">
-    <h1>preOrder</h1>
+    <h1>PreOrder</h1>
+    <!-- Add Order Form -->
     <form th:method="post" th:action="@{/orders/preOrder}" th:object="${preOrderData}">
         <div class="add-container">
             <!-- Article Field -->
@@ -49,37 +58,60 @@
                 <label for="comment">Comments:</label>
                 <input type="text" id="comment" th:field="*{comment}">
             </div>
-            <button type="submit">Добави</button>
+            <button type="submit">Add</button>
         </div>
     </form>
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Article</th>
-                <th>Quantity</th>
-                <th>Ordered by</th>
-                <th>Date</th>
-                <th>Order reason</th>
-                <th>Comment</th>
-            </tr>
-            </thead>
 
-            <tbody>
-                <tr th:each="article : ${allArticle}" th:object="${article}">
-                    <form th:method="put" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}" th:object="test">
-                    <td th:type="hidden" th:text="*{id}"></td>
-                    <td th:contenteditable="true" class="editable" th:text="*{artNum()}" th:field="*{artNum()}" th:value="*{artNum()}"></td>
-                    <td th:contenteditable="true" class="editable" th:text="*{quantityForOrder()}" th:field="*{quantityForOrder()}" th:value="*{quantityForOrder()}"></td>
-                    <td th:contenteditable="true" class="editable" th:text="*{orderBy()}" th:field="*{orderBy()}" th:value="*{orderBy()}"></td>
-                    <td contenteditable="true" class="editable" th:text="*{date()}" th:field="*{date()}" th:value="*{date()}"></td>
-                    <td contenteditable="true" class="editable" th:text="*{orderReason()}" th:field="*{orderReason()}" th:value="*{orderReason()}"></td>
-                    <td contenteditable="true" class="editable" th:text="*{comment()}" th:field="*{comment()}" th:value="*{comment()}"></td>
-                        <td><button type="submit">Обнови</button></td>
-                    </form>
-                </tr>
-            </tbody>
-        </table>
+    <!-- Display Orders -->
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Article</th>
+            <th>Quantity</th>
+            <th>Ordered By</th>
+            <th>Date</th>
+            <th>Order Reason</th>
+            <th>Comment</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="article : ${allArticle}" th:object="${article}">
+            <!-- Form for each article -->
+            <form th:method="put" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}">
+                <td th:text="*{id}"></td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"></div>
+                    <input type="hidden" th:field="*{artNum}" />
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantityForOrder}"></div>
+                    <input type="hidden" th:field="*{quantityForOrder}" />
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderBy}"></div>
+                    <input type="hidden" th:field="*{orderBy}" />
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"></div>
+                    <input type="hidden" th:field="*{date}" />
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderReason}"></div>
+                    <input type="hidden" th:field="*{orderReason}" />
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}"></div>
+                    <input type="hidden" th:field="*{comment}" />
+                </td>
+                <td>
+                    <button type="submit">Update</button>
+                </td>
+            </form>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>

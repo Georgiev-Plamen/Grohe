@@ -9,7 +9,7 @@ public record PreOrderDTO (
 
         Long id,
         String artNum,
-        int quantityForOrder,
+        Integer quantityForOrder,
         String orderBy,
         LocalDate date,
         String orderReason,

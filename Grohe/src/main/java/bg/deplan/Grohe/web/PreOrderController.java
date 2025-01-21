@@ -32,7 +32,6 @@ public class PreOrderController {
     public String preOrder(Model model) {
 
         model.addAttribute("preOrderData", preOrderDTO());
-        model.addAttribute("preOrderUpdateData", preOrderDTO());
         model.addAttribute("allArticle", preOrderService.getAllArticle());
 
         return "preOrder";
