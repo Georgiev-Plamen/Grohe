@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script>
+        // Set today's date on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById("currentDate").value = today;
+        });
+
+        // Function to sync contenteditable divs with hidden inputs
+        function updateHiddenInput(div) {
+            const hiddenInput = div.nextElementSibling;
+            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                hiddenInput.value = div.textContent.trim();
+            }
+        }
+    </script>
+</head>
+<body>
+<div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
+<div class="container">
+    <h1>PreOrder</h1>
+    <!-- Add Order Form -->
+    <form th:method="post" th:action="@{/orders/preOrder}" th:object="${preOrderData}">
+        <div class="add-container">
+            <!-- Article Field -->
+            <div class="preOrder-entity">
+                <label for="artNum">Article:</label>
+                <input type="text" id="artNum" th:field="*{artNum}" required>
+            </div>
+            <!-- Quantity Field -->
+            <div class="preOrder-entity">
+                <label for="quantityForOrder">Quantity:</label>
+                <input type="number" id="quantityForOrder" th:field="*{quantityForOrder}" required>
+            </div>
+            <!-- Order By Field -->
+            <div class="preOrder-entity">
+                <label for="orderBy">Order by:</label>
+                <input type="text" id="orderBy" th:field="*{orderBy}" required>
+            </div>
+            <!-- Date Field -->
+            <div class="preOrder-entity">
+                <label for="currentDate">Date:</label>
+                <input type="date" id="currentDate" th:field="*{date}" required>
+            </div>
+            <!-- Order Reason Field -->
+            <div class="preOrder-entity">
+                <label for="orderReason">Order reason:</label>
+                <input type="text" id="orderReason" th:field="*{orderReason}">
+            </div>
+            <!-- Comments Field -->
+            <div class="preOrder-entity">
+                <label for="comment">Comments:</label>
+                <input type="text" id="comment" th:field="*{comment}">
+            </div>
+            <button type="submit">Add</button>
+        </div>
+    </form>
+
+    <!-- Display Orders -->
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Article</th>
+            <th>Quantity</th>
+            <th>Ordered By</th>
+            <th>Date</th>
+            <th>Order Reason</th>
+            <th>Comment</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="article : ${allArticle}" th:object="${article}">
+            <!-- Form for each article -->
+            <form th:method="put" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}">
+                <td th:text="*{id}"></td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"></div>
+                    <input type="hidden" th:field="*{artNum}" />
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantityForOrder}"></div>
+                    <input type="hidden" th:field="*{quantityForOrder}" />
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderBy}"></div>
+                    <input type="hidden" th:field="*{orderBy}" />
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"></div>
+                    <input type="hidden" th:field="*{date}" />
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderReason}"></div>
+                    <input type="hidden" th:field="*{orderReason}" />
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}"></div>
+                    <input type="hidden" th:field="*{comment}" />
+                </td>
+                <td>
+                    <button type="submit">Update</button>
+                </td>
+            </form>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
