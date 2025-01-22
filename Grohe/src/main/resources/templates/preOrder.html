@@ -117,6 +117,11 @@
         </tr>
         </tbody>
     </table>
+    <form th:method="POST"
+          th:action="@{/orders/makeOrder}" >
+        <input type="hidden" name="makeOrder" th:value="makeOrder">
+        <button type="submit">Make Order</button>
+    </form>
 </div>
 </body>
 </html>

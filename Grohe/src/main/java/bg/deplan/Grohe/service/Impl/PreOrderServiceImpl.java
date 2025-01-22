@@ -9,6 +9,7 @@ import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
 import bg.deplan.Grohe.model.PreOrderItem;
 import bg.deplan.Grohe.service.ArticleService;
+import bg.deplan.Grohe.service.OrderService;
 import bg.deplan.Grohe.service.PreOrderService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class PreOrderServiceImpl implements PreOrderService {
     private PreOrderItemRepository preOrderRepository;
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderService orderService;
 
     public PreOrderItem savePreOrder(PreOrderItem preOrder) {
         return preOrderRepository.save(preOrder);
@@ -118,9 +122,11 @@ public class PreOrderServiceImpl implements PreOrderService {
     }
 
     @Override
-    public void makeOrder(PreOrderDTO preOrderDTO) {
+    public void makeOrder() {
 
-        preOrderRepository.deleteAll();
+        List<PreOrderItem> preOrderList = preOrderRepository.findAll();
+        orderService.createOrder(preOrderList);
+//        preOrderRepository.deleteAll();
     }
 
     private static ArticleDTO toAllItem(PreOrderItem preOrderItem) {

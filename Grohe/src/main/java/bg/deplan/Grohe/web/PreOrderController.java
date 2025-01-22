@@ -60,4 +60,13 @@ public class PreOrderController {
 
         return "redirect:/orders/preOrder";
     }
+
+    @PostMapping("/makeOrder")
+    public String makeOrder () {
+
+        preOrderService.makeOrder();
+
+        return "redirect:/orders/preOrder";
+    }
+
 }
