@@ -107,8 +107,13 @@
                 </td>
                 <td>
                     <button type="submit">Update</button>
+                    </form>
+                    <form th:method="delete"
+                          th:action="@{/orders/{id}(id=${article.id()})}" >
+                        <input type="hidden" name="id" th:value="delete">
+                        <button type="submit">Delete</button>
+                    </form>
                 </td>
-            </form>
         </tr>
         </tbody>
     </table>

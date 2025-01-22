@@ -19,4 +19,6 @@ public interface PreOrderService {
     void updateItems(PreOrderDTO preOrderDTO, Long id);
 
     PreOrderItem findById(Long id);
+
+    void deletePreOrder(Long id);
 }

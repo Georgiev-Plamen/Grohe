@@ -53,4 +53,11 @@ public class PreOrderController {
 
         return "redirect:/orders/preOrder";
     }
+
+    @DeleteMapping("/{id}")
+    public String deletePreOrderArticle(@PathVariable ("id") Long id) {
+        preOrderService.deletePreOrder(id);
+
+        return "redirect:/orders/preOrder";
+    }
 }

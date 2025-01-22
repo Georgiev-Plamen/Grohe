@@ -103,6 +103,11 @@ public class PreOrderServiceImpl implements PreOrderService {
         return preOrderRepository.findById(id).get();
     }
 
+    @Override
+    public void deletePreOrder(Long id) {
+        preOrderRepository.deleteById(id);
+    }
+
 
     @Override
     public List<ArticleDTO> getAllArticle() {
