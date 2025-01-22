@@ -69,12 +69,31 @@ public class PreOrderServiceImpl implements PreOrderService {
 
         Optional<Article> optionalArticle = articleRepository.findByArtNum(preOrderDTO.artNum());
 
-        preOrderItem.setArticle(optionalArticle.get());
-        preOrderItem.setQuantityForOrder(preOrderDTO.quantityForOrder());
-        preOrderItem.setOrderBy(preOrderDTO.orderBy());
-        preOrderItem.setDate(preOrderDTO.date());
-        preOrderItem.setOrderReason(preOrderDTO.orderReason());
-        preOrderItem.setComment(preOrderDTO.comment());
+        if(optionalArticle.isEmpty()) {
+            Article article = new Article();
+            article.setArtNum(preOrderDTO.artNum());
+            articleRepository.save(article);
+            optionalArticle = articleRepository.findByArtNum(preOrderDTO.artNum());
+        }
+
+        if(!preOrderDTO.artNum().isEmpty()) {
+                preOrderItem.setArticle(optionalArticle.get());
+        }
+        if(preOrderDTO.quantityForOrder() != 0) {
+            preOrderItem.setQuantityForOrder(preOrderDTO.quantityForOrder());
+        }
+        if(!preOrderDTO.orderBy().isEmpty()) {
+            preOrderItem.setOrderBy(preOrderDTO.orderBy());
+        }
+        if(!preOrderDTO.date().toString().isEmpty()) {
+            preOrderItem.setDate(preOrderDTO.date());
+        }
+        if(!preOrderDTO.orderReason().isEmpty()) {
+            preOrderItem.setOrderReason(preOrderDTO.orderReason());
+        }
+        if(!preOrderDTO.comment().isEmpty()) {
+            preOrderItem.setComment(preOrderDTO.comment());
+        }
 
         preOrderRepository.save(preOrderItem);
     }

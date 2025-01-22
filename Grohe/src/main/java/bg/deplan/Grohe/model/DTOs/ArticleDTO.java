@@ -6,7 +6,7 @@ public record ArticleDTO (
 
         Long id,
         String artNum,
-        int quantityForOrder,
+        Integer quantityForOrder,
         String artUrl,
         String orderBy,
         LocalDate date,

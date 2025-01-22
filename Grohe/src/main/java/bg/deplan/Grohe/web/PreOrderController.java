@@ -33,6 +33,7 @@ public class PreOrderController {
 
         model.addAttribute("preOrderData", preOrderDTO());
         model.addAttribute("allArticle", preOrderService.getAllArticle());
+        model.addAttribute("article", preOrderDTO());
 
         return "preOrder";
     }
@@ -45,8 +46,8 @@ public class PreOrderController {
         return "redirect:/orders/preOrder";
     }
 
-    @PutMapping("/updatePreOrder/{id}")
-    public String updateArticle(@PathVariable ("id") Long id, @ModelAttribute PreOrderDTO preOrderDTO) {
+    @PostMapping("/updatePreOrder/{id}")
+    public String updateArticle(@PathVariable ("id") Long id, @ModelAttribute PreOrderDTO preOrderDTO ) {
 
        preOrderService.updateItems(preOrderDTO, id);
 
