@@ -1,5 +1,6 @@
 package bg.deplan.Grohe.service.Impl;
 
+import bg.deplan.Grohe.data.OrderItemRepository;
 import bg.deplan.Grohe.data.OrderRepository;
 import bg.deplan.Grohe.model.DTOs.OrderDTO;
 import bg.deplan.Grohe.model.Order;
@@ -9,6 +10,7 @@ import bg.deplan.Grohe.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,8 +20,16 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
     @Override
     public void createOrder(List<PreOrderItem> preOrderItems) {
+
+        Order order = new Order();
+        order.setDate(LocalDate.now());
+        order.setOrderName("Order 4");
+        orderRepository.save(order);
 
         for (PreOrderItem preOrderItem : preOrderItems) {
             OrderItem orderItem = new OrderItem();
@@ -30,8 +40,11 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setOrderReason(preOrderItem.getOrderReason());
             orderItem.setComment(preOrderItem.getComment());
 
-            System.out.println(orderItem.toString());
+            orderItem.setOrder(order);
+            orderItemRepository.save(orderItem);
         }
+
+
     }
 
     @Override

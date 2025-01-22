@@ -126,7 +126,7 @@ public class PreOrderServiceImpl implements PreOrderService {
 
         List<PreOrderItem> preOrderList = preOrderRepository.findAll();
         orderService.createOrder(preOrderList);
-//        preOrderRepository.deleteAll();
+        preOrderRepository.deleteAll();
     }
 
     private static ArticleDTO toAllItem(PreOrderItem preOrderItem) {
