@@ -66,7 +66,6 @@
     <table>
         <thead>
         <tr>
-            <th>ID</th>
             <th>Article</th>
             <th>Quantity</th>
             <th>Ordered By</th>
@@ -80,7 +79,7 @@
         <tr th:each="article : ${allArticle}">
             <!-- Form for each article -->
             <form th:method="POST" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}" th:object="${article}">
-                <td th:text="*{id}"></td>
+<!--                <td th:text="*{id}"></td>-->
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}" th:value="*{artNum}"></div>
                     <input type="hidden" th:field="*{artNum}">
