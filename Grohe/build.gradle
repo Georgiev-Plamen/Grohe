@@ -27,6 +27,8 @@ dependencies {
 
 	// Additional dependencies
 	implementation 'mysql:mysql-connector-java:8.0.32'
+	implementation 'org.webjars:jquery:3.3.1'
+	implementation 'org.webjars:bootstrap:5.3.3'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	implementation 'org.modelmapper:modelmapper:3.2.0'
 	implementation 'org.springframework.security:spring-security-crypto'
