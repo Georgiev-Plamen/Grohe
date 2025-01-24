@@ -1,13 +1,13 @@
 package bg.deplan.Grohe;
 
-import bg.deplan.Grohe.data.OrderRepository;
-import bg.deplan.Grohe.model.Article;
-import bg.deplan.Grohe.model.Order;
+import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
+import bg.deplan.Grohe.model.DTOs.PreOrderExcelDTO;
+import bg.deplan.Grohe.service.PreOrderService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.ArrayList;
 import java.util.List;
+
 
 @SpringBootApplication
 public class GroheApplication {
@@ -17,5 +17,4 @@ public class GroheApplication {
 		SpringApplication.run(GroheApplication.class, args);
 
 	}
-
 }

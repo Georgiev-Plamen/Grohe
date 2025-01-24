@@ -7,19 +7,27 @@ import bg.deplan.Grohe.data.PreOrderItemRepository;
 import bg.deplan.Grohe.model.Article;
 import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
+import bg.deplan.Grohe.model.DTOs.PreOrderExcelDTO;
 import bg.deplan.Grohe.model.PreOrderItem;
 import bg.deplan.Grohe.service.ArticleService;
 import bg.deplan.Grohe.service.OrderService;
 import bg.deplan.Grohe.service.PreOrderService;
 import jakarta.persistence.EntityNotFoundException;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 @Service
 public class PreOrderServiceImpl implements PreOrderService {
@@ -141,4 +149,41 @@ public class PreOrderServiceImpl implements PreOrderService {
                 preOrderItem.getComment()
         );
     }
+
+    public List<PreOrderExcelDTO> readPreOrderFromExcel(String filePath) throws IOException {
+            List<PreOrderExcelDTO> preOrders = new ArrayList<>();
+
+            try (FileInputStream fis = new FileInputStream(filePath);
+                 Workbook workbook = new XSSFWorkbook(fis)) {
+
+                // Assuming the data is in the first sheet
+                Sheet sheet = workbook.getSheetAt(0);
+
+                // Iterate over rows, starting from the second row (skip the header)
+                for (int i = 8; i <= sheet.getLastRowNum(); i++) {
+                    Row row = sheet.getRow(i);
+
+                    if (row != null) {
+                        String artNum = row.getCell(1).getStringCellValue();
+                        Integer quantityForOrder = (int) row.getCell(3).getNumericCellValue();
+                        LocalDate date = LocalDate.now();
+                        String orderReason = "Stocks";
+                        String comment = row.getCell(10).getStringCellValue();
+
+                        // Create DTO and add it to the list
+                        PreOrderExcelDTO preOrderExcelDTO = new PreOrderExcelDTO(
+                                artNum,
+                                quantityForOrder,
+                                date,
+                                comment
+                        );
+
+                        preOrders.add(preOrderExcelDTO);
+                    }
+                }
+            }
+
+           return preOrders;
+    }
+
 }

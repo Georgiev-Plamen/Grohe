@@ -3,8 +3,10 @@ package bg.deplan.Grohe.service;
 import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
 import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
+import bg.deplan.Grohe.model.DTOs.PreOrderExcelDTO;
 import bg.deplan.Grohe.model.PreOrderItem;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface PreOrderService {
@@ -21,4 +23,6 @@ public interface PreOrderService {
     PreOrderItem findById(Long id);
 
     void deletePreOrder(Long id);
+
+    List<PreOrderExcelDTO> readPreOrderFromExcel(String filePath) throws IOException;
 }
