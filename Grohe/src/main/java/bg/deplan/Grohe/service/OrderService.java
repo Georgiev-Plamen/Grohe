@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface OrderService {
 
-    void createOrder(List<PreOrderItem> preOrderItems);
+    void createOrder(List<PreOrderItem> preOrderItems, String name);
 
     List<OrderDTO> getAllOrders();
 

@@ -24,11 +24,11 @@ public class OrderServiceImpl implements OrderService {
     private OrderItemRepository orderItemRepository;
 
     @Override
-    public void createOrder(List<PreOrderItem> preOrderItems) {
+    public void createOrder(List<PreOrderItem> preOrderItems, String name) {
 
         Order order = new Order();
         order.setDate(LocalDate.now());
-        order.setOrderName("Order 4");
+        order.setOrderName(name);
         orderRepository.save(order);
 
         for (PreOrderItem preOrderItem : preOrderItems) {

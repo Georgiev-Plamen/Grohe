@@ -62,9 +62,9 @@ public class PreOrderController {
     }
 
     @PostMapping("/makeOrder")
-    public String makeOrder () {
+    public String makeOrder (@RequestParam ("name") String name) {
 
-        preOrderService.makeOrder();
+        preOrderService.makeOrder(name);
 
         return "redirect:/orders/preOrder";
     }

@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orders</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/styles.css">
     <!-- Bootstrap CSS -->
-<!--    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">-->
+    <!--    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">-->
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-<!--    <script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>-->
+    <!--    <script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>-->
 
     <script>
         // Set today's date on page load
@@ -28,6 +29,7 @@
                 hiddenInput.value = div.textContent.trim();
             }
         }
+
     </script>
     <script>
     $(document).ready(function () {
@@ -41,6 +43,7 @@
         modal.find('.modal-body #recipient-name').val(recipient);
     });
     });
+
     </script>
 
 </head>
@@ -102,78 +105,78 @@
         <tr th:each="article : ${allArticle}">
             <!-- Form for each article -->
             <form th:method="POST" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}" th:object="${article}">
-<!--                <td th:text="*{id}"></td>-->
+                <!--                <td th:text="*{id}"></td>-->
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}" th:value="*{artNum}"></div>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"
+                         th:value="*{artNum}"></div>
                     <input type="hidden" th:field="*{artNum}">
                 </td>
 
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantityForOrder}" th:value="*{quantityForOrder}"></div>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantityForOrder}"
+                         th:value="*{quantityForOrder}"></div>
                     <input type="hidden" th:field="*{quantityForOrder}">
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderBy}" th:value="*{orderBy}"></div>
-                    <input type="hidden" th:field="*{orderBy}" />
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderBy}"
+                         th:value="*{orderBy}"></div>
+                    <input type="hidden" th:field="*{orderBy}"/>
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}" th:value="*{date}"></div>
-                    <input type="hidden" th:field="*{date}" />
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"
+                         th:value="*{date}"></div>
+                    <input type="hidden" th:field="*{date}"/>
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderReason}" th:value="*{orderReason}"></div>
-                    <input type="hidden" th:field="*{orderReason}" />
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderReason}"
+                         th:value="*{orderReason}"></div>
+                    <input type="hidden" th:field="*{orderReason}"/>
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}" th:value="*{comment}"></div>
-                    <input type="hidden" th:field="*{comment}" />
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}"
+                         th:value="*{comment}"></div>
+                    <input type="hidden" th:field="*{comment}"/>
                 </td>
                 <td>
                     <button type="submit">Update</button>
-                    </form>
-                    <form th:method="delete"
-                          th:action="@{/orders/{id}(id=${article.id()})}" >
-                        <input type="hidden" name="id" th:value="delete">
-                        <button type="submit">Delete</button>
-                    </form>
-                </td>
+            </form>
+            <form th:method="delete"
+                  th:action="@{/orders/{id}(id=${article.id()})}">
+                <input type="hidden" name="id" th:value="delete">
+                <button type="submit">Delete</button>
+            </form>
+            </td>
         </tr>
         </tbody>
     </table>
     <button type="button" class="eBtn" data-toggle="modal" data-target="#exampleModal">Make Order</button>
-<!--     popup screen -->
+    <!--     popup screen -->
     <div class="myForm">
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Моля въведете име на заявката</h5>
+                        <h5 id="exampleModalLabel">Моля въведете име на заявката</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form>
-                            <div class="form-group">
-                                <label for="recipient-name" class="col-form-label">Име:</label>
-                                <input type="text" class="form-control" id="recipient-name">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <form th:method="POST" th:action="@{/orders/makeOrder}">
-                            <button type="submit" class="btn btn-primary">Завърши поръчката</button>
-                            <input type="hidden" name="makeOrder" th:value="makeOrder">
-                        </form>
+                        <div class="form-group">
+                            <form th:method="POST" th:action="@{/orders/makeOrder}">
+                                <label for="name" class="col-form-label">Име:</label>
+                                <input type="text" class="form-control" id="name" name="name" th:value="*{name}">
+                                <button type="submit" class="btn btn-primary">Завърши поръчката</button>
+                                <input type="hidden" name="makeOrder" th:value="makeOrder">
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-    </div>
-
+</div>
 </div>
 </body>
 </html>
