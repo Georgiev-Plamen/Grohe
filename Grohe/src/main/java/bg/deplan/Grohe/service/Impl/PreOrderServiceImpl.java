@@ -25,10 +25,10 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -39,19 +39,24 @@ public class PreOrderServiceImpl implements PreOrderService {
     private final ResourceLoader resourceLoader;
 
     @Autowired
-    private ArticleRepository articleRepository;
+    private final ArticleRepository articleRepository;
     @Autowired
-    private ArticleService articleService;
+    private final ArticleService articleService;
     @Autowired
-    private PreOrderItemRepository preOrderRepository;
+    private final PreOrderItemRepository preOrderRepository;
     @Autowired
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
 
     @Autowired
     private OrderService orderService;
 
-    public PreOrderServiceImpl(ResourceLoader resourceLoader) {
+    public PreOrderServiceImpl(ResourceLoader resourceLoader, ArticleRepository articleRepository, ArticleService articleService, PreOrderItemRepository preOrderRepository, OrderRepository orderRepository, OrderService orderService) {
         this.resourceLoader = resourceLoader;
+        this.articleRepository = articleRepository;
+        this.articleService = articleService;
+        this.preOrderRepository = preOrderRepository;
+        this.orderRepository = orderRepository;
+        this.orderService = orderService;
     }
 
     public PreOrderItem savePreOrder(PreOrderItem preOrder) {
@@ -64,7 +69,7 @@ public class PreOrderServiceImpl implements PreOrderService {
 
         Optional<Article> optionalArticle = articleRepository.findByArtNum(articleDTO.artNum());
 
-        if(optionalArticle.isEmpty()) {
+        if (optionalArticle.isEmpty()) {
             Article article = new Article();
             article.setArtNum(articleDTO.artNum());
             articleRepository.save(article);
@@ -91,29 +96,29 @@ public class PreOrderServiceImpl implements PreOrderService {
 
         Optional<Article> optionalArticle = articleRepository.findByArtNum(preOrderDTO.artNum());
 
-        if(optionalArticle.isEmpty()) {
+        if (optionalArticle.isEmpty()) {
             Article article = new Article();
             article.setArtNum(preOrderDTO.artNum());
             articleRepository.save(article);
             optionalArticle = articleRepository.findByArtNum(preOrderDTO.artNum());
         }
 
-        if(!preOrderDTO.artNum().isEmpty()) {
-                preOrderItem.setArticle(optionalArticle.get());
+        if (!preOrderDTO.artNum().isEmpty()) {
+            preOrderItem.setArticle(optionalArticle.get());
         }
-        if(preOrderDTO.quantityForOrder() != 0) {
+        if (preOrderDTO.quantityForOrder().isEmpty()) {
             preOrderItem.setQuantityForOrder(preOrderDTO.quantityForOrder());
         }
-        if(!preOrderDTO.orderBy().isEmpty()) {
+        if (!preOrderDTO.orderBy().isEmpty()) {
             preOrderItem.setOrderBy(preOrderDTO.orderBy());
         }
-        if(!preOrderDTO.date().toString().isEmpty()) {
+        if (!preOrderDTO.date().toString().isEmpty()) {
             preOrderItem.setDate(preOrderDTO.date());
         }
-        if(!preOrderDTO.orderReason().isEmpty()) {
+        if (!preOrderDTO.orderReason().isEmpty()) {
             preOrderItem.setOrderReason(preOrderDTO.orderReason());
         }
-        if(!preOrderDTO.comment().isEmpty()) {
+        if (!preOrderDTO.comment().isEmpty()) {
             preOrderItem.setComment(preOrderDTO.comment());
         }
 
@@ -161,7 +166,10 @@ public class PreOrderServiceImpl implements PreOrderService {
     }
 
     public List<PreOrderExcelDTO> readPreOrderFromExcel() throws IOException {
-        List<PreOrderExcelDTO> preOrders = new ArrayList<>();
+
+        // need to save List of PreOrderExcelDTO
+        List<PreOrderExcelDTO> preOrderExcelDTOList = new ArrayList<>();
+        PreOrderItem preOrderItem = new PreOrderItem();
 
         // Load the file from the resources folder
         Resource resource = resourceLoader.getResource("classpath:test.xlsx");
@@ -171,14 +179,27 @@ public class PreOrderServiceImpl implements PreOrderService {
 
             // Assuming the data is in the first sheet
             Sheet sheet = workbook.getSheetAt(0);
-
+            int lastRow = sheet.getLastRowNum() - 3;
             // Iterate over rows, starting from the second row (skip the header)
-            for (int i = 9; i <= sheet.getLastRowNum(); i++) {
+            for (int i = 9; i < lastRow ; i++) {
                 Row row = sheet.getRow(i);
 
                 if (row != null) {
-                    String artNum = row.getCell(1).getStringCellValue();
-                    String quantityForOrder = row.getCell(3).getStringCellValue();
+                    Cell artNumCell = row.getCell(1);
+                    String artNum;
+                    if (artNumCell.getCellType() == CellType.NUMERIC) {
+                        artNum = String.valueOf((long) artNumCell.getNumericCellValue());
+                    } else {
+                        artNum = artNumCell.getStringCellValue();
+                    }
+                    // Handle numeric cells for quantityForOrder
+                    Cell quantityCell = row.getCell(3);
+                    String quantityForOrder;
+                    if (quantityCell.getCellType() == CellType.NUMERIC) {
+                        quantityForOrder = String.valueOf((int) quantityCell.getNumericCellValue());
+                    } else {
+                        quantityForOrder = quantityCell.getStringCellValue();
+                    }
                     LocalDate date = LocalDate.now();
                     String comment = row.getCell(10).getStringCellValue();
 
@@ -190,13 +211,38 @@ public class PreOrderServiceImpl implements PreOrderService {
                             comment
                     );
 
-                    preOrders.add(preOrderExcelDTO);
-                    System.out.println(preOrderExcelDTO.artNum().toString());
+
+                    preOrderExcelDTOList.add(preOrderExcelDTO);
+
+                    System.out.printf("Article: %s - %s pcs. Comment: %s %n", preOrderExcelDTO.artNum().toString(), preOrderExcelDTO.quantityForOrder().toString(), preOrderExcelDTO.comment().toString());
                 }
             }
+            listToPreOrderItem(preOrderExcelDTOList);
         }
 
-        return preOrders;
+        return preOrderExcelDTOList;
+    }
+
+    public void listToPreOrderItem(List<PreOrderExcelDTO> preOrderExcelDTOList) {
+
+        for (PreOrderExcelDTO preOrderExcelItems : preOrderExcelDTOList) {
+            Optional<Article> optionalArticle = articleRepository.findByArtNum(preOrderExcelItems.artNum());
+            PreOrderItem preOrderItem = new PreOrderItem();
+
+            if (optionalArticle.isEmpty()) {
+                Article article = new Article();
+                article.setArtNum(preOrderExcelItems.artNum());
+                articleRepository.save(article);
+                optionalArticle = articleRepository.findByArtNum(preOrderExcelItems.artNum());
+            }
+
+            preOrderItem.setArticle(optionalArticle.get());
+            preOrderItem.setQuantityForOrder(preOrderExcelItems.quantityForOrder());
+            preOrderItem.setDate(preOrderExcelItems.date());
+            preOrderItem.setComment(preOrderExcelItems.comment());
+
+            preOrderRepository.save(preOrderItem);
+        }
     }
 
 }

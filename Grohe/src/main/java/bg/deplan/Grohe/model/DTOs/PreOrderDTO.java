@@ -8,7 +8,7 @@ public record PreOrderDTO (
 
         Long id,
         String artNum,
-        Integer quantityForOrder,
+        String quantityForOrder,
         String orderBy,
         LocalDate date,
         String orderReason,

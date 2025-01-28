@@ -17,7 +17,7 @@ public class OrderItem extends BaseEntity{
     private Article article;
 
     @Column(name = "quantity")
-    private int quantity;
+    private String quantity;
 
     @Column(name = "comment")
     private String comment;
@@ -53,11 +53,11 @@ public class OrderItem extends BaseEntity{
         this.article = article;
     }
 
-    public int getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
 

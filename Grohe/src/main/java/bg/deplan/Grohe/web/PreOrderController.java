@@ -28,7 +28,7 @@ public class PreOrderController {
 
     @ModelAttribute("preOrderData")
     public PreOrderDTO preOrderDTO() {
-        return new PreOrderDTO(0L,"",0,"",LocalDate.now(), "","");
+        return new PreOrderDTO(0L,"","","",LocalDate.now(), "","");
     }
 
     @GetMapping("/preOrder")
@@ -73,8 +73,10 @@ public class PreOrderController {
     }
 
     @GetMapping("/test")
-    public List<PreOrderExcelDTO> getPreOrders() throws IOException {
-        return preOrderService.readPreOrderFromExcel();
+    public String getPreOrders() throws IOException {
+        preOrderService.readPreOrderFromExcel();
+
+        return "redirect:/orders/preOrder";
     }
 
 }
