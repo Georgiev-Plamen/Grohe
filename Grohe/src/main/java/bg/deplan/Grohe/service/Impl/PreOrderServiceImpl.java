@@ -17,10 +17,13 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
-import java.io.FileInputStream;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -33,6 +36,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class PreOrderServiceImpl implements PreOrderService {
 
     @Autowired
+    private final ResourceLoader resourceLoader;
+
+    @Autowired
     private ArticleRepository articleRepository;
     @Autowired
     private ArticleService articleService;
@@ -43,6 +49,10 @@ public class PreOrderServiceImpl implements PreOrderService {
 
     @Autowired
     private OrderService orderService;
+
+    public PreOrderServiceImpl(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+    }
 
     public PreOrderItem savePreOrder(PreOrderItem preOrder) {
         return preOrderRepository.save(preOrder);
@@ -150,40 +160,43 @@ public class PreOrderServiceImpl implements PreOrderService {
         );
     }
 
-    public List<PreOrderExcelDTO> readPreOrderFromExcel(String filePath) throws IOException {
-            List<PreOrderExcelDTO> preOrders = new ArrayList<>();
+    public List<PreOrderExcelDTO> readPreOrderFromExcel() throws IOException {
+        List<PreOrderExcelDTO> preOrders = new ArrayList<>();
 
-            try (FileInputStream fis = new FileInputStream(filePath);
-                 Workbook workbook = new XSSFWorkbook(fis)) {
+        // Load the file from the resources folder
+        Resource resource = resourceLoader.getResource("classpath:test.xlsx");
 
-                // Assuming the data is in the first sheet
-                Sheet sheet = workbook.getSheetAt(0);
+        try (InputStream inputStream = resource.getInputStream();
+             Workbook workbook = new XSSFWorkbook(inputStream)) {
 
-                // Iterate over rows, starting from the second row (skip the header)
-                for (int i = 8; i <= sheet.getLastRowNum(); i++) {
-                    Row row = sheet.getRow(i);
+            // Assuming the data is in the first sheet
+            Sheet sheet = workbook.getSheetAt(0);
 
-                    if (row != null) {
-                        String artNum = row.getCell(1).getStringCellValue();
-                        Integer quantityForOrder = (int) row.getCell(3).getNumericCellValue();
-                        LocalDate date = LocalDate.now();
-                        String orderReason = "Stocks";
-                        String comment = row.getCell(10).getStringCellValue();
+            // Iterate over rows, starting from the second row (skip the header)
+            for (int i = 9; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
 
-                        // Create DTO and add it to the list
-                        PreOrderExcelDTO preOrderExcelDTO = new PreOrderExcelDTO(
-                                artNum,
-                                quantityForOrder,
-                                date,
-                                comment
-                        );
+                if (row != null) {
+                    String artNum = row.getCell(1).getStringCellValue();
+                    String quantityForOrder = row.getCell(3).getStringCellValue();
+                    LocalDate date = LocalDate.now();
+                    String comment = row.getCell(10).getStringCellValue();
 
-                        preOrders.add(preOrderExcelDTO);
-                    }
+                    // Create DTO and add it to the list
+                    PreOrderExcelDTO preOrderExcelDTO = new PreOrderExcelDTO(
+                            artNum,
+                            quantityForOrder,
+                            date,
+                            comment
+                    );
+
+                    preOrders.add(preOrderExcelDTO);
+                    System.out.println(preOrderExcelDTO.artNum().toString());
                 }
             }
+        }
 
-           return preOrders;
+        return preOrders;
     }
 
 }

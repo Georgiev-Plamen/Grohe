@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public record PreOrderExcelDTO (
     String artNum,
-    Integer quantityForOrder,
+    String quantityForOrder,
     LocalDate date,
     String comment
 ){

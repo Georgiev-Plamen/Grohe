@@ -3,6 +3,7 @@ package bg.deplan.Grohe.web;
 import bg.deplan.Grohe.data.PreOrderItemRepository;
 import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
+import bg.deplan.Grohe.model.DTOs.PreOrderExcelDTO;
 import bg.deplan.Grohe.service.ArticleService;
 import bg.deplan.Grohe.service.PreOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 @RequestMapping("/orders")
@@ -67,6 +70,11 @@ public class PreOrderController {
         preOrderService.makeOrder(name);
 
         return "redirect:/orders/preOrder";
+    }
+
+    @GetMapping("/test")
+    public List<PreOrderExcelDTO> getPreOrders() throws IOException {
+        return preOrderService.readPreOrderFromExcel();
     }
 
 }
