@@ -91,7 +91,7 @@ public class PreOrderServiceImpl implements PreOrderService {
         PreOrderItem preOrderItem = preOrderItemRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("PreOrderItem not found with id: " + id));
 
-        String artNum = preOrderItem.getArticle().getArtNum();
+        String artNum = preOrderDTO.artNum();
         Optional<Article> optionalArticle = articleRepository.findByArtNum(artNum);
 
         if (optionalArticle.isEmpty()) {
@@ -101,7 +101,7 @@ public class PreOrderServiceImpl implements PreOrderService {
             optionalArticle = articleRepository.findByArtNum(preOrderDTO.artNum());
         }
 
-        if (preOrderDTO.artNum() != null && !preOrderDTO.artNum().equals(optionalArticle.get().getArtNum())) {
+        if (preOrderDTO.artNum() != null && !preOrderItem.getArticle().getArtNum().equals(optionalArticle.get().getArtNum())) {
             preOrderItem.setArticle(optionalArticle.get());
         }
         if (preOrderDTO.quantityForOrder() != null && !preOrderDTO.quantityForOrder().isEmpty()) {
