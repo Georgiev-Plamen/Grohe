@@ -86,20 +86,13 @@ public class PreOrderServiceImpl implements PreOrderService {
     }
 
     @Override
+    @Transactional
     public void updateItems(PreOrderDTO preOrderDTO, Long id) {
-
-        PreOrderItem preOrderItem = preOrderItemRepository.getReferenceById(id);
-
-        if (preOrderItem == null) {
-            throw new EntityNotFoundException("PreOrderItem not found with id: " + id);
-        }
+        PreOrderItem preOrderItem = preOrderItemRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("PreOrderItem not found with id: " + id));
 
         String artNum = preOrderItem.getArticle().getArtNum();
         Optional<Article> optionalArticle = articleRepository.findByArtNum(artNum);
-
-        System.out.println(preOrderItem.getOrderReason().toString());
-        System.out.println(preOrderItem.getArticle().getArtNum().toString());
-        System.out.println(preOrderItem.getQuantityForOrder().toString());
 
         if (optionalArticle.isEmpty()) {
             Article article = new Article();
@@ -108,22 +101,22 @@ public class PreOrderServiceImpl implements PreOrderService {
             optionalArticle = articleRepository.findByArtNum(preOrderDTO.artNum());
         }
 
-        if (preOrderDTO.artNum() != optionalArticle.get().getArtNum()) {
+        if (preOrderDTO.artNum() != null && !preOrderDTO.artNum().equals(optionalArticle.get().getArtNum())) {
             preOrderItem.setArticle(optionalArticle.get());
         }
-        if (preOrderDTO.quantityForOrder().isEmpty()) {
+        if (preOrderDTO.quantityForOrder() != null && !preOrderDTO.quantityForOrder().isEmpty()) {
             preOrderItem.setQuantityForOrder(preOrderDTO.quantityForOrder());
         }
-        if (!preOrderDTO.orderBy().isEmpty()) {
+        if (preOrderDTO.orderBy() != null && !preOrderDTO.orderBy().isEmpty()) {
             preOrderItem.setOrderBy(preOrderDTO.orderBy());
         }
-        if (!preOrderDTO.date().toString().isEmpty()) {
+        if (preOrderDTO.date() != null) {
             preOrderItem.setDate(preOrderDTO.date());
         }
-        if (!preOrderDTO.orderReason().isEmpty()) {
+        if (preOrderDTO.orderReason() != null && !preOrderDTO.orderReason().isEmpty()) {
             preOrderItem.setOrderReason(preOrderDTO.orderReason());
         }
-        if (!preOrderDTO.comment().isEmpty()) {
+        if (preOrderDTO.comment() != null && !preOrderDTO.comment().isEmpty()) {
             preOrderItem.setComment(preOrderDTO.comment());
         }
 
