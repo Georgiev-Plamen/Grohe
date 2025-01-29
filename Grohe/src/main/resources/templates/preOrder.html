@@ -149,9 +149,15 @@
         </tr>
         </tbody>
     </table>
-    <form th:method="GET"
-          th:action="@{/orders/test}">
-        <button type="submit">Import</button>
+<!--    <form th:method="GET"-->
+<!--          th:action="@{/orders/test}">-->
+<!--        <button type="submit">Import</button>-->
+<!--    </form>-->
+    <form th:method="POST"
+          th:action="@{/orders/importFromExcel}"
+          enctype="multipart/form-data">
+        <input type="file" name="file" accept=".xlsx" required>
+        <button type="submit">Import and Activate</button>
     </form>
     <button type="button" class="eBtn" data-toggle="modal" data-target="#exampleModal">Make Order</button>
     <!--     popup screen -->

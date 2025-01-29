@@ -165,26 +165,22 @@ public class PreOrderServiceImpl implements PreOrderService {
         );
     }
 
-    public List<PreOrderExcelDTO> readPreOrderFromExcel() throws IOException {
-
-        // need to save List of PreOrderExcelDTO
+    public List<PreOrderExcelDTO> readPreOrderFromExcel(InputStream inputStream) throws IOException {
+        // List to store the parsed DTOs
         List<PreOrderExcelDTO> preOrderExcelDTOList = new ArrayList<>();
-        PreOrderItem preOrderItem = new PreOrderItem();
 
-        // Load the file from the resources folder
-        Resource resource = resourceLoader.getResource("classpath:test.xlsx");
-
-        try (InputStream inputStream = resource.getInputStream();
-             Workbook workbook = new XSSFWorkbook(inputStream)) {
-
+        // Use the provided InputStream to read the Excel file
+        try (Workbook workbook = new XSSFWorkbook(inputStream)) {
             // Assuming the data is in the first sheet
             Sheet sheet = workbook.getSheetAt(0);
             int lastRow = sheet.getLastRowNum() - 3;
-            // Iterate over rows, starting from the second row (skip the header)
-            for (int i = 9; i < lastRow ; i++) {
+
+            // Iterate over rows, starting from the 10th row (skip the header)
+            for (int i = 9; i < lastRow; i++) {
                 Row row = sheet.getRow(i);
 
                 if (row != null) {
+                    // Read article number
                     Cell artNumCell = row.getCell(1);
                     String artNum;
                     if (artNumCell.getCellType() == CellType.NUMERIC) {
@@ -192,7 +188,8 @@ public class PreOrderServiceImpl implements PreOrderService {
                     } else {
                         artNum = artNumCell.getStringCellValue();
                     }
-                    // Handle numeric cells for quantityForOrder
+
+                    // Read quantity for order
                     Cell quantityCell = row.getCell(3);
                     String quantityForOrder;
                     if (quantityCell.getCellType() == CellType.NUMERIC) {
@@ -200,25 +197,31 @@ public class PreOrderServiceImpl implements PreOrderService {
                     } else {
                         quantityForOrder = quantityCell.getStringCellValue();
                     }
-                    LocalDate date = LocalDate.now();
+
+                    // Read comment
                     String comment = row.getCell(10).getStringCellValue();
 
                     // Create DTO and add it to the list
                     PreOrderExcelDTO preOrderExcelDTO = new PreOrderExcelDTO(
                             artNum,
                             quantityForOrder,
-                            date,
+                            LocalDate.now(), // Use current date
                             comment
                     );
 
-
                     preOrderExcelDTOList.add(preOrderExcelDTO);
 
-                    System.out.printf("Article: %s - %s pcs. Comment: %s %n", preOrderExcelDTO.artNum().toString(), preOrderExcelDTO.quantityForOrder().toString(), preOrderExcelDTO.comment().toString());
+                    // Print for debugging
+                    System.out.printf("Article: %s - %s pcs. Comment: %s %n",
+                            preOrderExcelDTO.artNum(),
+                            preOrderExcelDTO.quantityForOrder(),
+                            preOrderExcelDTO.comment());
                 }
             }
-            listToPreOrderItem(preOrderExcelDTOList);
         }
+
+        // Convert the list of DTOs to PreOrderItem (if needed)
+        listToPreOrderItem(preOrderExcelDTOList);
 
         return preOrderExcelDTOList;
     }
@@ -238,7 +241,10 @@ public class PreOrderServiceImpl implements PreOrderService {
 
             preOrderItem.setArticle(optionalArticle.get());
             preOrderItem.setQuantityForOrder(preOrderExcelItems.quantityForOrder());
+            preOrderItem.setOrderBy("Вили");
             preOrderItem.setDate(preOrderExcelItems.date());
+            //TODO: need to create method that translate cyrillic to latin
+            preOrderItem.setOrderReason("Stocks");
             preOrderItem.setComment(preOrderExcelItems.comment());
 
             preOrderRepository.save(preOrderItem);

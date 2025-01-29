@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -72,9 +73,21 @@ public class PreOrderController {
         return "redirect:/orders/preOrder";
     }
 
-    @GetMapping("/test")
-    public String getPreOrders() throws IOException {
-        preOrderService.readPreOrderFromExcel();
+    @GetMapping("/importFromExcel")
+    public String showUploadForm() {
+        return "uploadForm"; // Return the name of the HTML template for the upload form
+    }
+
+
+    //TODO: need to create redirectAttributes for errors
+    @PostMapping("/importFromExcel")
+    public String handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
+        if (!file.isEmpty()) {
+            preOrderService.readPreOrderFromExcel(file.getInputStream());
+        } else {
+            // Handle the case where the file is empty
+            throw new IllegalArgumentException("File is empty");
+        }
 
         return "redirect:/orders/preOrder";
     }
