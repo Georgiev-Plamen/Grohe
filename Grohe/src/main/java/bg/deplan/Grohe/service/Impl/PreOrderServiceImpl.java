@@ -13,11 +13,11 @@ import bg.deplan.Grohe.service.ArticleService;
 import bg.deplan.Grohe.service.OrderService;
 import bg.deplan.Grohe.service.PreOrderService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
@@ -43,24 +43,24 @@ public class PreOrderServiceImpl implements PreOrderService {
     @Autowired
     private final ArticleService articleService;
     @Autowired
-    private final PreOrderItemRepository preOrderRepository;
+    private final PreOrderItemRepository preOrderItemRepository;
     @Autowired
     private final OrderRepository orderRepository;
 
     @Autowired
     private OrderService orderService;
 
-    public PreOrderServiceImpl(ResourceLoader resourceLoader, ArticleRepository articleRepository, ArticleService articleService, PreOrderItemRepository preOrderRepository, OrderRepository orderRepository, OrderService orderService) {
+    public PreOrderServiceImpl(ResourceLoader resourceLoader, ArticleRepository articleRepository, ArticleService articleService, PreOrderItemRepository preOrderItemRepository, OrderRepository orderRepository, OrderService orderService) {
         this.resourceLoader = resourceLoader;
         this.articleRepository = articleRepository;
         this.articleService = articleService;
-        this.preOrderRepository = preOrderRepository;
+        this.preOrderItemRepository = preOrderItemRepository;
         this.orderRepository = orderRepository;
         this.orderService = orderService;
     }
 
     public PreOrderItem savePreOrder(PreOrderItem preOrder) {
-        return preOrderRepository.save(preOrder);
+        return preOrderItemRepository.save(preOrder);
     }
 
 
@@ -82,19 +82,24 @@ public class PreOrderServiceImpl implements PreOrderService {
         preOrderItem.setOrderReason(articleDTO.orderReason());
         preOrderItem.setComment(articleDTO.comment());
 
-        preOrderRepository.save(preOrderItem);
+        preOrderItemRepository.save(preOrderItem);
     }
 
     @Override
     public void updateItems(PreOrderDTO preOrderDTO, Long id) {
 
-        PreOrderItem preOrderItem = preOrderRepository.getReferenceById(id);
+        PreOrderItem preOrderItem = preOrderItemRepository.getReferenceById(id);
 
         if (preOrderItem == null) {
             throw new EntityNotFoundException("PreOrderItem not found with id: " + id);
         }
 
-        Optional<Article> optionalArticle = articleRepository.findByArtNum(preOrderDTO.artNum());
+        String artNum = preOrderItem.getArticle().getArtNum();
+        Optional<Article> optionalArticle = articleRepository.findByArtNum(artNum);
+
+        System.out.println(preOrderItem.getOrderReason().toString());
+        System.out.println(preOrderItem.getArticle().getArtNum().toString());
+        System.out.println(preOrderItem.getQuantityForOrder().toString());
 
         if (optionalArticle.isEmpty()) {
             Article article = new Article();
@@ -103,7 +108,7 @@ public class PreOrderServiceImpl implements PreOrderService {
             optionalArticle = articleRepository.findByArtNum(preOrderDTO.artNum());
         }
 
-        if (!preOrderDTO.artNum().isEmpty()) {
+        if (preOrderDTO.artNum() != optionalArticle.get().getArtNum()) {
             preOrderItem.setArticle(optionalArticle.get());
         }
         if (preOrderDTO.quantityForOrder().isEmpty()) {
@@ -122,23 +127,23 @@ public class PreOrderServiceImpl implements PreOrderService {
             preOrderItem.setComment(preOrderDTO.comment());
         }
 
-        preOrderRepository.save(preOrderItem);
+        preOrderItemRepository.save(preOrderItem);
     }
 
     @Override
     public PreOrderItem findById(Long id) {
-        return preOrderRepository.findById(id).get();
+        return preOrderItemRepository.findById(id).get();
     }
 
     @Override
     public void deletePreOrder(Long id) {
-        preOrderRepository.deleteById(id);
+        preOrderItemRepository.deleteById(id);
     }
 
 
     @Override
     public List<ArticleDTO> getAllArticle() {
-        return preOrderRepository.findAll()
+        return preOrderItemRepository.findAll()
                 .stream()
                 .map(PreOrderServiceImpl::toAllItem)
                 .toList();
@@ -147,9 +152,9 @@ public class PreOrderServiceImpl implements PreOrderService {
     @Override
     public void makeOrder(String name) {
 
-        List<PreOrderItem> preOrderList = preOrderRepository.findAll();
+        List<PreOrderItem> preOrderList = preOrderItemRepository.findAll();
         orderService.createOrder(preOrderList, name);
-        preOrderRepository.deleteAll();
+        preOrderItemRepository.deleteAll();
     }
 
     private static ArticleDTO toAllItem(PreOrderItem preOrderItem) {
@@ -247,7 +252,7 @@ public class PreOrderServiceImpl implements PreOrderService {
             preOrderItem.setOrderReason("Stocks");
             preOrderItem.setComment(preOrderExcelItems.comment());
 
-            preOrderRepository.save(preOrderItem);
+            preOrderItemRepository.save(preOrderItem);
         }
     }
 

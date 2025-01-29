@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name ="preOrder_item")
+@Table(name ="pre_order_item")
 public class PreOrderItem extends BaseEntity{
 
     @ManyToOne
