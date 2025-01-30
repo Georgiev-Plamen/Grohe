@@ -30,6 +30,7 @@
             }
         }
 
+
     </script>
     <script>
     $(document).ready(function () {
@@ -44,11 +45,14 @@
     });
     });
 
+
     </script>
 
 </head>
 <body>
+
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
+
 <div class="container">
     <h1>PreOrder</h1>
     <!-- Add Order Form -->
@@ -84,7 +88,7 @@
                 <label for="comment">Comments:</label>
                 <input type="text" id="comment" th:field="*{comment}">
             </div>
-            <button type="submit">Add</button>
+            <button class="pre-order-add-btn" type="submit">Add</button>
         </div>
     </form>
 
@@ -98,7 +102,7 @@
             <th>Date</th>
             <th>Order Reason</th>
             <th>Comment</th>
-            <th>Actions</th>
+            <th class="action-title">Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -137,29 +141,30 @@
                          th:value="*{comment}"></div>
                     <input type="hidden" th:field="*{comment}"/>
                 </td>
-                <td>
+                <td class="action">
                     <button type="submit">Update</button>
             </form>
             <form th:method="delete"
                   th:action="@{/orders/{id}(id=${article.id()})}">
                 <input type="hidden" name="id" th:value="delete">
-                <button type="submit">Delete</button>
+                <button class="delete-btn" type="submit">Delete</button>
             </form>
             </td>
         </tr>
         </tbody>
     </table>
-<!--    <form th:method="GET"-->
-<!--          th:action="@{/orders/test}">-->
-<!--        <button type="submit">Import</button>-->
-<!--    </form>-->
+
     <form th:method="POST"
           th:action="@{/orders/importFromExcel}"
           enctype="multipart/form-data">
-        <input type="file" name="file" accept=".xlsx" required>
-        <button type="submit">Import and Activate</button>
+        <label class="file">
+            <input type="file" id="file" aria-label="File browser example" accept=".xlsx" required>
+            <span class="file-custom"></span>
+            <button type="submit">Import</button>
+            <button type="button" class="eBtn" data-toggle="modal" data-target="#exampleModal">Make Order</button>
+        </label>
     </form>
-    <button type="button" class="eBtn" data-toggle="modal" data-target="#exampleModal">Make Order</button>
+
     <!--     popup screen -->
     <div class="myForm">
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
