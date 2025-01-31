@@ -9,7 +9,7 @@
 <body>
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
 <div class="container">
-    <h1>Orders</h1>
+    <h1 th:text="#{orders_title}">Orders</h1>
 
     <table>
         <thead>
@@ -30,12 +30,12 @@
                 <table class="article-table"> <!-- Inner table for articles -->
                     <thead>
                     <tr>
-                        <th>Article Number</th>
-                        <th>Quantity</th>
-                        <th>Ordered By</th>
-                        <th>Order Reason</th>
-                        <th>Date of Order</th>
-                        <th>Date of Delivery</th>
+                        <th th:text="#{article_name}">Article Number</th>
+                        <th th:text="#{article_quantity}">Quantity</th>
+                        <th th:text="#{orders_ordered_by}">Ordered By</th>
+                        <th th:text="#{orders_reason}">Order Reason</th>
+                        <th th:text="#{orders_date}">Date of Order</th>
+                        <th th:text="#{orders_delivery}">Date of Delivery</th>
                     </tr>
                     </thead>
                     <tbody>
