@@ -24,8 +24,9 @@
             <!-- Order information row -->
             <td><span th:text="${order.orderName}">Order name</span></td>
             <td><span th:text="${order.date}">Order date</span></td>
-            <td th:each="order : ${allOrders}">
-                <td colspan="2"> <!-- Span two columns to align with the order headers -->
+
+            <!-- Article table for the current order -->
+            <td colspan="2"> <!-- Span two columns to align with the order headers -->
                 <table class="article-table"> <!-- Inner table for articles -->
                     <thead>
                     <tr>
