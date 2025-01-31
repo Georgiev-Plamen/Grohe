@@ -12,7 +12,7 @@ public interface ArticleService {
 
     void addArticle(AddArticleDTO addArticleDTO);
 
-    List<AddArticleDTO> getAllArticle();
+    List<AddArticleDTO> getAllArticle(String brand);
 
     AddArticleDTO getArticleData(String artNum);
 

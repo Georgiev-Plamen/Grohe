@@ -39,10 +39,11 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<AddArticleDTO> getAllArticle() {
+    public List<AddArticleDTO> getAllArticle(String brand) {
         return articleRepository.findAll()
                 .stream()
                 .map(ArticleServiceImpl::toAllArticle)
+                .filter(a -> a.brand().equals(brand))
                 .toList();
     }
 
@@ -76,6 +77,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     private static AddArticleDTO toAllArticle(Article article) {
         return new AddArticleDTO(
+                article.getBrand(),
                 article.getArtNum(),
                 article.getName(),
                 article.getDescription(),

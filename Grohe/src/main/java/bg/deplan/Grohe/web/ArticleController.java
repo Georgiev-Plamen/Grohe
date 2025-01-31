@@ -19,7 +19,7 @@ public class ArticleController {
 
     @ModelAttribute("articleData")
     public AddArticleDTO addArticleDTO() {
-        return new AddArticleDTO("","","", "","", 1);
+        return new AddArticleDTO("","","","", "","", 1);
     }
 
     @GetMapping("/articles")
@@ -27,9 +27,19 @@ public class ArticleController {
                         Model model) {
 
         model.addAttribute("articleData", addArticleDTO());
-        model.addAttribute("allArticles", articleService.getAllArticle());
+        model.addAttribute("allArticles", articleService.getAllArticle("Grohe"));
 
         return "articles";
+    }
+
+    @GetMapping("/articlesViega")
+    public String allArticlesViega(@AuthenticationPrincipal UserDetails userDetails,
+                              Model model) {
+
+        model.addAttribute("articleData", addArticleDTO());
+        model.addAttribute("allArticles", articleService.getAllArticle("Viega"));
+
+        return "articlesViega";
     }
 
     @PostMapping("/addArticle")
