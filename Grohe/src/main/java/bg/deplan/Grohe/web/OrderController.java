@@ -24,4 +24,11 @@ public class OrderController {
         return "orders";
     }
 
+    @GetMapping("/allViega")
+    public String ordersViega(Model model){
+
+        model.addAttribute("allOrders", orderService.getAllOrders());
+
+        return "ordersViega";
+    }
 }

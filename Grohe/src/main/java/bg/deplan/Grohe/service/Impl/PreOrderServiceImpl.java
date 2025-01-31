@@ -37,7 +37,6 @@ public class PreOrderServiceImpl implements PreOrderService {
 
     @Autowired
     private final ResourceLoader resourceLoader;
-
     @Autowired
     private final ArticleRepository articleRepository;
     @Autowired
@@ -72,9 +71,11 @@ public class PreOrderServiceImpl implements PreOrderService {
         if (optionalArticle.isEmpty()) {
             Article article = new Article();
             article.setArtNum(articleDTO.artNum());
+            article.setBrand("Grohe");
             articleRepository.save(article);
             optionalArticle = articleRepository.findByArtNum(articleDTO.artNum());
         }
+
         preOrderItem.setArticle(optionalArticle.get());
         preOrderItem.setQuantityForOrder(articleDTO.quantityForOrder());
         preOrderItem.setOrderBy(articleDTO.orderBy());
@@ -159,6 +160,7 @@ public class PreOrderServiceImpl implements PreOrderService {
     private static ArticleDTO toAllItem(PreOrderItem preOrderItem) {
         return new ArticleDTO(
                 preOrderItem.getId(),
+                preOrderItem.getArticle().getBrand(),
                 preOrderItem.getArticle().getArtNum(),
                 preOrderItem.getQuantityForOrder(),
                 preOrderItem.getArticle().getArtUrl(),

@@ -30,6 +30,29 @@ body {
     box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
 }
 
+.navbar-viega {
+    position: relative;
+    background-color: black;
+    justify-content: flex-end;
+    overflow: hidden;
+    display: flex;
+    width: 100%;
+    padding-left: 1em;
+    padding-right: 1em;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+}
+
+.navbar-viega a, .dropdown .dropbtn {
+    font-family: Univers Next W00 Light;
+    display: inline-block;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 14px 20px;
+    font-size:18px;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
 .navbar a, .dropdown .dropbtn {
     font-family: Univers Next W00 Light;
     display: inline-block;

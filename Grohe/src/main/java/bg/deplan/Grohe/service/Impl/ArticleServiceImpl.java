@@ -26,12 +26,14 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void addArticle(AddArticleDTO addArticleDTO) {
         Article mappedArticle = new Article();
+        mappedArticle.setBrand("Grohe");
         mappedArticle.setArtNum(addArticleDTO.artNum());
         mappedArticle.setName(addArticleDTO.name());
         mappedArticle.setDescription(addArticleDTO.description());
         mappedArticle.setImageUrl(addArticleDTO.imgUrl());
         mappedArticle.setBarcode(addArticleDTO.barcode());
         mappedArticle.setQuantityInPallet(addArticleDTO.quantityInPallet());
+        mappedArticle.setQuantityInPacket(1);
 
         articleRepository.save(mappedArticle);
     }

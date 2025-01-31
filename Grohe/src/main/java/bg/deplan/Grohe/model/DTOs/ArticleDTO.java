@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public record ArticleDTO (
 
         Long id,
+        String brand,
         String artNum,
         String quantityForOrder,
         String artUrl,

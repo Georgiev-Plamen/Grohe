@@ -42,6 +42,16 @@ public class PreOrderController {
         return "preOrder";
     }
 
+    @GetMapping("/preOrderViega")
+    public String preOrderViega(Model model) {
+
+        model.addAttribute("preOrderData", preOrderDTO());
+        model.addAttribute("allArticle", preOrderService.getAllArticle());
+        model.addAttribute("article", preOrderDTO());
+
+        return "preOrderViega";
+    }
+
     @PostMapping("/preOrder")
     public String addToPreOrder(@ModelAttribute ArticleDTO articleDTO) {
 

@@ -16,11 +16,7 @@
             th:action="@{/articles/addArticle}"
             th:object="${articleData}"
     >
-
-
-
     <div class="add-container">
-
 
         <!--Article-->
         <div class="preOrder-entity">
@@ -118,6 +114,7 @@
                 <th th:text="#{article_img_url}">Order reason</th>
                 <th th:text="#{article_barcode}">Comment</th>
                 <th th:text="#{article_quantity_in_pallet}">Ordered by</th>
+                <th> Action </th>
             </tr>
             </thead>
             <tbody>
@@ -135,8 +132,7 @@
                           th:action="@{/articles/{artNum}(artNum=*{artNum()})}" >
 <!--                        <input type="hidden" name="id" th:value="get">-->
 <!--                        <button onclick="editArticle" th:method="get" th:href="@{/article/editArticle/{id}(id=*{id})}">Edit</button>-->
-                        <button type="submit"><img src="../static/images/edit.svg?height=24" aria-hidden="true">
-                            Edit</button>
+                        <button type="submit">Edit</button>
                     </form>
 
 <!--                    <form th:method="get"-->

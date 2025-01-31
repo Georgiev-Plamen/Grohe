@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 @Table (name = "articles")
 public class Article extends BaseEntity{
 
+    @Column
+    private String brand;
+    @Column
     private String name;
 
     @Column(name = "art_num")
@@ -26,6 +29,8 @@ public class Article extends BaseEntity{
     @Column(name = "quantity_in_pallet")
     private int quantityInPallet;
 
+    @Column(name = "quantity_in_packet")
+    private int quantityInPacket;
 
     public Article() {
     }
@@ -84,5 +89,21 @@ public class Article extends BaseEntity{
 
     public void setArtUrl(String artUrl) {
         this.artUrl = artUrl;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public int getQuantityInPacket() {
+        return quantityInPacket;
+    }
+
+    public void setQuantityInPacket(int quantityInPacket) {
+        this.quantityInPacket = quantityInPacket;
     }
 }
