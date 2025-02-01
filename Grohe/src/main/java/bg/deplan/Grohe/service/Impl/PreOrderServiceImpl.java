@@ -142,10 +142,11 @@ public class PreOrderServiceImpl implements PreOrderService {
 
 
     @Override
-    public List<ArticleDTO> getAllArticle() {
+    public List<ArticleDTO> getAllArticle(String brand) {
         return preOrderItemRepository.findAll()
                 .stream()
                 .map(PreOrderServiceImpl::toAllItem)
+                .filter(a -> a.brand().equals(brand))
                 .toList();
     }
 

@@ -36,7 +36,7 @@ public class PreOrderController {
     public String preOrder(Model model) {
 
         model.addAttribute("preOrderData", preOrderDTO());
-        model.addAttribute("allArticle", preOrderService.getAllArticle());
+        model.addAttribute("allArticle", preOrderService.getAllArticle("Grohe"));
         model.addAttribute("article", preOrderDTO());
 
         return "preOrder";
@@ -46,7 +46,7 @@ public class PreOrderController {
     public String preOrderViega(Model model) {
 
         model.addAttribute("preOrderData", preOrderDTO());
-        model.addAttribute("allArticle", preOrderService.getAllArticle());
+        model.addAttribute("allArticle", preOrderService.getAllArticle("Viega"));
         model.addAttribute("article", preOrderDTO());
 
         return "preOrderViega";

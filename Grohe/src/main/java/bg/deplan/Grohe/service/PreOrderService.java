@@ -14,7 +14,7 @@ public interface PreOrderService {
 
     void addItem(ArticleDTO articleDTO);
 
-    List<ArticleDTO> getAllArticle();
+    List<ArticleDTO> getAllArticle(String brand);
 
     void makeOrder(String name);
 

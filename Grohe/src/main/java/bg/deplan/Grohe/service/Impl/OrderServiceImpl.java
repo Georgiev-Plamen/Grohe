@@ -48,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDTO> getAllOrders() {
+    public List<OrderDTO> getAllOrders(String brand) {
         return orderRepository.findAll()
                 .stream()
                 .map(OrderServiceImpl::toAllOrders)

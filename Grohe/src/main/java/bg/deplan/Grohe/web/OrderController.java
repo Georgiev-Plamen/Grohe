@@ -19,7 +19,7 @@ public class OrderController {
     @GetMapping("/all")
     public String orders(Model model){
 
-        model.addAttribute("allOrders", orderService.getAllOrders());
+        model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
 
         return "orders";
     }
@@ -27,7 +27,7 @@ public class OrderController {
     @GetMapping("/allViega")
     public String ordersViega(Model model){
 
-        model.addAttribute("allOrders", orderService.getAllOrders());
+        model.addAttribute("allOrders", orderService.getAllOrders("Viega"));
 
         return "ordersViega";
     }

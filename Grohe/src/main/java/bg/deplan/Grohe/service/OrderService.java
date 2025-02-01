@@ -10,6 +10,6 @@ public interface OrderService {
 
     void createOrder(List<PreOrderItem> preOrderItems, String name) ;
 
-    List<OrderDTO> getAllOrders();
+    List<OrderDTO> getAllOrders(String brand);
 
 }

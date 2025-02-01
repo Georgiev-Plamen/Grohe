@@ -47,8 +47,13 @@ public class ArticleController {
 
         articleService.addArticle(addArticleDTO);
 
+        if(addArticleDTO.brand().equals("Viega")) {
+            return "redirect:/articles/articlesViega";
+        }
+
         return "redirect:/articles/articles";
     }
+
 
     @GetMapping("/{artNum}")
     public String editArticle(@PathVariable("artNum") String artNum, Model model) {
@@ -62,6 +67,10 @@ public class ArticleController {
     public String editArticle(@PathVariable("artNum") String artNum, AddArticleDTO addArticleDTO) {
 
         articleService.editArticle(addArticleDTO);
+
+        if(addArticleDTO.brand().equals("Viega")) {
+            return "redirect:/articles/articlesViega";
+        }
 
         return "redirect:/articles/articles";
     }

@@ -10,6 +10,7 @@ import java.util.List;
 @Table(name ="orders")
 public class Order extends BaseEntity {
 
+    private String brand;
     @Column(name = "order_name")
     private String orderName;
 
@@ -20,6 +21,14 @@ public class Order extends BaseEntity {
     private List<OrderItem> items;
 
     public Order() {
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     public String getOrderName() {
