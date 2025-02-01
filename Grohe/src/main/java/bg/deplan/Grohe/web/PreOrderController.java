@@ -3,7 +3,6 @@ package bg.deplan.Grohe.web;
 import bg.deplan.Grohe.data.PreOrderItemRepository;
 import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
-import bg.deplan.Grohe.model.DTOs.PreOrderExcelDTO;
 import bg.deplan.Grohe.service.ArticleService;
 import bg.deplan.Grohe.service.PreOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
 
 @Controller
 @RequestMapping("/orders")
@@ -57,6 +55,10 @@ public class PreOrderController {
 
         preOrderService.addItem(articleDTO);
 
+        if(articleDTO.brand().equals("Viega")) {
+            return "redirect:/orders/preOrderViega";
+        }
+
         return "redirect:/orders/preOrder";
     }
 
@@ -77,8 +79,16 @@ public class PreOrderController {
 
     @PostMapping("/makeOrder")
     public String makeOrder (@RequestParam ("name") String name) {
+        String brand = "Grohe";
+        preOrderService.makeOrder(name,brand);
 
-        preOrderService.makeOrder(name);
+        return "redirect:/orders/preOrder";
+    }
+
+    @PostMapping("/makeOrderViega")
+    public String makeOrderViega (@RequestParam ("name") String name) {
+        String brand = "Viega";
+        preOrderService.makeOrder(name,brand);
 
         return "redirect:/orders/preOrder";
     }

@@ -58,6 +58,8 @@
     <!-- Add Order Form -->
     <form th:method="post" th:action="@{/orders/preOrder}" th:object="${preOrderData}">
         <div class="add-container">
+
+            <input type="hidden" name="brand" th:value="Grohe">
             <!-- Article Field -->
             <div class="preOrder-entity">
                 <label for="artNum">Article:</label>

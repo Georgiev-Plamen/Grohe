@@ -15,11 +15,15 @@ body {
     line-height: 1.55;
     color: #0f2b4b;
     background-color: #ffffff;
+    padding-top: 60px;
     margin: 0;
 }
 
 .navbar {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
     background-color: white;
     justify-content: flex-end;
     overflow: hidden;
@@ -31,7 +35,10 @@ body {
 }
 
 .navbar-viega {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
     background-color: black;
     justify-content: flex-end;
     overflow: hidden;
@@ -198,6 +205,10 @@ select {
     border-radius: 4px;
 }
 
+svg {
+    margin: 5px;
+}
+
 .blog-post-card-blog-post-card {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     background: white;
@@ -208,16 +219,15 @@ select {
     transition: 0.3s;
     flex-direction: column;
     justify-content: space-between;
-    margin: 10px;
+    margin: 50px;
 }
 
 .blog-post-card-container {
     width: 100%;
     padding: 1em;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     padding-top: 32px;
-    padding-right: 8px;
     flex-direction: column;
     padding-bottom: 32px;
     justify-content: space-between;
@@ -243,8 +253,10 @@ select {
 }
 
 .logo-container {
-    z-index: 1000;
-    position:absolute;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1001;
     margin-left: 5em;
 }
 
@@ -368,3 +380,13 @@ select {
     width: 5em;
 }
 
+.deplan-logo {
+    Background-color: weight;
+        width: 100px;
+        height: 100px;
+}
+
+.home-container08 {
+    display: flex;
+
+}

@@ -151,10 +151,10 @@ public class PreOrderServiceImpl implements PreOrderService {
     }
 
     @Override
-    public void makeOrder(String name) {
+    public void makeOrder(String name, String brand) {
 
         List<PreOrderItem> preOrderList = preOrderItemRepository.findAll();
-        orderService.createOrder(preOrderList, name);
+        orderService.createOrder(preOrderList, name, brand);
         preOrderItemRepository.deleteAll();
     }
 

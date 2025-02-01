@@ -24,11 +24,12 @@ public class OrderServiceImpl implements OrderService {
     private OrderItemRepository orderItemRepository;
 
     @Override
-    public void createOrder(List<PreOrderItem> preOrderItems, String name) {
+    public void createOrder(List<PreOrderItem> preOrderItems, String name, String brand) {
 
         Order order = new Order();
         order.setDate(LocalDate.now());
         order.setOrderName(name);
+        order.setBrand(brand);
         orderRepository.save(order);
 
         for (PreOrderItem preOrderItem : preOrderItems) {
@@ -52,11 +53,13 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findAll()
                 .stream()
                 .map(OrderServiceImpl::toAllOrders)
+                .filter(o -> o.brand().equals(brand))
                 .toList();
     }
 
     private static OrderDTO toAllOrders(Order order) {
         return new OrderDTO(
+                order.getBrand(),
                 order.getOrderName(),
                 order.getDate(),
                 order.getItems()

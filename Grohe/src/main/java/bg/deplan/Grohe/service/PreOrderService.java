@@ -16,7 +16,7 @@ public interface PreOrderService {
 
     List<ArticleDTO> getAllArticle(String brand);
 
-    void makeOrder(String name);
+    void makeOrder(String name, String brand);
 
     void updateItems(PreOrderDTO preOrderDTO, Long id);
 
