@@ -27,7 +27,7 @@ public class PreOrderController {
 
     @ModelAttribute("preOrderData")
     public PreOrderDTO preOrderDTO() {
-        return new PreOrderDTO(0L,"","","",LocalDate.now(), "","");
+        return new PreOrderDTO(0L,"","","","",LocalDate.now(), "","");
     }
 
     @GetMapping("/preOrder")
@@ -67,12 +67,30 @@ public class PreOrderController {
 
        preOrderService.updateItems(preOrderDTO, id);
 
+        boolean isViega = false;
+        if(preOrderService.findById(id).getArticle().getBrand().equals("Viega")) {
+            isViega = true;
+        }
+
+        if(isViega) {
+            return "redirect:/orders/preOrderViega";
+        }
+
         return "redirect:/orders/preOrder";
     }
 
     @DeleteMapping("/{id}")
     public String deletePreOrderArticle(@PathVariable ("id") Long id) {
+        boolean isViega = false;
+
+        if(preOrderService.findById(id).getArticle().getBrand().equals("Viega")) {
+            isViega = true;
+        }
         preOrderService.deletePreOrder(id);
+
+        if(isViega) {
+            return "redirect:/orders/preOrderViega";
+        }
 
         return "redirect:/orders/preOrder";
     }

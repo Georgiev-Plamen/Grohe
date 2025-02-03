@@ -7,6 +7,7 @@ import java.time.LocalDate;
 public record PreOrderDTO (
 
         Long id,
+        String brand,
         String artNum,
         String quantityForOrder,
         String orderBy,

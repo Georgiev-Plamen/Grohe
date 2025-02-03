@@ -71,7 +71,7 @@ public class PreOrderServiceImpl implements PreOrderService {
         if (optionalArticle.isEmpty()) {
             Article article = new Article();
             article.setArtNum(articleDTO.artNum());
-            article.setBrand("Grohe");
+            article.setBrand(articleDTO.brand());
             articleRepository.save(article);
             optionalArticle = articleRepository.findByArtNum(articleDTO.artNum());
         }
