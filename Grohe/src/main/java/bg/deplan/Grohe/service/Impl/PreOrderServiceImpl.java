@@ -208,9 +208,11 @@ public class PreOrderServiceImpl implements PreOrderService {
 
                     // Read comment
                     String comment = row.getCell(10).getStringCellValue();
+                    String brand = articleRepository.findByArtNum(artNum).get().getBrand();
 
                     // Create DTO and add it to the list
                     PreOrderExcelDTO preOrderExcelDTO = new PreOrderExcelDTO(
+                            brand,
                             artNum,
                             quantityForOrder,
                             LocalDate.now(), // Use current date
@@ -222,6 +224,7 @@ public class PreOrderServiceImpl implements PreOrderService {
                     // Print for debugging
                     System.out.printf("Article: %s - %s pcs. Comment: %s %n",
                             preOrderExcelDTO.artNum(),
+                            preOrderExcelDTO.brand(),
                             preOrderExcelDTO.quantityForOrder(),
                             preOrderExcelDTO.comment());
                 }
@@ -243,6 +246,7 @@ public class PreOrderServiceImpl implements PreOrderService {
             if (optionalArticle.isEmpty()) {
                 Article article = new Article();
                 article.setArtNum(preOrderExcelItems.artNum());
+                article.setBrand(preOrderExcelItems.brand());
                 articleRepository.save(article);
                 optionalArticle = articleRepository.findByArtNum(preOrderExcelItems.artNum());
             }
