@@ -59,6 +59,7 @@ public class OrderServiceImpl implements OrderService {
 
     private static OrderDTO toAllOrders(Order order) {
         return new OrderDTO(
+                order.getId(),
                 order.getBrand(),
                 order.getOrderName(),
                 order.getDate(),

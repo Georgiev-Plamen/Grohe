@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record OrderDTO(
+        Long id,
         String brand,
         String orderName,
         LocalDate date,

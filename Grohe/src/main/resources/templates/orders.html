@@ -13,18 +13,30 @@
 
     <table>
         <thead>
-        <tr class="table-data">
+        <tr>
             <th th:text="#{orders_name}">Order name</th>
             <th th:text="#{orders_date}">Order date</th>
         </tr>
         </thead>
         <tbody>
         <!-- Loop through allOrders and display order details -->
-        <tr th:each="order : ${allOrders}" class="order-row">
-            <!-- Order information row -->
-            <td><span th:text="${order.orderName}">Order name</span></td>
-            <td><span th:text="${order.date}">Order date</span></td>
+        <tr th:each="order : ${allOrders}">
+            <form th:method="POST" th:action="@{/orders/editOrder/{id}(id=*{id})}" th:object="${order}">
+                <!-- Order information row -->
+    <!--            <td><span th:text="${order.orderName}">Order name</span></td>-->
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderName}"
+                         th:value="*{orderName}"></div>
+                    <input type="hidden" th:field="*{orderName}">
+                </td>
+<!--                <td><span th:text="${order.date}">Order date</span></td>-->
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"
+                         th:value="*{date}"></div>
+                    <input type="hidden" th:field="*{date}">
+                </td>
 
+            </form>
             <!-- Article table for the current order -->
             <td colspan="2"> <!-- Span two columns to align with the order headers -->
                 <table class="article-table"> <!-- Inner table for articles -->

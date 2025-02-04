@@ -6,12 +6,16 @@ import bg.deplan.Grohe.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @Controller
 @RequestMapping("/orders")
 public class OrderController {
+
+    @ModelAttribute("orderDto")
+    public OrderDTO orderDTO() { return new OrderDTO(0L, "","", LocalDate.now(),null);}
 
     @Autowired
     private OrderService orderService;
@@ -20,8 +24,17 @@ public class OrderController {
     public String orders(Model model){
 
         model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
+        model.addAttribute("order", orderDTO());
 
         return "orders";
+    }
+
+    @PostMapping("/editOrder/{id}")
+    public String editOrder(@PathVariable ("id") Long id, @ModelAttribute OrderDTO orderDTO) {
+
+
+
+        return "redirect:/orders/orders";
     }
 
     @GetMapping("/allViega")

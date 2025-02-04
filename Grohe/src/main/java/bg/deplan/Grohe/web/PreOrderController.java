@@ -108,7 +108,7 @@ public class PreOrderController {
         String brand = "Viega";
         preOrderService.makeOrder(name,brand);
 
-        return "redirect:/orders/preOrder";
+        return "redirect:/orders/preOrderViega";
     }
 
     @GetMapping("/importFromExcel")
