@@ -79,6 +79,23 @@ public class PreOrderController {
         return "redirect:/orders/preOrder";
     }
 
+    @PostMapping("/bulkUpdatePreOrder")
+    public String submitAllUpdates (@PathVariable ("id") Long id, @ModelAttribute PreOrderDTO preOrderDTO ) {
+
+        preOrderService.updateItems(preOrderDTO, id);
+
+        boolean isViega = false;
+        if(preOrderService.findById(id).getArticle().getBrand().equals("Viega")) {
+            isViega = true;
+        }
+
+        if(isViega) {
+            return "redirect:/orders/preOrderViega";
+        }
+
+        return "redirect:/orders/preOrder";
+    }
+
     @DeleteMapping("/{id}")
     public String deletePreOrderArticle(@PathVariable ("id") Long id) {
         boolean isViega = false;

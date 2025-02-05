@@ -7,13 +7,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/styles.css">
-    <!-- Bootstrap CSS -->
-    <!--    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">-->
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    <!--    <script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>-->
 
     <script>
         // Set today's date on page load
@@ -30,24 +27,42 @@
             }
         }
 
+        // Function to collect data from all rows and submit
+        function submitAllUpdates() {
+            const rows = document.querySelectorAll('tbody tr');
+            const updates = [];
 
+            rows.forEach(row => {
+                const form = row.querySelector('form');
+                const formData = new FormData(form);
+                const update = {};
+
+                formData.forEach((value, key) => {
+                    update[key] = value;
+                });
+
+                updates.push(update);
+            });
+
+            // Submit the updates to the server
+            fetch('/orders/bulkUpdatePreOrder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updates),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('All updates submitted successfully!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Error submitting updates!');
+            });
+        }
     </script>
-    <script>
-    $(document).ready(function () {
-    $('.eBtn').on('click', function (event) {
-        var button = $(this); // Button that triggered the modal
-        var recipient = button.data('whatever'); // Extract info from data-* attributes
-
-        // Update the modal's content
-        var modal = $('#exampleModal');
-        modal.find('.modal-title').text('New message to ' + recipient);
-        modal.find('.modal-body #recipient-name').val(recipient);
-    });
-    });
-
-
-    </script>
-
 </head>
 <body>
 
@@ -58,7 +73,6 @@
     <!-- Add Order Form -->
     <form th:method="post" th:action="@{/orders/preOrder}" th:object="${preOrderData}">
         <div class="add-container">
-
             <input type="hidden" name="brand" th:value="Grohe">
             <!-- Article Field -->
             <div class="preOrder-entity">
@@ -111,13 +125,11 @@
         <tr th:each="article : ${allArticle}">
             <!-- Form for each article -->
             <form th:method="POST" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}" th:object="${article}">
-                <!--                <td th:text="*{id}"></td>-->
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"
                          th:value="*{artNum}"></div>
                     <input type="hidden" th:field="*{artNum}">
                 </td>
-
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantityForOrder}"
                          th:value="*{quantityForOrder}"></div>
@@ -144,17 +156,19 @@
                     <input type="hidden" th:field="*{comment}"/>
                 </td>
                 <td class="action">
-                    <button type="submit">Update</button>
+                    <form th:method="delete"
+                          th:action="@{/orders/{id}(id=${article.id()})}">
+                        <input type="hidden" name="id" th:value="delete">
+                        <button class="delete-btn" type="submit">Delete</button>
+                    </form>
+                </td>
             </form>
-            <form th:method="delete"
-                  th:action="@{/orders/{id}(id=${article.id()})}">
-                <input type="hidden" name="id" th:value="delete">
-                <button class="delete-btn" type="submit">Delete</button>
-            </form>
-            </td>
         </tr>
         </tbody>
     </table>
+
+    <!-- Single Update Button -->
+    <button type="button" class="btn btn-primary" onclick="submitAllUpdates()">Update All</button>
 
     <form th:method="POST"
           th:action="@{/orders/importFromExcel}"
@@ -168,7 +182,7 @@
         </label>
     </form>
 
-    <!--     popup screen -->
+    <!-- Popup screen -->
     <div class="myForm">
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
@@ -194,7 +208,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 </body>
 </html>
