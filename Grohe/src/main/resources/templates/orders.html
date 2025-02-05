@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orders</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <script>
+        function updateHiddenInput(div) {
+            const hiddenInput = div.nextElementSibling;
+            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                hiddenInput.value = div.textContent.trim();
+            }
+        }
+    </script>
 </head>
 <body>
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
@@ -35,7 +43,10 @@
                          th:value="*{date}"></div>
                     <input type="hidden" th:field="*{date}">
                 </td>
-
+                <td>
+                    <input type="hidden" id="brand" name="brand" th:value="Grohe">
+                    <button class="update-order" type="submit">&#10226;</button>
+                </td>
             </form>
             <!-- Article table for the current order -->
             <td colspan="2"> <!-- Span two columns to align with the order headers -->

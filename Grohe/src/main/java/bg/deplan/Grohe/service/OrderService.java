@@ -12,4 +12,5 @@ public interface OrderService {
 
     List<OrderDTO> getAllOrders(String brand);
 
+    void editOrder(OrderDTO orderDTO, Long id);
 }

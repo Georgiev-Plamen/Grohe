@@ -32,9 +32,9 @@ public class OrderController {
     @PostMapping("/editOrder/{id}")
     public String editOrder(@PathVariable ("id") Long id, @ModelAttribute OrderDTO orderDTO) {
 
+        orderService.editOrder(orderDTO, id);
 
-
-        return "redirect:/orders/orders";
+        return "redirect:/orders/all";
     }
 
     @GetMapping("/allViega")

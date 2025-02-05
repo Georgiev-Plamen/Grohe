@@ -57,6 +57,25 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
+    @Override
+    public void editOrder(OrderDTO orderDTO, Long id) {
+        Order order = orderRepository.findById(id).get();
+
+        if(!order.getOrderName().equals(orderDTO.orderName()) && orderDTO.orderName() != null) {
+            order.setOrderName(orderDTO.orderName());
+        }
+
+//        if(!order.getBrand().equals(orderDTO.brand()) && orderDTO.brand() != null) {
+//            order.setBrand(orderDTO.brand());
+//        }
+
+        if(!order.getDate().equals(orderDTO.date()) && orderDTO.date() != null) {
+            order.setDate(orderDTO.date());
+        }
+
+        orderRepository.save(order);
+    }
+
     private static OrderDTO toAllOrders(Order order) {
         return new OrderDTO(
                 order.getId(),
