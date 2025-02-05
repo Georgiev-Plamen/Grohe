@@ -236,6 +236,18 @@ public class PreOrderServiceImpl implements PreOrderService {
         return preOrderExcelDTOList;
     }
 
+    //TODO
+    @Override
+    public void bulkUpdate(List<PreOrderDTO> updates) {
+
+        for (PreOrderDTO preOrderDTO : updates) {
+            Long id = preOrderDTO.id();
+
+            PreOrderItem preOrderItem = preOrderItemRepository.findById(id).get();
+
+        }
+    }
+
     public void listToPreOrderItem(List<PreOrderExcelDTO> preOrderExcelDTOList) {
 
         for (PreOrderExcelDTO preOrderExcelItems : preOrderExcelDTOList) {
