@@ -173,7 +173,7 @@ public class PreOrderServiceImpl implements PreOrderService {
         );
     }
 
-    public List<PreOrderExcelDTO> readPreOrderFromExcel(InputStream inputStream) throws IOException {
+    public List<PreOrderExcelDTO> readPreOrderFromExcel(InputStream inputStream, String brand) throws IOException {
         // List to store the parsed DTOs
         List<PreOrderExcelDTO> preOrderExcelDTOList = new ArrayList<>();
 
@@ -208,7 +208,6 @@ public class PreOrderServiceImpl implements PreOrderService {
 
                     // Read comment
                     String comment = row.getCell(10).getStringCellValue();
-                    String brand = articleRepository.findByArtNum(artNum).get().getBrand();
 
                     // Create DTO and add it to the list
                     PreOrderExcelDTO preOrderExcelDTO = new PreOrderExcelDTO(
@@ -222,7 +221,7 @@ public class PreOrderServiceImpl implements PreOrderService {
                     preOrderExcelDTOList.add(preOrderExcelDTO);
 
                     // Print for debugging
-                    System.out.printf("Article: %s - %s pcs. Comment: %s %n",
+                    System.out.printf("Article: %s%nBrand: %s%n%s pcs.%nComment: %s %n====%n",
                             preOrderExcelDTO.artNum(),
                             preOrderExcelDTO.brand(),
                             preOrderExcelDTO.quantityForOrder(),

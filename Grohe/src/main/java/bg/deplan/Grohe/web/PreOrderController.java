@@ -119,9 +119,10 @@ public class PreOrderController {
 
     //TODO: need to create redirectAttributes for errors
     @PostMapping("/importFromExcel")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
+    public String handleFileUpload(@RequestParam("file") MultipartFile file,
+    @RequestParam ("brand") String brand) throws IOException {
         if (!file.isEmpty()) {
-            preOrderService.readPreOrderFromExcel(file.getInputStream());
+            preOrderService.readPreOrderFromExcel(file.getInputStream(), brand);
         } else {
             // Handle the case where the file is empty
             throw new IllegalArgumentException("File is empty");

@@ -34,10 +34,9 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	implementation 'org.modelmapper:modelmapper:3.2.0'
 	implementation 'org.springframework.security:spring-security-crypto'
+	implementation 'org.apache.xmlbeans:xmlbeans:5.1.1'
+	implementation 'org.apache.poi:poi-ooxml:5.2.3'
 	implementation 'org.apache.poi:poi:5.2.3'
-	implementation('org.apache.poi:poi-ooxml:5.2.3') {
-		exclude group: 'org.apache.xmlbeans', module: 'xmlbeans'
-	}
 
 	// Development and testing dependencies
 	developmentOnly 'org.springframework.boot:spring-boot-devtools:3.3.0' // Use the latest version
