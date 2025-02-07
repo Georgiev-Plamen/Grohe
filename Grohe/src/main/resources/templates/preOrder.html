@@ -20,31 +20,48 @@
         });
 
         // Function to sync contenteditable divs with hidden inputs
-        async function submitAllUpdates() {
-            const rows = document.querySelectorAll('tbody tr');
-            const updates = [];
+       async function submitAllUpdates() {
+    const rows = document.querySelectorAll('tbody tr');
+    const updates = [];
 
-            rows.forEach(row => {
-                const update = {};
+    rows.forEach(row => {
+        // Ignore rows with a DELETE form
+        const deleteForm = row.querySelector('form');
+        if (deleteForm) {
+            const methodInput = deleteForm.querySelector('input[name="_method"]');
+            if (methodInput && methodInput.value.toLowerCase() === "delete") {
+                return;  // Skip this row
+            }
+        }
 
-                // Collect all inputs
-                const inputs = row.querySelectorAll('input');
-                inputs.forEach(input => {
-                    if (input.name !== "_csrf") { // ✅ Ignore _csrf field
-                        update[input.name] = input.value.trim();
-                    }
-                });
+        const update = {};
 
-                // Collect contenteditable divs
-                const editableDivs = row.querySelectorAll('[contenteditable="true"]');
-                editableDivs.forEach(div => {
-                    const hiddenInput = div.nextElementSibling;
-                    if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-                        update[hiddenInput.name] = div.textContent.trim();
-                    }
-                });
+        // Collect all inputs (excluding _csrf)
+        const inputs = row.querySelectorAll('input');
+        inputs.forEach(input => {
+            if (input.name !== "_csrf") {
+                update[input.name] = input.value.trim();
+            }
+        });
 
-                updates.push(update);
+        // Collect contenteditable divs
+        const editableDivs = row.querySelectorAll('[contenteditable="true"]');
+        editableDivs.forEach(div => {
+            const hiddenInput = div.nextElementSibling;
+            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                update[hiddenInput.name] = div.textContent.trim();
+            }
+        });
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = String(date.getFullYear()).slice(-2);
+            return `${day}.${month}.${year}`;  // Returns in dd.MM.yy format
+        }
+
+        updates.push(update);
             });
 
             // Submit the updates to the server
@@ -76,6 +93,7 @@
     <form th:method="post" th:action="@{/orders/preOrder}" th:object="${preOrderData}">
         <div class="add-container">
             <!-- Article Field -->
+            <input type="hidden" name="brand" th:value="Grohe">
             <div class="preOrder-entity">
                 <label for="artNum">Article:</label>
                 <input type="text" id="artNum" th:field="*{artNum}" required>
@@ -143,11 +161,11 @@
                          th:value="*{orderBy}"></div>
                     <input type="hidden" th:field="*{orderBy}"/>
                 </td>
-<!--                <td>-->
-<!--                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"-->
-<!--                         th:value="*{date}"></div>-->
-<!--                    <input type="hidden" th:field="*{date}"/>-->
-<!--                </td>-->
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"
+                         th:value="*{date}"></div>
+                    <input type="hidden" th:field="*{date}"/>
+                </td>
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderReason}"
                          th:value="*{orderReason}"></div>
@@ -158,14 +176,14 @@
                          th:value="*{comment}"></div>
                     <input type="hidden" th:field="*{comment}"/>
                 </td>
-<!--                <td class="action">-->
-<!--                    <form th:method="delete"-->
-<!--                          th:action="@{/orders/{id}(id=${article.id()})}">-->
-<!--                        <input type="hidden" name="id" th:value="delete">-->
-<!--                        <button class="delete-btn" type="submit">Delete</button>-->
-<!--                    </form>-->
-<!--                </td>-->
             </form>
+                <td class="action">
+                    <form th:action="@{/orders/delete/{id}(id=${article.id()})}" th:method="DELETE">
+                        <input type="hidden" name="_method" value="delete">
+                        <button class="delete-btn" type="submit">Delete</button>
+                    </form>
+                </td>
+
         </tr>
         </tbody>
     </table>

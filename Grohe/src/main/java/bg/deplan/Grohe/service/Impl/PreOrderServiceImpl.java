@@ -104,6 +104,7 @@ public class PreOrderServiceImpl implements PreOrderService {
         if (optionalArticle.isEmpty()) {
             Article article = new Article();
             article.setArtNum(preOrderDTO.artNum());
+            article.setBrand(preOrderDTO.brand());
             articleRepository.save(article);
             optionalArticle = articleRepository.findByArtNum(preOrderDTO.artNum());
         }

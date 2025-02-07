@@ -20,18 +20,9 @@ public class PreOrderRestController {
         this.preOrderService = preOrderService;
         }
 
-    @PostMapping("/receive")
-    public ResponseEntity<String> receivePreOrder(@RequestBody ArticleDTO articleDTO) {
-        try {
-            preOrderService.addItem(articleDTO); // Assuming a save method exists
-            return ResponseEntity.ok("PreOrder received and saved successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving pre-order: " + e.getMessage());
-        }
-    }
-
     @PostMapping("/receive/bulkUpdatePreOrder")
-    public ResponseEntity<String> bulkUpdatePreOrder(@RequestBody List<PreOrderDTO> updates) {
+    public ResponseEntity<String> bulkUpdatePreOrder(@RequestBody List<PreOrderDTO> updates,
+                                                     @RequestParam(required = false) String _method) {
         try {
             for (PreOrderDTO preOrderDTO : updates) {
                 preOrderService.updateItems(preOrderDTO, preOrderDTO.id()); // Assuming an update method exists

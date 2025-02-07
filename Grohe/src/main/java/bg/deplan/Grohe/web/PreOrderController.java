@@ -88,7 +88,7 @@ public class PreOrderController {
         return "redirect:/orders/preOrder";
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public String deletePreOrderArticle(@PathVariable ("id") Long id) {
         boolean isViega = false;
 

@@ -3,9 +3,11 @@ package bg.deplan.Grohe.model.DTOs;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.time.LocalDate;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record PreOrderDTO (
 
         Long id,
@@ -14,7 +16,7 @@ public record PreOrderDTO (
         String quantityForOrder,
         String orderBy,
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "d.MM.yy") // Match your frontend format
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") // Match your frontend format
         LocalDate date,
 
         String orderReason,
