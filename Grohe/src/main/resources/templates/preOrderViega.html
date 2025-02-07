@@ -14,7 +14,6 @@
     <!-- Bootstrap JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <!--    <script type="text/javascript" th:src="@{js/main.js}" src="../static/js/main.js"></script>-->
-
     <script>
         // Set today's date on page load
         window.addEventListener('DOMContentLoaded', () => {
@@ -23,29 +22,67 @@
         });
 
         // Function to sync contenteditable divs with hidden inputs
-        function updateHiddenInput(div) {
-            const hiddenInput = div.nextElementSibling;
-            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-                hiddenInput.value = div.textContent.trim();
+        async function submitAllUpdates() {
+        const rows = document.querySelectorAll('tbody tr');
+        const updates = [];
+
+        rows.forEach(row => {
+        // Ignore rows with a DELETE form
+        const deleteForm = row.querySelector('form');
+        if (deleteForm) {
+        const methodInput = deleteForm.querySelector('input[name="_method"]');
+            if (methodInput && methodInput.value.toLowerCase() === "delete") {
+                 return; // Skip this row
             }
         }
 
+        const update = {};
 
-    </script>
-    <script>
-    $(document).ready(function () {
-    $('.eBtn').on('click', function (event) {
-        var button = $(this); // Button that triggered the modal
-        var recipient = button.data('whatever'); // Extract info from data-* attributes
+        // Collect all inputs (excluding _csrf)
+        const inputs = row.querySelectorAll('input');
+        inputs.forEach(input => {
+        if (input.name !== "_csrf") {
+        update[input.name] = input.value.trim();
+        }
+        });
 
-        // Update the modal's content
-        var modal = $('#exampleModal');
-        modal.find('.modal-title').text('New message to ' + recipient);
-        modal.find('.modal-body #recipient-name').val(recipient);
-    });
-    });
+        // Collect contenteditable divs
+        const editableDivs = row.querySelectorAll('[contenteditable="true"]');
+        editableDivs.forEach(div => {
+        const hiddenInput = div.nextElementSibling;
+        if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+        update[hiddenInput.name] = div.textContent.trim();
+        }
+        });
 
+        function formatDate(dateString) {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = String(date.getFullYear()).slice(-2);
+        return `${day}.${month}.${year}`; // Returns in dd.MM.yy format
+        }
 
+        updates.push(update);
+        });
+
+        // Submit the updates to the server
+        try {
+        const response = await fetch('api/preorder/receive/bulkUpdatePreOrder', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updates)
+        });
+
+        const result = await response.text();
+        alert(result);
+        } catch (error) {
+        console.error('Error sending PreOrder:', error);
+        alert('Failed to send PreOrder');
+        }
+        }
     </script>
 
 </head>
@@ -112,6 +149,8 @@
             <!-- Form for each article -->
             <form th:method="POST" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}" th:object="${article}">
                 <!--                <td th:text="*{id}"></td>-->
+                <input type="hidden" name="brand" th:value="Viega">
+                <input type="hidden" name="id" id="id" th:value="*{id}">
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"
                          th:value="*{artNum}"></div>
@@ -143,18 +182,19 @@
                          th:value="*{comment}"></div>
                     <input type="hidden" th:field="*{comment}"/>
                 </td>
-                <td class="action">
-                    <button type="submit">Update</button>
             </form>
-            <form th:method="delete"
-                  th:action="@{/orders/{id}(id=${article.id()})}">
-                <input type="hidden" name="id" th:value="delete">
-                <button class="delete-btn" type="submit">Delete</button>
-            </form>
+            <td class="action">
+                <form th:action="@{/orders/delete/{id}(id=${article.id()})}" th:method="DELETE">
+                    <input type="hidden" name="_method" value="delete">
+                    <button class="delete-btn" type="submit">Delete</button>
+                </form>
             </td>
         </tr>
         </tbody>
     </table>
+
+    <!-- Single Update Button -->
+    <button type="button" class="btn btn-primary" onclick="submitAllUpdates()">Update All</button>
 
     <form th:method="POST"
           th:action="@{/orders/importFromExcel}"
