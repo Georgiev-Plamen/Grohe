@@ -20,47 +20,49 @@
         });
 
         // Function to sync contenteditable divs with hidden inputs
-        function updateHiddenInput(div) {
-            const hiddenInput = div.nextElementSibling;
-            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-                hiddenInput.value = div.textContent.trim();
-            }
-        }
-
-        // Function to collect data from all rows and submit
-        function submitAllUpdates() {
+        async function submitAllUpdates() {
             const rows = document.querySelectorAll('tbody tr');
             const updates = [];
 
             rows.forEach(row => {
-                const form = row.querySelector('form');
-                const formData = new FormData(form);
                 const update = {};
 
-                formData.forEach((value, key) => {
-                    update[key] = value;
+                // Collect all inputs
+                const inputs = row.querySelectorAll('input');
+                inputs.forEach(input => {
+                    if (input.name !== "_csrf") { // ✅ Ignore _csrf field
+                        update[input.name] = input.value.trim();
+                    }
+                });
+
+                // Collect contenteditable divs
+                const editableDivs = row.querySelectorAll('[contenteditable="true"]');
+                editableDivs.forEach(div => {
+                    const hiddenInput = div.nextElementSibling;
+                    if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                        update[hiddenInput.name] = div.textContent.trim();
+                    }
                 });
 
                 updates.push(update);
             });
 
             // Submit the updates to the server
-            fetch('/orders/bulkUpdatePreOrder', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updates),
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                alert('All updates submitted successfully!');
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('Error submitting updates!');
-            });
+            try {
+                const response = await fetch('api/preorder/receive/bulkUpdatePreOrder', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updates)
+                });
+
+                const result = await response.text();
+                alert(result);
+            } catch (error) {
+                console.error('Error sending PreOrder:', error);
+                alert('Failed to send PreOrder');
+            }
         }
     </script>
 </head>
@@ -73,7 +75,8 @@
     <!-- Add Order Form -->
     <form th:method="post" th:action="@{/orders/preOrder}" th:object="${preOrderData}">
         <div class="add-container">
-            <input type="hidden" name="brand" th:value="Grohe">
+            <input type="hidden" name="brand" th:text="Grohe">
+            <input type="hidden" name="id" id="id" th:field="*{id}">
             <!-- Article Field -->
             <div class="preOrder-entity">
                 <label for="artNum">Article:</label>
@@ -140,11 +143,11 @@
                          th:value="*{orderBy}"></div>
                     <input type="hidden" th:field="*{orderBy}"/>
                 </td>
-                <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"
-                         th:value="*{date}"></div>
-                    <input type="hidden" th:field="*{date}"/>
-                </td>
+<!--                <td>-->
+<!--                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"-->
+<!--                         th:value="*{date}"></div>-->
+<!--                    <input type="hidden" th:field="*{date}"/>-->
+<!--                </td>-->
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderReason}"
                          th:value="*{orderReason}"></div>
@@ -155,13 +158,13 @@
                          th:value="*{comment}"></div>
                     <input type="hidden" th:field="*{comment}"/>
                 </td>
-                <td class="action">
-                    <form th:method="delete"
-                          th:action="@{/orders/{id}(id=${article.id()})}">
-                        <input type="hidden" name="id" th:value="delete">
-                        <button class="delete-btn" type="submit">Delete</button>
-                    </form>
-                </td>
+<!--                <td class="action">-->
+<!--                    <form th:method="delete"-->
+<!--                          th:action="@{/orders/{id}(id=${article.id()})}">-->
+<!--                        <input type="hidden" name="id" th:value="delete">-->
+<!--                        <button class="delete-btn" type="submit">Delete</button>-->
+<!--                    </form>-->
+<!--                </td>-->
             </form>
         </tr>
         </tbody>

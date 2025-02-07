@@ -30,7 +30,7 @@ public class SecurityConfig {
                 )
                 .csrf(csrf -> csrf
                         .csrfTokenRequestHandler(csrfTokenHandler) // Handle CSRF tokens
-                        .ignoringRequestMatchers("/api/**")        // Disable CSRF for API paths
+                        .ignoringRequestMatchers("orders/api/**")        // Disable CSRF for API paths
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
                 .formLogin(formLogin -> formLogin

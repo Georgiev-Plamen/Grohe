@@ -88,29 +88,6 @@ public class PreOrderController {
         return "redirect:/orders/preOrder";
     }
 
-    @PostMapping("/orders/bulkUpdatePreOrder")
-    @ResponseBody
-    public ResponseEntity<String> bulkUpdatePreOrder(@RequestBody List<PreOrderDTO> updates) {
-        try {
-            // Process updates and save to the database
-            preOrderService.bulkUpdate(updates);
-            return ResponseEntity.ok("Updates processed successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing updates: " + e.getMessage());
-        }
-
-//        boolean isViega = false;
-//        if(preOrderService.findById(id).getArticle().getBrand().equals("Viega")) {
-//            isViega = true;
-//        }
-//
-//        if(isViega) {
-//            return "redirect:/orders/preOrderViega";
-//        }
-
-//        return "redirect:/orders/preOrder";
-    }
-
     @DeleteMapping("/{id}")
     public String deletePreOrderArticle(@PathVariable ("id") Long id) {
         boolean isViega = false;
