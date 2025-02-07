@@ -75,8 +75,6 @@
     <!-- Add Order Form -->
     <form th:method="post" th:action="@{/orders/preOrder}" th:object="${preOrderData}">
         <div class="add-container">
-            <input type="hidden" name="brand" th:text="Grohe">
-            <input type="hidden" name="id" id="id" th:field="*{id}">
             <!-- Article Field -->
             <div class="preOrder-entity">
                 <label for="artNum">Article:</label>
@@ -128,6 +126,8 @@
         <tr th:each="article : ${allArticle}">
             <!-- Form for each article -->
             <form th:method="POST" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}" th:object="${article}">
+                <input type="hidden" name="brand" th:value="Grohe">
+                <input type="hidden" name="id" id="id" th:value="*{id}">
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"
                          th:value="*{artNum}"></div>
