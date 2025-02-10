@@ -1,5 +1,10 @@
 Design :
+* Export ot excel order - !!!
+* Count edit article in pre order.
+* Need promo finder.
+
 
 * Need dropdown menu with option to select language.
+
 
 
