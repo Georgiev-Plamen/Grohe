@@ -18,6 +18,14 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     public byte[] exportOrderToExcel(Order order) throws IOException {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Order Export");
+            CellStyle cellStyle = workbook.createCellStyle();
+
+            Font workbookFont = workbook.createFont();
+            workbookFont.setBold(true);
+            workbookFont.setFontHeightInPoints((short) 12);  // Font size 12
+            workbookFont.setFontName("Arial");
+            workbookFont.setColor(IndexedColors.BLACK.getIndex());  // Set font color
+            cellStyle.setFont(workbookFont);  // Attach font
 
             //Column adjust
             sheet.setColumnWidth(0, 3803);
@@ -31,7 +39,8 @@ public class ExcelExportServiceImpl implements ExcelExportService {
             rowIndex = createOrderHeader(sheet, order, rowIndex);
 
             // Sub-header: Article List
-            rowIndex = createArticleTableHeader(sheet, rowIndex);
+            rowIndex =
+                    createArticleTableHeader(sheet, rowIndex, workbook);
             int counter = 1;
 
             // Populate article data
@@ -97,16 +106,49 @@ public class ExcelExportServiceImpl implements ExcelExportService {
 
         rowIndex++;  // Leave an empty row for spacing
         rowIndex++;  // Leave an empty row for spacing
+
+
         return rowIndex;
     }
 
-    private int createArticleTableHeader(Sheet sheet, int rowIndex) {
+//    private int createArticleTableHeader(Sheet sheet, int rowIndex) {
+//        Row row = sheet.createRow(rowIndex++);
+//        row.setHeightInPoints(43);
+//        row.createCell(0).setCellValue("");
+//        row.createCell(1).setCellValue("Product Number");
+//        row.createCell(2).setCellValue("Q-ty");
+//        row.createCell(3).setCellValue("Order reason");
+//
+//        return rowIndex;
+//    }
+
+    private int createArticleTableHeader(Sheet sheet, int rowIndex, Workbook workbook) {
         Row row = sheet.createRow(rowIndex++);
-        row.setHeightInPoints(43);
-        row.createCell(0).setCellValue("");
-        row.createCell(1).setCellValue("Product Number");
-        row.createCell(2).setCellValue("Q-ty");
-        row.createCell(3).setCellValue("Order reason");
+        row.setHeightInPoints(32);  // Set the row height
+
+        CellStyle headerStyle = workbook.createCellStyle();
+        Font headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        headerFont.setFontHeightInPoints((short) 11);  // Font size 12
+        headerFont.setFontName("Arial");
+        headerFont.setColor(IndexedColors.BLACK.getIndex());  // Set font color
+        headerStyle.setFont(headerFont);  // Attach font
+
+        headerStyle.setBorderTop(BorderStyle.MEDIUM);
+        headerStyle.setBorderBottom(BorderStyle.MEDIUM);
+        headerStyle.setBorderLeft(BorderStyle.MEDIUM);
+        headerStyle.setBorderRight(BorderStyle.MEDIUM);
+        headerStyle.setAlignment(HorizontalAlignment.CENTER);  // Center alignment
+        headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);  // Center alignment
+
+
+
+        String[] headers = {"", "Product Number", "Q-ty", "Order Reason"};
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = row.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(headerStyle);
+        }
 
         return rowIndex;
     }
