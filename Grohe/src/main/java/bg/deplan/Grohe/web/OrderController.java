@@ -29,6 +29,22 @@ public class OrderController {
         return "orders";
     }
 
+    @GetMapping("/allNew")
+    public String ordersNew(Model model){
+
+        model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
+        model.addAttribute("order", orderDTO());
+
+        return "ordersNew";
+    }
+
+    @PostMapping("/search")
+    public String orderSearch(Model model, @ModelAttribute("order") OrderDTO order){
+        model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
+
+        return "orderSearch";
+    }
+
     @PostMapping("/editOrder/{id}")
     public String editOrder(@PathVariable ("id") Long id, @ModelAttribute OrderDTO orderDTO) {
 

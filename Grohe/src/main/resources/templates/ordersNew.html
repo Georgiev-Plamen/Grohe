@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script>
+        function updateHiddenInput(div) {
+            const hiddenInput = div.nextElementSibling;
+            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                hiddenInput.value = div.textContent.trim();
+            }
+        }
+    </script>
+</head>
+<body>
+<div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
+
+<div class="container">
+    <form th:method="post" th:action="@{/orders/search}" th:object="${order}">
+        <div class="add-container">
+            <!-- Article Field -->
+            <input type="hidden" name="brand" th:value="Grohe">
+            <div class="preOrder-entity">
+                <label for="orderName">Order name:</label>
+                <input type="text" id="orderName" th:field="*{orderName}" required>
+            </div>
+            <!-- Quantity Field -->
+            <div class="preOrder-entity">
+                <label for="date">Date:</label>
+                <input type="date" id="date" th:field="*{date}" required>
+            </div>
+            <button class="pre-order-add-btn" type="submit">Search</button>
+            <!-- Order By Field -->
+            <!--            <div class="preOrder-entity">-->
+            <!--&lt;!&ndash;                <label for="orderBy">Order by:</label>&ndash;&gt;-->
+            <!--&lt;!&ndash;                <input type="text" id="orderBy" th:field="*{orderBy}" required>&ndash;&gt;-->
+            <!--            </div>-->
+            <!--            &lt;!&ndash; Date Field &ndash;&gt;-->
+            <!--            <div class="preOrder-entity">-->
+            <!--                <label for="currentDate">Date:</label>-->
+            <!--                <input type="date" id="currentDate" th:field="*{date}" required>-->
+            <!--            </div>-->
+            <!--            &lt;!&ndash; Order Reason Field &ndash;&gt;-->
+            <!--            <div class="preOrder-entity">-->
+            <!--                <label for="orderReason">Order reason:</label>-->
+            <!--                <input type="text" id="orderReason" th:field="*{orderReason}">-->
+            <!--            </div>-->
+            <!--            &lt;!&ndash; Comments Field &ndash;&gt;-->
+            <!--            <div class="preOrder-entity">-->
+            <!--                <label for="comment">Comments:</label>-->
+            <!--                <input type="text" id="comment" th:field="*{comment}">-->
+            <!--            </div>-->
+        </form>
+        </div>
+</div>
+
+<div class="container">
+    <h1 th:text="#{orders_title}">Orders</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th th:text="#{orders_name}">Order name</th>
+            <th th:text="#{orders_date}">Order date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Loop through allOrders and display order details -->
+        <tr th:each="order : ${allOrders}">
+            <form th:method="POST" th:action="@{/orders/editOrder/{id}(id=*{id})}" th:object="${order}">
+                <!-- Order information row -->
+                <!--            <td><span th:text="${order.orderName}">Order name</span></td>-->
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderName}"
+                         th:value="*{orderName}"></div>
+                    <input type="hidden" th:field="*{orderName}">
+                </td>
+                <!--                <td><span th:text="${order.date}">Order date</span></td>-->
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"
+                         th:value="*{date}"></div>
+                    <input type="hidden" th:field="*{date}">
+                </td>
+                <td>
+                    <input type="hidden" id="brand" name="brand" th:value="Grohe">
+                    <button class="update-order" type="submit">&#10226;</button>
+                </td>
+            </form>
+            <!-- Article table for the current order -->
+            <!--            <td colspan="2"> &lt;!&ndash; Span two columns to align with the order headers &ndash;&gt;-->
+            <!--                <table class="article-table"> &lt;!&ndash; Inner table for articles &ndash;&gt;-->
+            <!--                    <thead>-->
+            <!--                    <tr>-->
+            <!--                        <th th:text="#{article_name}">Article Number</th>-->
+            <!--                        <th th:text="#{article_quantity}">Quantity</th>-->
+            <!--                        <th th:text="#{orders_ordered_by}">Ordered By</th>-->
+            <!--                        <th th:text="#{orders_reason}">Order Reason</th>-->
+            <!--                        <th th:text="#{orders_date}">Date of Order</th>-->
+            <!--                        <th th:text="#{orders_delivery}">Date of Delivery</th>-->
+            <!--                    </tr>-->
+            <!--                    </thead>-->
+            <!--                    <tbody>-->
+            <!--                    <tr th:each="article : ${order.articleList}">-->
+            <!--                        <td><span th:text="${article.getArticle.artNum}"></span></td>-->
+            <!--                        <td><span th:text="${article.quantity}"></span></td>-->
+            <!--                        <td><span th:text="${article.orderBy}"></span></td>-->
+            <!--                        <td><span th:text="${article.orderReason}"></span></td>-->
+            <!--                        <td><span th:text="${article.dateOfOrder}"></span></td>-->
+            <!--                        <td><span th:text="${article.dateOfDelivery}"></span></td>-->
+            <!--                    </tr>-->
+            <!--                    </tbody>-->
+            <!--                </table>-->
+            <!--            </td>-->
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -43,12 +43,6 @@ public class PreOrderController {
         return "preOrder";
     }
 
-   @GetMapping("/preOrderTest")
-   public String getPreOrderPage() {
-           // The HTML file should be placed in src/main/resources/templates/preorder.html
-            return "preOrderTest";
-   }
-
     @GetMapping("/preOrderViega")
     public String preOrderViega(Model model) {
 

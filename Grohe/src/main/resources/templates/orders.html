@@ -59,6 +59,7 @@
                         <th th:text="#{orders_reason}">Order Reason</th>
                         <th th:text="#{orders_date}">Date of Order</th>
                         <th th:text="#{orders_delivery}">Date of Delivery</th>
+                        <th th:text="#{orders_comment}">Comments</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -69,6 +70,7 @@
                         <td><span th:text="${article.orderReason}"></span></td>
                         <td><span th:text="${article.dateOfOrder}"></span></td>
                         <td><span th:text="${article.dateOfDelivery}"></span></td>
+                        <td><span th:text="${article.comment}"></span></td>
                     </tr>
                     </tbody>
                 </table>
