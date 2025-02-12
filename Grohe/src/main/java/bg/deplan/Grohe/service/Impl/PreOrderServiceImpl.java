@@ -8,8 +8,10 @@ import bg.deplan.Grohe.model.Article;
 import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderExcelDTO;
+import bg.deplan.Grohe.model.Order;
 import bg.deplan.Grohe.model.PreOrderItem;
 import bg.deplan.Grohe.service.ArticleService;
+import bg.deplan.Grohe.service.ExcelExportService;
 import bg.deplan.Grohe.service.OrderService;
 import bg.deplan.Grohe.service.PreOrderService;
 import jakarta.persistence.EntityNotFoundException;
@@ -45,16 +47,19 @@ public class PreOrderServiceImpl implements PreOrderService {
     private final PreOrderItemRepository preOrderItemRepository;
     @Autowired
     private final OrderRepository orderRepository;
+    @Autowired
+    private final ExcelExportService excelExportService;
 
     @Autowired
     private OrderService orderService;
 
-    public PreOrderServiceImpl(ResourceLoader resourceLoader, ArticleRepository articleRepository, ArticleService articleService, PreOrderItemRepository preOrderItemRepository, OrderRepository orderRepository, OrderService orderService) {
+    public PreOrderServiceImpl(ResourceLoader resourceLoader, ArticleRepository articleRepository, ArticleService articleService, PreOrderItemRepository preOrderItemRepository, OrderRepository orderRepository, ExcelExportService excelExportService, OrderService orderService) {
         this.resourceLoader = resourceLoader;
         this.articleRepository = articleRepository;
         this.articleService = articleService;
         this.preOrderItemRepository = preOrderItemRepository;
         this.orderRepository = orderRepository;
+        this.excelExportService = excelExportService;
         this.orderService = orderService;
     }
 
@@ -158,6 +163,33 @@ public class PreOrderServiceImpl implements PreOrderService {
         List<PreOrderItem> preOrderList = preOrderItemRepository.findAllByArticle_Brand(brand);
         orderService.createOrder(preOrderList, name, brand);
         preOrderItemRepository.deleteAllByArticle_Brand(brand);
+    }
+
+    @Override
+    @Transactional
+    public void createAndExportOrder(String name, String brand) {
+        List<PreOrderItem> preOrderList = preOrderItemRepository.findAllByArticle_Brand(brand);
+
+        // Create and persist the order
+        Order order = orderService.createOrder(preOrderList, name, brand);
+
+        // Delete the pre-orders
+        preOrderItemRepository.deleteAllByArticle_Brand(brand);
+
+        // Export the order to Excel
+        exportOrder(order);
+    }
+
+    @Transactional
+    private void exportOrder(Order order) {
+        try {
+            byte[] excelFile = excelExportService.exportOrderToExcel(order);
+            System.out.println("Exported order: " + order.getId());
+            // Optionally save or email the file
+        } catch (IOException e) {
+            // Handle exception
+            e.printStackTrace();
+        }
     }
 
     private static ArticleDTO toAllItem(PreOrderItem preOrderItem) {

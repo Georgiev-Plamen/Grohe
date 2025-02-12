@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -24,7 +23,7 @@ public class OrderServiceImpl implements OrderService {
     private OrderItemRepository orderItemRepository;
 
     @Override
-    public void createOrder(List<PreOrderItem> preOrderItems, String name, String brand) {
+    public Order createOrder(List<PreOrderItem> preOrderItems, String name, String brand) {
 
         Order order = new Order();
         order.setDate(LocalDate.now());
@@ -46,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
 
+        return order;
     }
 
     @Override

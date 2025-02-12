@@ -27,4 +27,6 @@ public interface PreOrderService {
     List<PreOrderExcelDTO> readPreOrderFromExcel(InputStream inputStream, String brand) throws IOException;
 
     void bulkUpdate(List<PreOrderDTO> updates);
+
+    void createAndExportOrder(String name, String brand);
 }

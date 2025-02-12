@@ -101,7 +101,7 @@ public class PreOrderController {
     @PostMapping("/makeOrder")
     public String makeOrder (@RequestParam ("name") String name) {
         String brand = "Grohe";
-        preOrderService.makeOrder(name,brand);
+        preOrderService.createAndExportOrder(name,brand);
 
         return "redirect:/orders/preOrder";
     }
