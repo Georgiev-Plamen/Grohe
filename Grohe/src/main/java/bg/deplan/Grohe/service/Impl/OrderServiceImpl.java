@@ -7,6 +7,7 @@ import bg.deplan.Grohe.model.Order;
 import bg.deplan.Grohe.model.OrderItem;
 import bg.deplan.Grohe.model.PreOrderItem;
 import bg.deplan.Grohe.service.OrderService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -74,20 +75,27 @@ public class OrderServiceImpl implements OrderService {
             orderItemRepository.save(orderItem);
         }
 
-        exportOrder(order);
-
         return order;
     }
 
-    private void exportOrder(Order order) {
+    @Override
+    @Transactional
+    public void exportOrder(long id) {
         try {
-            byte[] excelFile = excelExportService.exportOrderToExcel(order);
-            System.out.println("Exported order: " + order.getId());
+            byte[] excelFile = excelExportService.exportOrderToExcel(id);
+            System.out.println("Exported order: " + id);
             // Optionally save or email the file
         } catch (IOException e) {
             // Handle exception
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public long lastOrderId() {
+        Long id = orderRepository.findLastId();
+
+        return id;
     }
 
     @Override

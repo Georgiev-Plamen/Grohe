@@ -28,5 +28,5 @@ public interface PreOrderService {
 
     void bulkUpdate(List<PreOrderDTO> updates);
 
-    void createAndExportOrder(String name, String brand);
+    boolean createAndExportOrder(String name, String brand) throws IOException;
 }

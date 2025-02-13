@@ -1,11 +1,18 @@
 package bg.deplan.Grohe.web;
 
+import bg.deplan.Grohe.data.OrderRepository;
 import bg.deplan.Grohe.data.PreOrderItemRepository;
 import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
 import bg.deplan.Grohe.service.ArticleService;
+import bg.deplan.Grohe.service.ExcelExportService;
+import bg.deplan.Grohe.service.OrderService;
 import bg.deplan.Grohe.service.PreOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +27,13 @@ public class PreOrderController {
     @Autowired
     private PreOrderService preOrderService;
     @Autowired
+    private OrderService orderService;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
     private PreOrderItemRepository preOrderRepository;
-
+    @Autowired
+    private ExcelExportService excelExportService;
     @Autowired
     private ArticleService articleService;
 
@@ -96,11 +108,39 @@ public class PreOrderController {
     }
 
     @PostMapping("/makeOrder")
-    public String makeOrder (@RequestParam ("name") String name) {
+    public ResponseEntity<String> makeOrder(@RequestParam("name") String name) throws IOException {
         String brand = "Grohe";
-        preOrderService.createAndExportOrder(name, brand);
 
-        return "redirect:/orders/preOrder";
+        // Create the order
+        boolean isOrderCreated = preOrderService.createAndExportOrder(name, brand);
+
+        if (!isOrderCreated) {
+            // Handle the case where the order creation failed
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
+        // Get the last order ID
+//        Long lastOrderId = orderService.lastOrderId();
+//
+//        if (lastOrderId == null) {
+//            // Handle the case where the last order ID is not available
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//
+//        // Export the order to Excel
+//        byte[] excelFile = excelExportService.exportOrderToExcel(lastOrderId);
+//
+//        if (excelFile == null || excelFile.length == 0) {
+//            // Handle the case where the Excel file generation failed
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//
+//        // Return the Excel file as a response
+//        return ResponseEntity.ok()
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=order_" + lastOrderId + ".xlsx")
+//                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+//                .body(excelFile);
+        return ResponseEntity.ok().body("Successfully create order");
     }
 
     @PostMapping("/makeOrderViega")

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public interface ExcelExportService {
 
-    public byte[] exportOrderToExcel(Order order) throws IOException;
+    public byte[] exportOrderToExcel(long id) throws IOException;
 
 
 }

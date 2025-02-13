@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.time.format.DateTimeFormatter;
 
 @Service
@@ -25,7 +26,8 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     }
 
     @Transactional
-    public byte[] exportOrderToExcel(Order order) throws IOException {
+    public byte[] exportOrderToExcel(long id) throws IOException {
+
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Order Export");
             sheet.setHorizontallyCenter(true);
@@ -55,6 +57,8 @@ public class ExcelExportServiceImpl implements ExcelExportService {
 
             int rowIndex = 0;
 
+            Order order = orderRepository.getReferenceById(id);
+
             // Header: Order Information
             rowIndex = createOrderHeader(sheet, order, rowIndex, cellStyle);
 
@@ -62,7 +66,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
             rowIndex = createArticleTableHeader(sheet, rowIndex, workbook);
             int counter = 1;
 
-
+            List <OrderItem> articles = order.getItems();
 
             // Populate article data
             for (OrderItem article : order.getItems()) {

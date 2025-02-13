@@ -170,16 +170,14 @@ public class PreOrderServiceImpl implements PreOrderService {
 
     @Override
     @Transactional
-    public void createAndExportOrder(String name, String brand) {
+    public boolean createAndExportOrder(String name, String brand) throws IOException {
 
         List<PreOrderItem> PreOrderItem = preOrderItemRepository.findAllByArticle_Brand(brand);
-
         orderService.createAndExportOrder(PreOrderItem, name, brand);
-
-        // Delete the pre-orders
         preOrderItemRepository.deleteAllByArticle_Brand(brand);
+//        excelExportService.exportOrderToExcel(orderService.lastOrderId());
 
-        // Export the order to Excel
+        return true;
     }
 
     private static ArticleDTO toAllItem(PreOrderItem preOrderItem) {
