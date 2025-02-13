@@ -1,6 +1,7 @@
 package bg.deplan.Grohe.service.Impl;
 
 import bg.deplan.Grohe.data.ArticleRepository;
+import bg.deplan.Grohe.data.OrderItemRepository;
 import bg.deplan.Grohe.data.OrderRepository;
 
 import bg.deplan.Grohe.data.PreOrderItemRepository;
@@ -8,7 +9,6 @@ import bg.deplan.Grohe.model.Article;
 import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderExcelDTO;
-import bg.deplan.Grohe.model.Order;
 import bg.deplan.Grohe.model.PreOrderItem;
 import bg.deplan.Grohe.service.ArticleService;
 import bg.deplan.Grohe.service.ExcelExportService;
@@ -48,17 +48,20 @@ public class PreOrderServiceImpl implements PreOrderService {
     @Autowired
     private final OrderRepository orderRepository;
     @Autowired
+    private final OrderItemRepository orderItemRepository;
+    @Autowired
     private final ExcelExportService excelExportService;
 
     @Autowired
     private OrderService orderService;
 
-    public PreOrderServiceImpl(ResourceLoader resourceLoader, ArticleRepository articleRepository, ArticleService articleService, PreOrderItemRepository preOrderItemRepository, OrderRepository orderRepository, ExcelExportService excelExportService, OrderService orderService) {
+    public PreOrderServiceImpl(ResourceLoader resourceLoader, ArticleRepository articleRepository, ArticleService articleService, PreOrderItemRepository preOrderItemRepository, OrderRepository orderRepository, OrderItemRepository orderItemRepository, ExcelExportService excelExportService, OrderService orderService) {
         this.resourceLoader = resourceLoader;
         this.articleRepository = articleRepository;
         this.articleService = articleService;
         this.preOrderItemRepository = preOrderItemRepository;
         this.orderRepository = orderRepository;
+        this.orderItemRepository = orderItemRepository;
         this.excelExportService = excelExportService;
         this.orderService = orderService;
     }
@@ -168,28 +171,15 @@ public class PreOrderServiceImpl implements PreOrderService {
     @Override
     @Transactional
     public void createAndExportOrder(String name, String brand) {
-        List<PreOrderItem> preOrderList = preOrderItemRepository.findAllByArticle_Brand(brand);
 
-        // Create and persist the order
-        Order order = orderService.createOrder(preOrderList, name, brand);
+        List<PreOrderItem> PreOrderItem = preOrderItemRepository.findAllByArticle_Brand(brand);
+
+        orderService.createAndExportOrder(PreOrderItem, name, brand);
 
         // Delete the pre-orders
         preOrderItemRepository.deleteAllByArticle_Brand(brand);
 
         // Export the order to Excel
-        exportOrder(order);
-    }
-
-    @Transactional
-    private void exportOrder(Order order) {
-        try {
-            byte[] excelFile = excelExportService.exportOrderToExcel(order);
-            System.out.println("Exported order: " + order.getId());
-            // Optionally save or email the file
-        } catch (IOException e) {
-            // Handle exception
-            e.printStackTrace();
-        }
     }
 
     private static ArticleDTO toAllItem(PreOrderItem preOrderItem) {

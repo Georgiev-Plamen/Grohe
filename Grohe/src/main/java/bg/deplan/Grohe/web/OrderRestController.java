@@ -26,7 +26,7 @@ public class OrderRestController {
 
     @GetMapping("/{id}/export")
     public ResponseEntity<byte[]> exportOrder(@PathVariable Long id) throws IOException {
-        // Simulate fetching an orderDTO from the database
+//        // Simulate fetching an orderDTO from the database
         Order order = orderRepository.getReferenceById(id); // Replace with real service call
 
         byte[] excelFile = excelExportService.exportOrderToExcel(order);

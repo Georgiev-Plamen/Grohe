@@ -11,6 +11,8 @@ public interface OrderService {
 
     Order createOrder(List<PreOrderItem> preOrderItems, String name, String brand) ;
 
+    public Order createAndExportOrder(List<PreOrderItem> preOrderItems, String name, String brand);
+
     List<OrderDTO> getAllOrders(String brand);
 
     void editOrder(OrderDTO orderDTO, Long id);

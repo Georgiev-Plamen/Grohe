@@ -10,6 +10,7 @@ import bg.deplan.Grohe.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,6 +22,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderItemRepository orderItemRepository;
+
+    @Autowired
+    private ExcelExportServiceImpl excelExportService;
 
     @Override
     public Order createOrder(List<PreOrderItem> preOrderItems, String name, String brand) {
@@ -46,6 +50,44 @@ public class OrderServiceImpl implements OrderService {
 
 
         return order;
+    }
+
+    @Override
+    public Order createAndExportOrder(List<PreOrderItem> preOrderItems, String name, String brand) {
+
+        Order order = new Order();
+        order.setDate(LocalDate.now());
+        order.setOrderName(name);
+        order.setBrand(brand);
+        orderRepository.save(order);
+
+        for (PreOrderItem preOrderItem : preOrderItems) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setArticle(preOrderItem.getArticle());
+            orderItem.setQuantity(preOrderItem.getQuantityForOrder());
+            orderItem.setOrderBy(preOrderItem.getOrderBy());
+            orderItem.setDateOfOrder(preOrderItem.getDate());
+            orderItem.setOrderReason(preOrderItem.getOrderReason());
+            orderItem.setComment(preOrderItem.getComment());
+
+            orderItem.setOrder(order);
+            orderItemRepository.save(orderItem);
+        }
+
+        exportOrder(order);
+
+        return order;
+    }
+
+    private void exportOrder(Order order) {
+        try {
+            byte[] excelFile = excelExportService.exportOrderToExcel(order);
+            System.out.println("Exported order: " + order.getId());
+            // Optionally save or email the file
+        } catch (IOException e) {
+            // Handle exception
+            e.printStackTrace();
+        }
     }
 
     @Override

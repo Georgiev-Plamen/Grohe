@@ -1,10 +1,13 @@
 package bg.deplan.Grohe.service.Impl;
 
+import bg.deplan.Grohe.data.OrderRepository;
 import bg.deplan.Grohe.model.Order;
 import bg.deplan.Grohe.model.OrderItem;
 import bg.deplan.Grohe.service.ExcelExportService;
+import jakarta.transaction.Transactional;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -12,8 +15,16 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 
 @Service
+@Transactional
 public class ExcelExportServiceImpl implements ExcelExportService {
 
+    @Autowired
+    private OrderRepository orderRepository;
+
+    public ExcelExportServiceImpl(OrderRepository orderRepository) {
+    }
+
+    @Transactional
     public byte[] exportOrderToExcel(Order order) throws IOException {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Order Export");
@@ -50,6 +61,8 @@ public class ExcelExportServiceImpl implements ExcelExportService {
             // Sub-header: Article List
             rowIndex = createArticleTableHeader(sheet, rowIndex, workbook);
             int counter = 1;
+
+
 
             // Populate article data
             for (OrderItem article : order.getItems()) {
