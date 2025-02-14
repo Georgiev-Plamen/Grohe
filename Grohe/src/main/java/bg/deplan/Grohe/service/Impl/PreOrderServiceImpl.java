@@ -173,7 +173,7 @@ public class PreOrderServiceImpl implements PreOrderService {
     public boolean createAndExportOrder(String name, String brand) throws IOException {
 
         List<PreOrderItem> PreOrderItem = preOrderItemRepository.findAllByArticle_Brand(brand);
-        orderService.createAndExportOrder(PreOrderItem, name, brand);
+        orderService.createOrder(PreOrderItem, name, brand);
         preOrderItemRepository.deleteAllByArticle_Brand(brand);
 //        excelExportService.exportOrderToExcel(orderService.lastOrderId());
 

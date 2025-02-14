@@ -54,44 +54,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order createAndExportOrder(List<PreOrderItem> preOrderItems, String name, String brand) {
-
-        Order order = new Order();
-        order.setDate(LocalDate.now());
-        order.setOrderName(name);
-        order.setBrand(brand);
-        orderRepository.save(order);
-
-        for (PreOrderItem preOrderItem : preOrderItems) {
-            OrderItem orderItem = new OrderItem();
-            orderItem.setArticle(preOrderItem.getArticle());
-            orderItem.setQuantity(preOrderItem.getQuantityForOrder());
-            orderItem.setOrderBy(preOrderItem.getOrderBy());
-            orderItem.setDateOfOrder(preOrderItem.getDate());
-            orderItem.setOrderReason(preOrderItem.getOrderReason());
-            orderItem.setComment(preOrderItem.getComment());
-
-            orderItem.setOrder(order);
-            orderItemRepository.save(orderItem);
-        }
-
-        return order;
-    }
-
-    @Override
-    @Transactional
-    public void exportOrder(long id) {
-        try {
-            byte[] excelFile = excelExportService.exportOrderToExcel(id);
-            System.out.println("Exported order: " + id);
-            // Optionally save or email the file
-        } catch (IOException e) {
-            // Handle exception
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     public long lastOrderId() {
         Long id = orderRepository.findLastId();
 
@@ -114,10 +76,6 @@ public class OrderServiceImpl implements OrderService {
         if(!order.getOrderName().equals(orderDTO.orderName()) && orderDTO.orderName() != null) {
             order.setOrderName(orderDTO.orderName());
         }
-
-//        if(!order.getBrand().equals(orderDTO.brand()) && orderDTO.brand() != null) {
-//            order.setBrand(orderDTO.brand());
-//        }
 
         if(!order.getDate().equals(orderDTO.date()) && orderDTO.date() != null) {
             order.setDate(orderDTO.date());
