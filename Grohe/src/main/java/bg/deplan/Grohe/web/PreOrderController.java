@@ -108,7 +108,7 @@ public class PreOrderController {
     }
 
     @PostMapping("/makeOrder")
-    public ResponseEntity<String> makeOrder(@RequestParam("name") String name) throws IOException {
+    public ResponseEntity<byte[]> makeOrder(@RequestParam("name") String name) throws IOException {
         String brand = "Grohe";
 
         // Create the order
@@ -120,27 +120,27 @@ public class PreOrderController {
         }
 
         // Get the last order ID
-//        Long lastOrderId = orderService.lastOrderId();
-//
-//        if (lastOrderId == null) {
-//            // Handle the case where the last order ID is not available
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//        }
-//
-//        // Export the order to Excel
-//        byte[] excelFile = excelExportService.exportOrderToExcel(lastOrderId);
-//
-//        if (excelFile == null || excelFile.length == 0) {
-//            // Handle the case where the Excel file generation failed
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//        }
-//
-//        // Return the Excel file as a response
-//        return ResponseEntity.ok()
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=order_" + lastOrderId + ".xlsx")
-//                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-//                .body(excelFile);
-        return ResponseEntity.ok().body("Successfully create order");
+        Long lastOrderId = orderService.lastOrderId();
+
+        if (lastOrderId == null) {
+            // Handle the case where the last order ID is not available
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
+        // Export the order to Excel
+        byte[] excelFile = excelExportService.exportOrderToExcel(lastOrderId);
+
+        if (excelFile == null || excelFile.length == 0) {
+            // Handle the case where the Excel file generation failed
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
+        // Return the Excel file as a response
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Order " + lastOrderId + ".xlsx")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(excelFile);
+//        return ResponseEntity.ok().body("Successfully create order");
     }
 
     @PostMapping("/makeOrderViega")

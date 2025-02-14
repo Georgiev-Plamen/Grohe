@@ -81,7 +81,17 @@
                 alert('Failed to send PreOrder');
             }
         }
+        function downloadAndReload() {
+            // Trigger the file download
+            window.location.href = "/download"; // Replace with your endpoint
+
+            // Reload the page after a short delay (to ensure the download starts)
+            setTimeout(function() {
+                window.location.reload();
+            }, 2000); // Adjust the delay as needed
+        }
     </script>
+
 </head>
 <body>
 

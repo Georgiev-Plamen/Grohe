@@ -12,7 +12,7 @@ public class OrderItem extends BaseEntity{
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "article_id")
     private Article article;
 

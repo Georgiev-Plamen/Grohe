@@ -1,5 +1,6 @@
 package bg.deplan.Grohe.service.Impl;
 
+import bg.deplan.Grohe.data.OrderItemRepository;
 import bg.deplan.Grohe.data.OrderRepository;
 import bg.deplan.Grohe.model.Order;
 import bg.deplan.Grohe.model.OrderItem;
@@ -21,6 +22,8 @@ public class ExcelExportServiceImpl implements ExcelExportService {
 
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
     public ExcelExportServiceImpl(OrderRepository orderRepository) {
     }
@@ -58,6 +61,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
             int rowIndex = 0;
 
             Order order = orderRepository.getReferenceById(id);
+            order.setItems(orderItemRepository.findAllByOrderId(id));
 
             // Header: Order Information
             rowIndex = createOrderHeader(sheet, order, rowIndex, cellStyle);
