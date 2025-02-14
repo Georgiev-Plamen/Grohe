@@ -81,17 +81,7 @@
                 alert('Failed to send PreOrder');
             }
         }
-        function downloadAndReload() {
-            // Trigger the file download
-            window.location.href = "/download"; // Replace with your endpoint
-
-            // Reload the page after a short delay (to ensure the download starts)
-            setTimeout(function() {
-                window.location.reload();
-            }, 2000); // Adjust the delay as needed
-        }
     </script>
-
 </head>
 <body>
 
@@ -227,12 +217,13 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <form th:method="POST" th:action="@{/orders/makeOrder}">
+                            <form id="downloadForm" th:method="POST" th:action="@{/orders/makeOrder}">
                                 <label for="name" class="col-form-label">Име:</label>
                                 <input type="text" class="form-control" id="name" name="name" th:value="*{name}">
-                                <button type="submit" class="btn btn-primary">Завърши поръчката</button>
+                                <button type="submit" class="btn btn-primary">Заварши</button>
                                 <input type="hidden" name="makeOrder" th:value="makeOrder">
                             </form>
+                            <a href="/orders/all">Към заявки</a>
                         </div>
                     </div>
                 </div>

@@ -8,6 +8,7 @@ import bg.deplan.Grohe.service.ArticleService;
 import bg.deplan.Grohe.service.ExcelExportService;
 import bg.deplan.Grohe.service.OrderService;
 import bg.deplan.Grohe.service.PreOrderService;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -130,7 +131,7 @@ public class PreOrderController {
         // Export the order to Excel
         byte[] excelFile = excelExportService.exportOrderToExcel(lastOrderId);
 
-        if (excelFile == null || excelFile.length == 0) {
+        if (excelFile == null) {
             // Handle the case where the Excel file generation failed
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
