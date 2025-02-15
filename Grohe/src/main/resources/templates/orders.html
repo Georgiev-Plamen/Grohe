@@ -18,7 +18,6 @@
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
 <div class="container">
     <h1 th:text="#{orders_title}">Orders</h1>
-
     <table>
         <thead>
         <tr>
@@ -30,6 +29,7 @@
         <!-- Loop through allOrders and display order details -->
         <tr th:each="order : ${allOrders}">
             <form th:method="POST" th:action="@{/orders/editOrder/{id}(id=*{id})}" th:object="${order}">
+                <input type="hidden" id="brand" name="brand" th:value="Grohe">
                 <!-- Order information row -->
     <!--            <td><span th:text="${order.orderName}">Order name</span></td>-->
                 <td>
@@ -44,10 +44,13 @@
                     <input type="hidden" th:field="*{date}">
                 </td>
                 <td>
-                    <input type="hidden" id="brand" name="brand" th:value="Grohe">
-                    <button class="update-order" type="submit">&#10226;</button>
+                        <button class="update-order" type="submit">Обнови</button>
+                    </form>
+                    <form th:method="POST" th:action="@{/orders/deleteOrder/{id}(id=*{id})}" th:object="${order}">
+                        <button class="update-order" type="submit">Изтрий</button>
+                    </form>
                 </td>
-            </form>
+
             <!-- Article table for the current order -->
             <td colspan="2"> <!-- Span two columns to align with the order headers -->
                 <table class="article-table"> <!-- Inner table for articles -->

@@ -61,6 +61,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
+    public void deleteOrder(Long id) {
+        orderItemRepository.deleteAllByOrderId(id);
+        orderRepository.deleteById(id);
+    }
+
+    @Override
     public List<OrderDTO> getAllOrders(String brand) {
         return orderRepository.findAll()
                 .stream()

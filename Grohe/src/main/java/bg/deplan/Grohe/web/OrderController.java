@@ -60,4 +60,12 @@ public class OrderController {
 
         return "ordersViega";
     }
+
+    @PostMapping("/deleteOrder/{id}")
+    public String deleteOrder(@PathVariable ("id") Long id) {
+
+        orderService.deleteOrder(id);
+
+        return "redirect:/orders/all";
+    }
 }
