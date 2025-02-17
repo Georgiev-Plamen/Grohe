@@ -390,3 +390,7 @@ svg {
     display: flex;
 
 }
+
+.action-column {
+    display: flex;
+}

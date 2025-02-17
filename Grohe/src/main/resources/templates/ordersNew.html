@@ -6,23 +6,23 @@
     <title>Orders</title>
     <link rel="stylesheet" href="/css/styles.css">
     <script>
-        function updateHiddenInput(div) {
-            const hiddenInput = div.nextElementSibling;
-            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-                hiddenInput.value = div.textContent.trim();
-            }
-        }
-
         function showOrderDetails(orderId) {
-            // Hide all details tables first
-            document.querySelectorAll('.order-details-table').forEach(table => {
-                table.style.display = 'none';
-            });
+            // Hide all order details tables first
+<!--            document.querySelectorAll('.order-details-table').forEach(table => {-->
+<!--                table.style.display = 'none';-->
+<!--            });-->
 
-            // Show the details table for the selected order
+            // Show the specific order details table
             const detailsTable = document.getElementById('orderDetails-' + orderId);
+
             if (detailsTable) {
-                detailsTable.style.display = 'table';
+                const currentDisplay = window.getComputedStyle(detailsTable).display;
+
+                if (currentDisplay === 'none') {
+                    detailsTable.style.display = 'table';
+                } else {
+                    detailsTable.style.display = 'none';
+                }
             }
         }
     </script>
@@ -33,13 +33,11 @@
 <div class="container">
     <form th:method="post" th:action="@{/orders/search}" th:object="${order}">
         <div class="add-container">
-            <!-- Article Field -->
             <input type="hidden" name="brand" th:value="Grohe">
             <div class="preOrder-entity">
                 <label for="orderName">Order name:</label>
                 <input type="text" id="orderName" th:field="*{orderName}" required>
             </div>
-            <!-- Quantity Field -->
             <div class="preOrder-entity">
                 <label for="date">Date:</label>
                 <input type="date" id="date" th:field="*{date}" required>
@@ -47,52 +45,10 @@
             <button class="pre-order-add-btn" type="submit">Search</button>
         </div>
     </form>
-</div>
-
-<div class="container">
-    <h1 th:text="#{orders_title}">Orders</h1>
-
-    <table>
-        <thead>
-        <tr>
-            <th th:text="#{orders_name}">Order name</th>
-            <th th:text="#{orders_date}">Order date</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Loop through allOrders and display order details -->
-        <tr th:each="order : ${allOrders}">
-            <form th:method="POST" th:action="@{/orders/editOrder/{id}(id=*{id})}" th:object="${order}">
-                <!-- Order information row -->
-                <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderName}"
-                         th:value="*{orderName}"></div>
-                    <input type="hidden" th:field="*{orderName}">
-                </td>
-                <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"
-                         th:value="*{date}"></div>
-                    <input type="hidden" th:field="*{date}">
-                </td>
-                <td>
-                    <input type="hidden" id="brand" name="brand" th:value="Grohe">
-                    <button class="update-order" type="submit">Обновяване</button>
-            </form>
-
-                    <form th:method="POST" th:action="@{/orders/deleteOrder/{id}(id=*{id})}" th:object="${order}">
-                        <button class="update-order" type="submit">Изтриване</button>
-                    </form>
-
-                        <button type="button" onclick="showOrderDetails(${order.id})">Show Details</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
 
     <!-- Hidden tables for order details -->
     <div th:each="order : ${allOrders}">
-        <table id="orderDetails-${order.id}" class="order-details-table" style="display: none;">
+        <table th:attr="id='orderDetails-' + ${order.id}" class="order-details-table" style="display: none;">
             <thead>
             <tr>
                 <th>Article Number</th>
@@ -115,6 +71,45 @@
             </tbody>
         </table>
     </div>
+</div>
+
+<div class="container">
+    <h1 th:text="#{orders_title}">Orders</h1>
+    <table>
+        <thead>
+        <tr>
+            <th th:text="#{orders_name}">Order name</th>
+            <th th:text="#{orders_date}">Order date</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${allOrders}">
+            <form th:method="POST" th:action="@{/orders/editOrder/{id}(id=${order.id})}" th:object="${order}">
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderName}"></div>
+                    <input type="hidden" th:field="*{orderName}">
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"></div>
+                    <input type="hidden" th:field="*{date}">
+                </td>
+                <td>
+                    <div class="action-column">
+                    <input type="hidden" name="brand" th:value="Grohe">
+                    <button class="update-order" type="submit">Обновяване</button>
+            </form>
+
+            <form th:method="POST" th:action="@{/orders/deleteOrder/{id}(id=${order.id})}" th:object="${order}">
+                <button class="update-order" type="submit">Изтриване</button>
+            </form>
+
+            <button class="update-order" type="submit" th:attr="onclick='showOrderDetails(' + ${order.id} + ')'" >Отвори</button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
