@@ -68,6 +68,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public OrderDTO getOrderById(Long orderId) {
+        Order order = orderRepository.getReferenceById(orderId);
+        OrderDTO orderDTO = toAllOrders(order);
+
+        return orderDTO;
+    }
+
+    @Override
     public List<OrderDTO> getAllOrders(String brand) {
         return orderRepository.findAll()
                 .stream()

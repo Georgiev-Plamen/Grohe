@@ -18,4 +18,6 @@ public interface OrderService {
     long lastOrderId();
 
     void deleteOrder(Long id);
+
+    OrderDTO getOrderById(Long orderId);
 }
