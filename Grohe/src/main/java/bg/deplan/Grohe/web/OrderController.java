@@ -47,8 +47,8 @@ public class OrderController {
     }
 
     @PostMapping("/search")
-    public String orderSearch(Model model, @ModelAttribute("order") OrderDTO order){
-        model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
+    public String orderSearch(Model model, @RequestParam("artNum") String artNum){
+        model.addAttribute("OrdersWithArt", orderService.findOrdersContainsArt(artNum));
 
         return "orderSearch";
     }

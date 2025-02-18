@@ -35,20 +35,20 @@
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
 
 <div class="container">
-    <form th:method="post" th:action="@{/orders/search}" th:object="${order}">
-<!--        <div class="add-container">-->
-<!--            <input type="hidden" name="brand" th:value="Grohe">-->
+    <form th:method="post" th:action="@{/orders/search}" th:object="${OrdersWithArt}">
+        <div class="add-container">
+            <input type="hidden" name="brand" th:value="Grohe">
 <!--            <div class="preOrder-entity">-->
-<!--                <label for="orderName">Order name:</label>-->
-<!--                <input type="text" id="orderName" th:field="*{orderName}" required>-->
+<!--                <label for="artNum">Aricle:</label>-->
+<!--                <input type="text" id="artNum" th:field="${artNum}" required>-->
 <!--            </div>-->
 <!--            <div class="preOrder-entity">-->
 <!--                <label for="date">Date:</label>-->
 <!--                <input type="date" id="date" th:field="*{date}" required>-->
 <!--            </div>-->
-<!--            <button class="pre-order-add-btn" type="submit">Search</button>-->
+            <button class="pre-order-add-btn" type="submit">Search</button>
 <!--        </div>-->
-<!--    </form>-->
+    </form>
 
     <!-- Hidden tables for order details -->
     <div th:each="order : ${allOrders}">

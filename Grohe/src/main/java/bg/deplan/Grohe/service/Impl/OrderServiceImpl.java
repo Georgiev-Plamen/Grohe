@@ -76,6 +76,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<OrderDTO> findOrdersContainsArt(String artNum) {
+        return orderRepository.findAll()
+                .stream()
+                .map(OrderServiceImpl::toAllOrders)
+                .filter(o -> o.articleList().contains(artNum))
+                .toList();
+
+    }
+
+    @Override
     public List<OrderDTO> getAllOrders(String brand) {
         return orderRepository.findAll()
                 .stream()

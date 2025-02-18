@@ -20,4 +20,6 @@ public interface OrderService {
     void deleteOrder(Long id);
 
     OrderDTO getOrderById(Long orderId);
+
+    List<OrderDTO> findOrdersContainsArt(String artNum);
 }
