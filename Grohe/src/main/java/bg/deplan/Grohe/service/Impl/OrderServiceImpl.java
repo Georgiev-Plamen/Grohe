@@ -88,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
     public void editOrder(OrderDTO orderDTO, Long id) {
         Order order = orderRepository.findById(id).get();
 
-        if(!order.getOrderName().equals(orderDTO.orderName()) && orderDTO.orderName() != null) {
+        if(!order.getOrderName().equals(orderDTO.orderName()) && orderDTO.orderName() != null && !orderDTO.orderName().isEmpty()) {
             order.setOrderName(orderDTO.orderName());
         }
 

@@ -122,8 +122,8 @@ h1 {
 }
 
 form {
-    margin-top: 0.5em;
-    margin-left: 0.5em;
+    margin-top: 0.2em;
+    margin-left: 0.2em;
     display: flex;
     flex-direction: column;
 }
@@ -135,7 +135,7 @@ table {
 
 th, td {
     border: 1px solid #ddd;
-    padding: 5px;
+    padding: 3px;
     text-align: left;
 }
 
@@ -149,10 +149,10 @@ label {
 
 input {
     background: aliceblue;
-    margin-bottom: 15px;
-    margin-right: 15px;
-    padding: 5px;
-    font-size: 16px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    padding: 3px;
+    font-size: 15px;
     border: 1px solid #ccc;
     border-radius: 10px;
 }
@@ -187,6 +187,7 @@ a {
     font-family: Univers Next W00 Bold, sans-serif;
     color: #007BFF;
     text-decoration: none;
+    padding-right: 1em;
 }
 
 a:hover {
@@ -393,4 +394,6 @@ svg {
 
 .action-column {
     display: flex;
+    align-items: baseline
+
 }
