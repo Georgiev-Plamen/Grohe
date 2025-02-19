@@ -37,7 +37,7 @@
 <div class="container">
         <div class="add-container">
             <div class="preOrder-entity">
-                <form th:method="GET" th:action="@{/orders/search/*{artNum}}">
+                <form th:method="POST" th:action="@{/orders/search/*{artNum}}">
                 <label for="artNum">Article:</label>
                 <input type="text" name="artNum" id="artNum" th:value="*{artNum}">
 <!--                <input type="text" id="artNum" th:field="*{artNum}" required>-->
@@ -54,7 +54,7 @@
 <!-- tables for Search details -->
 <div th:each="order : ${ordersWithArt}">
 <!--    <table th:attr="id='orderDetails-' + ${order.id}" class="order-details-table" style="display: none;">-->
-    <table class="order-details-table">
+    <table>
         <thead>
         <tr>
             <th th:text="${order.orderName()}"></th>
