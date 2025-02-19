@@ -34,7 +34,7 @@
                    th:field="*{artNum}" minlength="2" maxlength="50" required>
         </div>
 
-        <!--Quantity-->
+        <!--Name-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
                    th:for="name">Наименование:
@@ -48,7 +48,6 @@
                    th:field="*{name}" minlength="1" maxlength="50" required>
         </div>
 
-        <!--Order by-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
                    th:for="description">Описание:
@@ -62,7 +61,7 @@
                    th:field="*{description}" minlength="1" maxlength="50">
         </div>
 
-        <!--Date-->
+        <!--Picture-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
                    th:for="imgUrl">Снимка:
@@ -76,7 +75,7 @@
                    th:field="*{imgUrl}" minlength="1" maxlength="50">
         </div>
 
-        <!--Order reason-->
+        <!--Barcode-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
                    th:for="barcode">Баркод:
@@ -90,7 +89,7 @@
                    th:field="*{barcode}" minlength="1" maxlength="50">
         </div>
 
-        <!--Comments-->
+        <!--Pieces in pallet-->
         <div class="preOrder-entity">
             <label class="preOrder-label"
                    th:for="quantityInPallet">Брой в палет:

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script>
+        function showOrderDetails(orderId) {
+
+
+
+            // Show the specific order details table
+            const detailsTable = document.getElementById('orderDetails-' + orderId);
+
+            if (detailsTable) {
+                const currentDisplay = window.getComputedStyle(detailsTable).display;
+
+                if (currentDisplay === 'none') {
+
+                    // Hide all order details tables first
+                    document.querySelectorAll('.order-details-table').forEach(table => {
+                        table.style.display = 'none';
+                    });
+
+                    detailsTable.style.display = 'table';
+                } else {
+                    detailsTable.style.display = 'none';
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+<div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
+
+<div class="container">
+    <form th:method="GET" th:action="@{/orders/search}">
+        <div class="add-container">
+            <input type="hidden" name="brand" th:value="Grohe">
+            <div class="preOrder-entity">
+                <label for="artNum">Article:</label>
+                <input type="text" id="artNum" th:value="*{artNum}">
+<!--                <input type="text" id="artNum" th:field="*{artNum}" required>-->
+            </div>
+<!--            <div class="preOrder-entity">-->
+<!--                <label for="date">Date:</label>-->
+<!--                <input type="date" id="date" th:field="*{date}" required>-->
+<!--            </div>-->
+            <button class="pre-order-add-btn" type="submit">Search</button>
+<!--        </div>-->
+    </form>
+</div>
+
+<!-- Hidden tables for order details -->
+<div th:each="order : ${ordersWithArt}">
+    <table th:attr="id='orderDetails-' + ${order.id}" class="order-details-table" style="display: none;">
+        <thead>
+        <tr>
+            <th th:text="${order.orderName()}"></th>
+            <th><a href="#" class="update-order" th:attr="onclick='showOrderDetails(' + ${order.id} + ')'">Затвори</a></th>
+        </tr>
+        <tr>
+            <th>Article Number</th>
+            <th>Quantity</th>
+            <th>Ordered By</th>
+            <th>Order Reason</th>
+            <th>Date of Order</th>
+            <th>Date of Delivery</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr th:each="article : ${order.articleList}">
+            <td th:text="${article.getArticle.artNum}"></td>
+            <td th:text="${article.quantity}"></td>
+            <td th:text="${article.orderBy}"></td>
+            <td th:text="${article.orderReason}"></td>
+            <td th:text="${article.dateOfOrder}"></td>
+            <td th:text="${article.dateOfDelivery}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!--<div class="container">-->
+<!--    <h1 th:text="#{orders_title}">Orders</h1>-->
+<!--    <table>-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th th:text="#{orders_name}">Order name</th>-->
+<!--            <th th:text="#{orders_date}">Order date</th>-->
+<!--            <th>Actions</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr th:each="order : ${allOrders}">-->
+<!--            <form id="editForm-${order.id}" th:method="POST" th:action="@{/orders/editOrder/{id}(id=${order.id})}" th:object="${order}">-->
+<!--                <td>-->
+<!--                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderName}"></div>-->
+<!--                    <input type="hidden" th:field="*{orderName}">-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"></div>-->
+<!--                    <input type="hidden" th:field="*{date}">-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    <input type="hidden" name="brand" th:value="Grohe">-->
+<!--                    <div class="action-column">-->
+<!--                        <a href="#" class="update-order" onclick="document.getElementById('editForm-${order.id}').submit();">Обновяване</a>-->
+<!--            </form>-->
+
+<!--            <form id="deleteForm-${order.id}" th:method="POST" th:action="@{/orders/deleteOrder/{id}(id=${order.id})}" th:object="${order}">-->
+<!--                        <a href="#" class="update-order" onclick="document.getElementById('deleteForm-${order.id}').submit();">Изтриване</a>-->
+<!--            </form>-->
+<!--                        <a href="#" class="update-order" th:attr="onclick='showOrderDetails(' + ${order.id} + ')'"  window.scrollTo(0, 0);>Отвори</a>-->
+<!--                    </div>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
+<!--</div>-->
+</body>
+</html>

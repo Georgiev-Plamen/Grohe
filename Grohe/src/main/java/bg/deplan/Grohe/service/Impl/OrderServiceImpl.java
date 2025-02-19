@@ -76,11 +76,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public List<OrderDTO> findOrdersContainsArt(String artNum) {
         return orderRepository.findAll()
                 .stream()
                 .map(OrderServiceImpl::toAllOrders)
-                .filter(o -> o.articleList().contains(artNum))
+                .filter(o -> o.articleList()
+                        .stream()
+                        .anyMatch(a -> a.getArticle().getArtNum().equals(artNum)))
                 .toList();
 
     }

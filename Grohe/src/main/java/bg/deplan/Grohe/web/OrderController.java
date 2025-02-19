@@ -46,12 +46,21 @@ public class OrderController {
         return "orderDetails"; // Thymeleaf fragment or template
     }
 
-    @PostMapping("/search")
+    @GetMapping("/search/{artNum}")
     public String orderSearch(Model model, @RequestParam("artNum") String artNum){
-        model.addAttribute("OrdersWithArt", orderService.findOrdersContainsArt(artNum));
 
-        return "orderSearch";
+        model.addAttribute("ordersWithArt", orderService.findOrdersContainsArt(artNum));
+
+        return "redirect:/orders/allNew";
     }
+
+//    @GetMapping("/orderNewSearch/{artNum}")
+//    public String orderSearchView(Model model, @RequestParam("artNum") String artNum) {
+//
+//        model.addAttribute("ordersWithArt", orderService.findOrdersContainsArt(artNum));
+//
+//        return "orderNewSearch";
+//    }
 
     @PostMapping("/editOrder/{id}")
     public String editOrder(@PathVariable ("id") Long id, @ModelAttribute OrderDTO orderDTO) {

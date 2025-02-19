@@ -35,21 +35,53 @@
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
 
 <div class="container">
-    <form th:method="post" th:action="@{/orders/search}" th:object="${OrdersWithArt}">
         <div class="add-container">
-            <input type="hidden" name="brand" th:value="Grohe">
-<!--            <div class="preOrder-entity">-->
-<!--                <label for="artNum">Aricle:</label>-->
-<!--                <input type="text" id="artNum" th:field="${artNum}" required>-->
+            <div class="preOrder-entity">
+                <form th:method="GET" th:action="@{/orders/search/*{artNum}}">
+                <label for="artNum">Article:</label>
+                <input type="text" name="artNum" id="artNum" th:value="*{artNum}">
+<!--                <input type="text" id="artNum" th:field="*{artNum}" required>-->
 <!--            </div>-->
 <!--            <div class="preOrder-entity">-->
 <!--                <label for="date">Date:</label>-->
 <!--                <input type="date" id="date" th:field="*{date}" required>-->
 <!--            </div>-->
-            <button class="pre-order-add-btn" type="submit">Search</button>
-<!--        </div>-->
-    </form>
+                <button class="pre-order-add-btn" type="submit">Search</button>
+                </form>
+            </div>
+</div>
 
+<!-- tables for Search details -->
+<div th:each="order : ${ordersWithArt}">
+<!--    <table th:attr="id='orderDetails-' + ${order.id}" class="order-details-table" style="display: none;">-->
+    <table class="order-details-table">
+        <thead>
+        <tr>
+            <th th:text="${order.orderName()}"></th>
+            <th><a href="#" class="update-order" th:attr="onclick='showOrderDetails(' + ${order.id} + ')'">Затвори</a></th>
+        </tr>
+        <tr>
+            <th>Article Number</th>
+            <th>Quantity</th>
+            <th>Ordered By</th>
+            <th>Order Reason</th>
+            <th>Date of Order</th>
+            <th>Date of Delivery</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr th:each="article : ${order.articleList}">
+            <td th:text="${article.getArticle.artNum}"></td>
+            <td th:text="${article.quantity}"></td>
+            <td th:text="${article.orderBy}"></td>
+            <td th:text="${article.orderReason}"></td>
+            <td th:text="${article.dateOfOrder}"></td>
+            <td th:text="${article.dateOfDelivery}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
     <!-- Hidden tables for order details -->
     <div th:each="order : ${allOrders}">
         <table th:attr="id='orderDetails-' + ${order.id}" class="order-details-table" style="display: none;">
