@@ -7,6 +7,8 @@ public record ArticleDTO (
         Long id,
         String brand,
         String artNum,
+        String name,
+        String description,
         String quantityForOrder,
         String artUrl,
         String orderBy,

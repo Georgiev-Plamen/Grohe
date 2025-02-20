@@ -132,6 +132,7 @@
         <thead>
         <tr>
             <th>Article</th>
+            <th>Name</th>
             <th>Quantity</th>
             <th>Ordered By</th>
             <th>Date</th>
@@ -150,6 +151,9 @@
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"
                          th:value="*{artNum}"></div>
                     <input type="hidden" th:field="*{artNum}">
+                </td>
+                <td>
+                    <div th:text="*{name}" th:value="*{name}"></div>
                 </td>
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantityForOrder}"
