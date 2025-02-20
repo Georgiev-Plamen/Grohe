@@ -50,6 +50,9 @@ public class OrderController {
     public String orderSearch(Model model, @RequestParam("artNum") String artNum){
 
         model.addAttribute("ordersWithArt", orderService.findOrdersContainsArt(artNum));
+        model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
+        model.addAttribute("order", orderDTO());
+
 
         return "ordersNew";
     }

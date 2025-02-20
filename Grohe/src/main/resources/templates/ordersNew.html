@@ -9,7 +9,6 @@
         function showOrderDetails(orderId) {
 
 
-
             // Show the specific order details table
             const detailsTable = document.getElementById('orderDetails-' + orderId);
 
@@ -29,66 +28,47 @@
                 }
             }
         }
+
+        function handleSearchResults() {
+            // Hide all order details tables when performing a new search
+            document.querySelectorAll('.order-details-table').forEach(table => {
+                table.style.display = 'none';
+            });
+
+            // Show only the search results (if any)
+            const searchResults = document.querySelectorAll('.search-result-table');
+            searchResults.forEach(table => {
+                table.style.display = 'table';
+            });
+        }
     </script>
 </head>
 <body>
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
 
+<!--OrdersNew - allOrders-->
+
 <div class="container">
-        <div class="add-container">
-            <div class="preOrder-entity">
-                <form th:method="POST" th:action="@{/orders/search/*{artNum}}">
+    <div class="add-container">
+        <div class="preOrder-entity">
+            <form th:method="POST" th:action="@{/orders/search/*{artNum}}" onsubmit="handleSearchResults()">
                 <label for="artNum">Article:</label>
                 <input type="text" name="artNum" id="artNum" th:value="*{artNum}">
-<!--                <input type="text" id="artNum" th:field="*{artNum}" required>-->
-<!--            </div>-->
-<!--            <div class="preOrder-entity">-->
-<!--                <label for="date">Date:</label>-->
-<!--                <input type="date" id="date" th:field="*{date}" required>-->
-<!--            </div>-->
                 <button class="pre-order-add-btn" type="submit">Search</button>
-                </form>
-            </div>
-</div>
+            </form>
+        </div>
+    </div>
 
-<!-- tables for Search details -->
-<div th:each="order : ${ordersWithArt}">
-<!--    <table th:attr="id='orderDetails-' + ${order.id}" class="order-details-table" style="display: none;">-->
-    <table>
-        <thead>
-        <tr>
-            <th th:text="${order.orderName()}"></th>
-            <th><a href="#" class="update-order" th:attr="onclick='showOrderDetails(' + ${order.id} + ')'">Затвори</a></th>
-        </tr>
-        <tr>
-            <th>Article Number</th>
-            <th>Quantity</th>
-            <th>Ordered By</th>
-            <th>Order Reason</th>
-            <th>Date of Order</th>
-            <th>Date of Delivery</th>
-        </tr>
+    <!-- tables for Search details -->
+    <div th:each="order : ${ordersWithArt}">
+<!--        <table th:attr="id='orderDetails-' + ${order.id}" class="search-result-table" style="display: none;">-->
+        <table th:attr="id='orderDetails-' + ${order.id}" class="search-result-table">
 
-        </thead>
-        <tbody>
-        <tr th:each="article : ${order.articleList}">
-            <td th:text="${article.getArticle.artNum}"></td>
-            <td th:text="${article.quantity}"></td>
-            <td th:text="${article.orderBy}"></td>
-            <td th:text="${article.orderReason}"></td>
-            <td th:text="${article.dateOfOrder}"></td>
-            <td th:text="${article.dateOfDelivery}"></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-    <!-- Hidden tables for order details -->
-    <div th:each="order : ${allOrders}">
-        <table th:attr="id='orderDetails-' + ${order.id}" class="order-details-table" style="display: none;">
             <thead>
             <tr>
                 <th th:text="${order.orderName()}"></th>
-                <th><a href="#" class="update-order" th:attr="onclick='showOrderDetails(' + ${order.id} + ')'">Затвори</a></th>
+                <th><a href="#" class="update-order"
+                       th:attr="onclick='showOrderDetails(' + ${order.id} + ')'">Затвори</a></th>
             </tr>
             <tr>
                 <th>Article Number</th>
@@ -112,44 +92,89 @@
             </tbody>
         </table>
     </div>
-<!--</div>-->
+    <!-- Hidden tables for order details -->
+    <div th:each="order : ${allOrders}">
+        <table th:attr="id='orderDetails-' + ${order.id}" class="order-details-table" style="display: none;">
+            <thead>
+            <tr>
+                <th th:text="${order.orderName()}"></th>
+                <th><a href="#" class="update-order"
+                       th:attr="onclick='showOrderDetails(' + ${order.id} + ')'">Затвори</a></th>
+            </tr>
+            <tr>
+                <th>Article Number</th>
+                <th>Quantity</th>
+                <th>Ordered By</th>
+                <th>Order Reason</th>
+                <th>Date of Order</th>
+                <th>Date of Delivery</th>
+            </tr>
 
-<div class="container">
-    <h1 th:text="#{orders_title}">Orders</h1>
-    <table>
-        <thead>
-        <tr>
-            <th th:text="#{orders_name}">Order name</th>
-            <th th:text="#{orders_date}">Order date</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="order : ${allOrders}">
-            <form id="editForm-${order.id}" th:method="POST" th:action="@{/orders/editOrder/{id}(id=${order.id})}" th:object="${order}">
+            </thead>
+            <tbody>
+            <tr th:each="article : ${order.articleList}">
+                <td th:text="${article.getArticle.artNum}"></td>
+                <td th:text="${article.quantity}"></td>
+                <td th:text="${article.orderBy}"></td>
+                <td th:text="${article.orderReason}"></td>
+                <td th:text="${article.dateOfOrder}"></td>
+                <td th:text="${article.dateOfDelivery}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!--</div>-->
+
+    <div class="container">
+        <h1 th:text="#{orders_title}">Orders</h1>
+        <table>
+            <thead>
+            <tr>
+                <th th:text="#{orders_name}">Order name</th>
+                <th th:text="#{orders_date}">Order date</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${allOrders}" th:object="${order}">
+                <!-- Order Name -->
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderName}"></div>
                     <input type="hidden" th:field="*{orderName}">
                 </td>
+
+                <!-- Date -->
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"></div>
                     <input type="hidden" th:field="*{date}">
                 </td>
-                <td>
-                    <input type="hidden" name="brand" th:value="Grohe">
-                    <div class="action-column">
-                        <a href="#" class="update-order" onclick="document.getElementById('editForm-${order.id}').submit();">Обновяване</a>
-            </form>
 
-            <form id="deleteForm-${order.id}" th:method="POST" th:action="@{/orders/deleteOrder/{id}(id=${order.id})}" th:object="${order}">
-                        <a href="#" class="update-order" onclick="document.getElementById('deleteForm-${order.id}').submit();">Изтриване</a>
-            </form>
-                        <a href="#" class="update-order" th:attr="onclick='showOrderDetails(' + ${order.id} + ')'"  window.scrollTo(0, 0);>Отвори</a>
+                <!-- Actions (Update, Delete, Open) -->
+                <td>
+                    <div class="action-column">
+                        <!-- Edit Form -->
+                        <form id="editForm-${order.id}" th:method="POST"
+                              th:action="@{/orders/editOrder/{id}(id=${order.id})}" th:object="${order}">
+                            <input type="hidden" name="brand" th:value="Grohe">
+                            <a href="#" class="update-order"
+                               onclick="document.getElementById('editForm-${order.id}').submit();">Обновяване</a>
+                        </form>
+
+                        <!-- Delete Form -->
+                        <form id="deleteForm-${order.id}" th:method="POST"
+                              th:action="@{/orders/deleteOrder/{id}(id=${order.id})}" th:object="${order}">
+                            <a href="#" class="update-order"
+                               onclick="document.getElementById('deleteForm-${order.id}').submit();">Изтриване</a>
+                        </form>
+
+                        <!-- Open Order Details -->
+                        <a href="#" class="update-order"
+                           th:attr="onclick='showOrderDetails(' + ${order.id} + '); window.scrollTo(0, 0);'">Отвори</a>
                     </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
