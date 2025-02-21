@@ -25,7 +25,7 @@ public class PreOrderRestController {
                                                      @RequestParam(required = false) String _method) {
         try {
             for (PreOrderDTO preOrderDTO : updates) {
-                preOrderService.updateItems(preOrderDTO, preOrderDTO.id()); // Assuming an update method exists
+                preOrderService.updateItems(preOrderDTO, preOrderDTO.id());
             }
             return ResponseEntity.ok("Bulk updates processed successfully!");
         } catch (Exception e) {
