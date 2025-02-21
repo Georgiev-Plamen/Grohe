@@ -1,5 +1,5 @@
 Design :
-* Export ot excel order - !!!
+
 * Count edit article in pre order.
 * Need promo finder.
 
