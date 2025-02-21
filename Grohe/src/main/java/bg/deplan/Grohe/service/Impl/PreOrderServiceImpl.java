@@ -149,7 +149,6 @@ public class PreOrderServiceImpl implements PreOrderService {
         preOrderItemRepository.deleteById(id);
     }
 
-
     @Override
     public List<ArticleDTO> getAllArticle(String brand) {
         return preOrderItemRepository.findAll()
@@ -242,13 +241,6 @@ public class PreOrderServiceImpl implements PreOrderService {
                     );
 
                     preOrderExcelDTOList.add(preOrderExcelDTO);
-
-                    // Print for debugging
-                    System.out.printf("Article: %s%nBrand: %s%n%s pcs.%nComment: %s %n====%n",
-                            preOrderExcelDTO.artNum(),
-                            preOrderExcelDTO.brand(),
-                            preOrderExcelDTO.quantityForOrder(),
-                            preOrderExcelDTO.comment());
                 }
             }
         }
@@ -259,7 +251,6 @@ public class PreOrderServiceImpl implements PreOrderService {
         return preOrderExcelDTOList;
     }
 
-    //TODO
     @Override
     public void bulkUpdate(List<PreOrderDTO> updates) {
 
