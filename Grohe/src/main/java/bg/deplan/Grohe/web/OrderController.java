@@ -70,7 +70,7 @@ public class OrderController {
 
         orderService.editOrder(orderDTO, id);
 
-        return "redirect:/orders/all";
+        return "redirect:/orders/ordersNew";
     }
 
     @GetMapping("/allViega")
@@ -86,6 +86,6 @@ public class OrderController {
 
         orderService.deleteOrder(id);
 
-        return "redirect:/orders/all";
+        return "redirect:/orders/ordersNew";
     }
 }

@@ -83,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
                 .map(OrderServiceImpl::toAllOrders)
                 .filter(o -> o.articleList()
                         .stream()
-                        .anyMatch(a -> a.getArticle().getArtNum().equals(artNum)))
+                        .anyMatch(a -> a.getArticle().getArtNum().contains(artNum)))
                 .toList();
 
     }
