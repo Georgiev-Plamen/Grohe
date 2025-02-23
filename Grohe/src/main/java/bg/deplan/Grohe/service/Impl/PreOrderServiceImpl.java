@@ -191,7 +191,8 @@ public class PreOrderServiceImpl implements PreOrderService {
                 preOrderItem.getOrderBy(),
                 preOrderItem.getDate(),
                 preOrderItem.getOrderReason(),
-                preOrderItem.getComment()
+                preOrderItem.getComment(),
+                preOrderItem.getArticle().getBarcode()
         );
     }
 

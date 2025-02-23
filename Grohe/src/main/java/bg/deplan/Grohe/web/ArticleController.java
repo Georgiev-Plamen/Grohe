@@ -19,7 +19,7 @@ public class ArticleController {
 
     @ModelAttribute("articleData")
     public AddArticleDTO addArticleDTO() {
-        return new AddArticleDTO("","","","", "","", 1);
+        return new AddArticleDTO(0L,"","","","", "","", 1);
     }
 
     @GetMapping("/articles")

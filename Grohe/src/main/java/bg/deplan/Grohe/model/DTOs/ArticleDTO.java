@@ -14,7 +14,8 @@ public record ArticleDTO (
         String orderBy,
         LocalDate date,
         String orderReason,
-        String comment) {
+        String comment,
+        String barcode) {
 
 }
 

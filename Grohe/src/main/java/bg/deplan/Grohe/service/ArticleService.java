@@ -19,4 +19,6 @@ public interface ArticleService {
     void editArticle(AddArticleDTO addArticleDTO);
 
     Article findById(Long id);
+
+    void bulkUpdateArticle(List<AddArticleDTO> updates);
 }

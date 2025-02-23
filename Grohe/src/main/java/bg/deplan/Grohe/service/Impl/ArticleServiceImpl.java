@@ -3,6 +3,7 @@ package bg.deplan.Grohe.service.Impl;
 import bg.deplan.Grohe.data.ArticleRepository;
 import bg.deplan.Grohe.model.Article;
 import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
+import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.service.ArticleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -58,7 +59,8 @@ public class ArticleServiceImpl implements ArticleService {
     public void editArticle(AddArticleDTO addArticleDTO) {
         Article article = articleRepository.findByArtNum(addArticleDTO.artNum()).get();
         article.setArtNum(addArticleDTO.artNum());
-        article.setName(addArticleDTO.name());article.setDescription(addArticleDTO.description());
+        article.setName(addArticleDTO.name());
+        article.setDescription(addArticleDTO.description());
         article.setImageUrl(addArticleDTO.imgUrl());
         article.setBarcode(addArticleDTO.barcode());
         article.setQuantityInPallet(addArticleDTO.quantityInPallet());
@@ -71,12 +73,32 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.findById(id).get();
     }
 
+    @Override
+    public void bulkUpdateArticle(List<AddArticleDTO> updates) {
+        for (AddArticleDTO articleDTO : updates) {
+                Long id = articleDTO.id();
+
+                Article article = articleRepository.findById(id).get();
+
+                article.setArtNum(articleDTO.artNum());
+                article.setBarcode(articleDTO.barcode());
+                article.setName(articleDTO.name());
+                article.setDescription(articleDTO.description());
+                article.setImageUrl(articleDTO.imgUrl());
+                article.setBarcode(articleDTO.barcode());
+                article.setQuantityInPallet(articleDTO.quantityInPallet());
+
+                articleRepository.save(article);
+        }
+    }
+
     public Article findByArtNum(String s) {
         return articleRepository.findByArtNum(s).get();
     }
 
     private static AddArticleDTO toAllArticle(Article article) {
         return new AddArticleDTO(
+                article.getId(),
                 article.getBrand(),
                 article.getArtNum(),
                 article.getName(),

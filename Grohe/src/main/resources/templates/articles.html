@@ -5,6 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orders</title>
     <link rel="stylesheet" href="/css/styles.css">
+
+    <script>
+        async function submitAllUpdates() {
+            const rows = document.querySelectorAll('tbody tr');
+            const updates = [];
+
+            rows.forEach(row => {
+                // Ignore rows with a DELETE form
+                const deleteForm = row.querySelector('form');
+                if (deleteForm) {
+                    const methodInput = deleteForm.querySelector('input[name="_method"]');
+                    if (methodInput && methodInput.value.toLowerCase() === "delete") {
+                        return;
+                    }
+                }
+
+                const update = {};
+
+                // Collect all inputs (excluding _csrf)
+                const inputs = row.querySelectorAll('input');
+                inputs.forEach(input => {
+                    if (input.name !== "_csrf") {
+                        update[input.name] = input.value.trim();
+                    }
+                });
+
+                // Collect contenteditable divs
+                const editableDivs = row.querySelectorAll('[contenteditable="true"]');
+                editableDivs.forEach(div => {
+                    const hiddenInput = div.nextElementSibling;
+                    if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                        update[hiddenInput.name] = div.textContent.trim();
+                    }
+                });
+
+                updates.push(update);
+            });
+
+            // Submit the updates to the server
+            try {
+                const response = await fetch('api/receive/bulkUpdateArticle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updates)
+                });
+
+                const result = await response.text();
+                alert(result);
+            } catch (error) {
+                console.error('Error sending PreOrder:', error);
+                alert('Failed to send PreOrder');
+            }
+        }
+    </script>
 </head>
 <body>
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
@@ -121,7 +177,7 @@
             <tbody>
             <tr th:each="article : ${allArticles}"
                 th:object="${article}" class="container">
-                <td><span th:text="*{artNum()}">Art. </span></td>
+                <td><span contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"> Art. </span></td>
                 <td><span th:text="*{name()}">Quantity</span></td>
                 <td><span th:text="*{description()}">Date</span></td>
                 <td><span th:text="*{imgUrl()}">Order reason</span></td>
@@ -145,6 +201,7 @@
             </tr>
             </tbody>
         </table>
+        <button type="button" class="btn btn-primary" onclick="submitAllUpdates()">Update All</button>
     </form>
 </div>
 </body>
