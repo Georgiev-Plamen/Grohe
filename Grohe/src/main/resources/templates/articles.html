@@ -5,14 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orders</title>
     <link rel="stylesheet" href="/css/styles.css">
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script>
+        function updateHiddenInput(div) {
+            const hiddenInput = div.nextElementSibling;
+            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                hiddenInput.value = div.textContent.trim();
+            }
+        }
+
         async function submitAllUpdates() {
             const rows = document.querySelectorAll('tbody tr');
             const updates = [];
 
             rows.forEach(row => {
-                // Ignore rows with a DELETE form
                 const deleteForm = row.querySelector('form');
                 if (deleteForm) {
                     const methodInput = deleteForm.querySelector('input[name="_method"]');
@@ -23,15 +30,12 @@
 
                 const update = {};
 
-                // Collect all inputs (excluding _csrf)
-                const inputs = row.querySelectorAll('input');
-                inputs.forEach(input => {
-                    if (input.name !== "_csrf") {
-                        update[input.name] = input.value.trim();
-                    }
-                });
+                 // Collect the article ID
+                const idInput = row.querySelector('input[name="id"]');
+                if (idInput) {
+                    update.id = idInput.value.trim();
+                }
 
-                // Collect contenteditable divs
                 const editableDivs = row.querySelectorAll('[contenteditable="true"]');
                 editableDivs.forEach(div => {
                     const hiddenInput = div.nextElementSibling;
@@ -43,7 +47,6 @@
                 updates.push(update);
             });
 
-            // Submit the updates to the server
             try {
                 const response = await fetch('api/receive/bulkUpdateArticle', {
                     method: 'POST',
@@ -53,11 +56,15 @@
                     body: JSON.stringify(updates)
                 });
 
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
                 const result = await response.text();
                 alert(result);
             } catch (error) {
                 console.error('Error sending PreOrder:', error);
-                alert('Failed to send PreOrder');
+                alert('Failed to send', error);
             }
         }
     </script>
@@ -66,102 +73,11 @@
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
 <div class="container">
     <h1>Артикули</h1>
-
-    <form
-            th:method="post"
-            th:action="@{/articles/addArticle}"
-            th:object="${articleData}"
-    >
-    <div class="add-container">
-
-        <input type="hidden" name="brand" th:value="Viega">
-
-        <!--Article-->
-        <div class="preOrder-entity">
-            <label class="preOrder-label"
-                   th:for="artNum">Арт. номер:
-            </label>
-
-            <small class="text-danger" th:if="${#fields.hasErrors('artNum')}" th:errors="*{artNum}">Article Error</small>
-
-            <input class="preOrder-input"
-                   type="text"
-                   th:errorclass="is-invalid"
-                   th:field="*{artNum}" minlength="2" maxlength="50" required>
+    <form th:method="post" th:action="@{/articles/addArticle}" th:object="${articleData}">
+        <div class="add-container">
+            <input type="hidden" name="brand" th:value="Grohe">
+            <!-- Add other fields here -->
         </div>
-
-        <!--Name-->
-        <div class="preOrder-entity">
-            <label class="preOrder-label"
-                   th:for="name">Наименование:
-            </label>
-
-            <small class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</small>
-
-            <input class="preOrder-input"
-                   type="text"
-                   th:errorclass="is-invalid"
-                   th:field="*{name}" minlength="1" maxlength="50" required>
-        </div>
-
-        <div class="preOrder-entity">
-            <label class="preOrder-label"
-                   th:for="description">Описание:
-            </label>
-
-            <small class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description Error</small>
-
-            <input class="preOrder-input"
-                   type="text"
-                   th:errorclass="is-invalid"
-                   th:field="*{description}" minlength="1" maxlength="50">
-        </div>
-
-        <!--Picture-->
-        <div class="preOrder-entity">
-            <label class="preOrder-label"
-                   th:for="imgUrl">Снимка:
-            </label>
-
-            <small class="text-danger" th:if="${#fields.hasErrors('imgUrl')}" th:errors="*{imgUrl}">Quantity Error</small>
-
-            <input class="preOrder-input"
-                   type="text"
-                   th:errorclass="is-invalid"
-                   th:field="*{imgUrl}" minlength="1" maxlength="50">
-        </div>
-
-        <!--Barcode-->
-        <div class="preOrder-entity">
-            <label class="preOrder-label"
-                   th:for="barcode">Баркод:
-            </label>
-
-            <small class="text-danger" th:if="${#fields.hasErrors('barcode')}" th:errors="*{barcode}">Barcode Error</small>
-
-            <input class="preOrder-input"
-                   type="text"
-                   th:errorclass="is-invalid"
-                   th:field="*{barcode}" minlength="1" maxlength="50">
-        </div>
-
-        <!--Pieces in pallet-->
-        <div class="preOrder-entity">
-            <label class="preOrder-label"
-                   th:for="quantityInPallet">Брой в палет:
-            </label>
-
-            <small class="text-danger" th:if="${#fields.hasErrors('quantityInPallet')}" th:errors="*{quantityInPallet}">comment Error</small>
-
-            <input class="preOrder-input"
-                   type="number"
-                   th:errorclass="is-invalid"
-                   th:field="*{quantityInPallet}" minlength="1" maxlength="4" >
-        </div>
-
-        <button type="submit">Добави артикул</button>
-    </div>
-
         <table>
             <thead>
             <tr class="table-data">
@@ -171,37 +87,42 @@
                 <th th:text="#{article_img_url}">Order reason</th>
                 <th th:text="#{article_barcode}">Comment</th>
                 <th th:text="#{article_quantity_in_pallet}">Ordered by</th>
-                <th> Action </th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="article : ${allArticles}"
-                th:object="${article}" class="container">
-                <td><span contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"> Art. </span></td>
-                <td><span th:text="*{name()}">Quantity</span></td>
-                <td><span th:text="*{description()}">Date</span></td>
-                <td><span th:text="*{imgUrl()}">Order reason</span></td>
-                <td><span th:text="*{barcode()}">Number of stops</span></td>
-                <td><span th:text="*{quantityInPallet()}">Number of stops</span></td>
-<!--                <td><span th:text="*{author()}">Added by</span></td>-->
+            <tr th:each="article : ${allArticles}" class="container">
+                <!-- Hidden input for article ID -->
+                <input type="hidden" name="id" th:value="${article.id()}">
                 <td>
-                    <form th:method="GET"
-                          th:action="@{/articles/{artNum}(artNum=*{artNum()})}" >
-<!--                        <input type="hidden" name="id" th:value="get">-->
-<!--                        <button onclick="editArticle" th:method="get" th:href="@{/article/editArticle/{id}(id=*{id})}">Edit</button>-->
-                        <button type="submit">Edit</button>
-                    </form>
-
-<!--                    <form th:method="get"-->
-<!--                          th:action="@{/elevator/editElevator/{id}(id=*{id})}">-->
-<!--                        <button onclick="editElevator(1)" th:method="get" th:href="@{/elevator/editElevator/{id}(id=*{id})}">Edit</button>-->
-<!--                    </form>-->
-
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.artNum()}"></div>
+                    <input type="hidden" name="artNum" th:value="${article.artNum()}">
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.name()}"></div>
+                    <input type="hidden" name="name" th:value="${article.name()}">
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)"
+                         th:text="${article.description()}"></div>
+                    <input type="hidden" name="description" th:value="${article.description()}">
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.imgUrl()}"></div>
+                    <input type="hidden" name="imgUrl" th:value="${article.imgUrl()}">
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.barcode()}"></div>
+                    <input type="hidden" name="barcode" th:value="${article.barcode()}">
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)"
+                         th:text="${article.quantityInPallet()}"></div>
+                    <input type="hidden" name="quantityInPallet" th:value="${article.quantityInPallet()}">
                 </td>
             </tr>
             </tbody>
         </table>
-        <button type="button" class="btn btn-primary" onclick="submitAllUpdates()">Update All</button>
+        <button type="button" class="btn btn-primary fix" onclick="submitAllUpdates()">Update All</button>
     </form>
 </div>
 </body>

@@ -397,3 +397,9 @@ svg {
     align-items: baseline
 
 }
+
+.fix {
+    position: fixed;
+    top: 5em;
+    right: 2em;
+    z-index: 1000;

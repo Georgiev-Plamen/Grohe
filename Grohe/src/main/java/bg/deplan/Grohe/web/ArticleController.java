@@ -19,59 +19,31 @@ public class ArticleController {
 
     @ModelAttribute("articleData")
     public AddArticleDTO addArticleDTO() {
-        return new AddArticleDTO(0L,"","","","", "","", 1);
+        return new AddArticleDTO(0l, "", "", "", "", "", "", 1);
     }
 
     @GetMapping("/articles")
-    public String allArticles(@AuthenticationPrincipal UserDetails userDetails,
-                        Model model) {
-
+    public String allArticles(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         model.addAttribute("articleData", addArticleDTO());
         model.addAttribute("allArticles", articleService.getAllArticle("Grohe"));
-
         return "articles";
-    }
-
-    @GetMapping("/articlesViega")
-    public String allArticlesViega(@AuthenticationPrincipal UserDetails userDetails,
-                              Model model) {
-
-        model.addAttribute("articleData", addArticleDTO());
-        model.addAttribute("allArticles", articleService.getAllArticle("Viega"));
-
-        return "articlesViega";
     }
 
     @PostMapping("/addArticle")
     public String addArticle(AddArticleDTO addArticleDTO) {
-
         articleService.addArticle(addArticleDTO);
-
-        if(addArticleDTO.brand().equals("Viega")) {
-            return "redirect:/articles/articlesViega";
-        }
-
-        return "redirect:/articles/articles";
+        return addArticleDTO.brand().equals("Viega") ? "redirect:/articles/articlesViega" : "redirect:/articles/articles";
     }
-
 
     @GetMapping("/{artNum}")
     public String editArticle(@PathVariable("artNum") String artNum, Model model) {
-
-        model.addAttribute("articleData",articleService.getArticleData(artNum));
-
+        model.addAttribute("articleData", articleService.getArticleData(artNum));
         return "editArticles";
     }
 
     @PutMapping("/{artNum}")
     public String editArticle(@PathVariable("artNum") String artNum, AddArticleDTO addArticleDTO) {
-
         articleService.editArticle(addArticleDTO);
-
-        if(addArticleDTO.brand().equals("Viega")) {
-            return "redirect:/articles/articlesViega";
-        }
-
-        return "redirect:/articles/articles";
+        return addArticleDTO.brand().equals("Viega") ? "redirect:/articles/articlesViega" : "redirect:/articles/articles";
     }
 }

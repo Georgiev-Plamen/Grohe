@@ -3,13 +3,11 @@ package bg.deplan.Grohe.service.Impl;
 import bg.deplan.Grohe.data.ArticleRepository;
 import bg.deplan.Grohe.model.Article;
 import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
-import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.service.ArticleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -80,6 +78,9 @@ public class ArticleServiceImpl implements ArticleService {
 
                 Article article = articleRepository.findById(id).get();
 
+                if (articleDTO.artNum().isEmpty()) {
+                    return;
+                }
                 article.setArtNum(articleDTO.artNum());
                 article.setBarcode(articleDTO.barcode());
                 article.setName(articleDTO.name());
