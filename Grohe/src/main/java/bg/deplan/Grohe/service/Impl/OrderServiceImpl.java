@@ -89,6 +89,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void bulkUpdateArticle(List<OrderDTO> updates) {
+        for(OrderDTO orderDTO : updates) {
+            Order order = orderRepository.findById(orderDTO.id()).get();
+
+            order.setItems(orderDTO.articleList());
+            order.setOrderName(orderDTO.orderName());
+
+            orderRepository.save(order);
+        }
+    }
+
+    @Override
     public List<OrderDTO> getAllOrders(String brand) {
         return orderRepository.findAll()
                 .stream()

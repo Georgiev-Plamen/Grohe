@@ -49,6 +49,10 @@ public class OrderItem extends BaseEntity{
         return article;
     }
 
+    public long articleId() {
+        return article.getId();
+    }
+
     public void setArticle(Article article) {
         this.article = article;
     }

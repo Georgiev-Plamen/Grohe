@@ -30,7 +30,7 @@
 
                 const update = {};
 
-                 // Collect the article ID
+                // Collect the article ID
                 const idInput = row.querySelector('input[name="id"]');
                 if (idInput) {
                     update.id = idInput.value.trim();
@@ -77,53 +77,151 @@
         <div class="add-container">
             <input type="hidden" name="brand" th:value="Grohe">
             <!-- Add other fields here -->
-        </div>
-        <table>
-            <thead>
-            <tr class="table-data">
-                <th th:text="#{article_number}">Артикулен номер</th>
-                <th th:text="#{article_name}">Quantity</th>
-                <th th:text="#{article_description}">Ordered by</th>
-                <th th:text="#{article_img_url}">Order reason</th>
-                <th th:text="#{article_barcode}">Comment</th>
-                <th th:text="#{article_quantity_in_pallet}">Ordered by</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="article : ${allArticles}" class="container">
-                <!-- Hidden input for article ID -->
-                <input type="hidden" name="id" th:value="${article.id()}">
-                <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.artNum()}"></div>
-                    <input type="hidden" name="artNum" th:value="${article.artNum()}">
-                </td>
-                <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.name()}"></div>
-                    <input type="hidden" name="name" th:value="${article.name()}">
-                </td>
-                <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)"
-                         th:text="${article.description()}"></div>
-                    <input type="hidden" name="description" th:value="${article.description()}">
-                </td>
-                <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.imgUrl()}"></div>
-                    <input type="hidden" name="imgUrl" th:value="${article.imgUrl()}">
-                </td>
-                <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.barcode()}"></div>
-                    <input type="hidden" name="barcode" th:value="${article.barcode()}">
-                </td>
-                <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)"
-                         th:text="${article.quantityInPallet()}"></div>
-                    <input type="hidden" name="quantityInPallet" th:value="${article.quantityInPallet()}">
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <button type="button" class="btn btn-primary fix" onclick="submitAllUpdates()">Update All</button>
+            <!--Article-->
+            <div class="preOrder-entity">
+                <label class="preOrder-label"
+                       th:for="artNum">Арт. номер:
+                </label>
+
+                <small class="text-danger" th:if="${#fields.hasErrors('artNum')}" th:errors="*{artNum}">Article
+                    Error</small>
+
+                <input class="preOrder-input"
+                       type="text"
+                       th:errorclass="is-invalid"
+                       th:field="*{artNum}" minlength="2" maxlength="50" required>
+            </div>
+
+            <!--Quantity-->
+            <div class="preOrder-entity">
+                <label class="preOrder-label"
+                       th:for="name">Наименование:
+                </label>
+
+                <small class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</small>
+
+                <input class="preOrder-input"
+                       type="text"
+                       th:errorclass="is-invalid"
+                       th:field="*{name}" minlength="1" maxlength="50" required>
+            </div>
+
+            <!--Order by-->
+            <div class="preOrder-entity">
+                <label class="preOrder-label"
+                       th:for="description">Описание:
+                </label>
+
+                <small class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description
+                    Error</small>
+
+                <input class="preOrder-input"
+                       type="text"
+                       th:errorclass="is-invalid"
+                       th:field="*{description}" minlength="1" maxlength="50">
+            </div>
+
+            <!--Date-->
+            <div class="preOrder-entity">
+                <label class="preOrder-label"
+                       th:for="imgUrl">Снимка:
+                </label>
+
+                <small class="text-danger" th:if="${#fields.hasErrors('imgUrl')}" th:errors="*{imgUrl}">Quantity
+                    Error</small>
+
+                <input class="preOrder-input"
+                       type="text"
+                       th:errorclass="is-invalid"
+                       th:field="*{imgUrl}" minlength="1" maxlength="50">
+            </div>
+
+            <!--Order reason-->
+            <div class="preOrder-entity">
+                <label class="preOrder-label"
+                       th:for="barcode">Баркод:
+                </label>
+
+                <small class="text-danger" th:if="${#fields.hasErrors('barcode')}" th:errors="*{barcode}">Barcode
+                    Error</small>
+
+                <input class="preOrder-input"
+                       type="text"
+                       th:errorclass="is-invalid"
+                       th:field="*{barcode}" minlength="1" maxlength="50">
+            </div>
+
+            <!--Comments-->
+            <div class="preOrder-entity">
+                <label class="preOrder-label"
+                       th:for="quantityInPallet">Брой в палет:
+                </label>
+
+                <small class="text-danger" th:if="${#fields.hasErrors('quantityInPallet')}"
+                       th:errors="*{quantityInPallet}">comment Error</small>
+
+                <input class="preOrder-input"
+                       type="number"
+                       th:errorclass="is-invalid"
+                       th:field="*{quantityInPallet}" minlength="1" maxlength="4">
+            </div>
+
+            <button type="submit">Добави артикул</button>
     </form>
+</div>
+
+<table>
+    <thead>
+    <tr class="table-data">
+        <th th:text="#{article_number}">Артикулен номер</th>
+        <th th:text="#{article_name}">Quantity</th>
+        <th th:text="#{article_description}">Ordered by</th>
+        <th th:text="#{article_img_url}">Order reason</th>
+        <th th:text="#{article_barcode}">Comment</th>
+        <th th:text="#{article_quantity_in_pallet}">Ordered by</th>
+        <th>Изтриване</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="article : ${allArticles}" class="container">
+        <!-- Hidden input for article ID -->
+        <input type="hidden" name="id" th:value="${article.id()}">
+        <td>
+            <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.artNum()}"></div>
+            <input type="hidden" name="artNum" th:value="${article.artNum()}">
+        </td>
+        <td>
+            <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.name()}"></div>
+            <input type="hidden" name="name" th:value="${article.name()}">
+        </td>
+        <td>
+            <div contenteditable="true" oninput="updateHiddenInput(this)"
+                 th:text="${article.description()}"></div>
+            <input type="hidden" name="description" th:value="${article.description()}">
+        </td>
+        <td>
+            <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.imgUrl()}"></div>
+            <input type="hidden" name="imgUrl" th:value="${article.imgUrl()}">
+        </td>
+        <td>
+            <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.barcode()}"></div>
+            <input type="hidden" name="barcode" th:value="${article.barcode()}">
+        </td>
+        <td>
+            <div contenteditable="true" oninput="updateHiddenInput(this)"
+                 th:text="${article.quantityInPallet()}"></div>
+            <input type="hidden" name="quantityInPallet" th:value="${article.quantityInPallet()}">
+        </td>
+        <td>
+            <form th:action="@{/articles/delete/{id}(id=${article.id()})}" th:method="DELETE">
+                <input type="hidden" name="_method" value="delete">
+                <button class="delete-btn" type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<button type="button" class="btn btn-primary fix" onclick="submitAllUpdates()">Update All</button>
 </div>
 </body>
 </html>

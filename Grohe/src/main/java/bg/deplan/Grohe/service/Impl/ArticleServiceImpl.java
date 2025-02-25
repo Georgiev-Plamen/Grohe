@@ -93,6 +93,11 @@ public class ArticleServiceImpl implements ArticleService {
         }
     }
 
+    @Override
+    public void deleteArticle(long id) {
+        articleRepository.deleteById(id);
+    }
+
     public Article findByArtNum(String s) {
         return articleRepository.findByArtNum(s).get();
     }

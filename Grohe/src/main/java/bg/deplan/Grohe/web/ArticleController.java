@@ -35,15 +35,18 @@ public class ArticleController {
         return addArticleDTO.brand().equals("Viega") ? "redirect:/articles/articlesViega" : "redirect:/articles/articles";
     }
 
-    @GetMapping("/{artNum}")
-    public String editArticle(@PathVariable("artNum") String artNum, Model model) {
-        model.addAttribute("articleData", articleService.getArticleData(artNum));
-        return "editArticles";
-    }
-
     @PutMapping("/{artNum}")
     public String editArticle(@PathVariable("artNum") String artNum, AddArticleDTO addArticleDTO) {
         articleService.editArticle(addArticleDTO);
         return addArticleDTO.brand().equals("Viega") ? "redirect:/articles/articlesViega" : "redirect:/articles/articles";
     }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteArticle(@PathVariable("id") long id) {
+
+        articleService.deleteArticle(id);
+
+        return "redirect:/articles/articles";
+    }
+
 }

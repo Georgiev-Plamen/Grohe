@@ -86,6 +86,6 @@ public class OrderController {
 
         orderService.deleteOrder(id);
 
-        return "redirect:/orders/ordersNew";
+        return "redirect:/orders/allNew";
     }
 }
