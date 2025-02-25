@@ -97,7 +97,7 @@ public class PreOrderServiceImpl implements PreOrderService {
     @Override
     @Transactional
     public void updateItems(PreOrderDTO preOrderDTO, Long id) {
-        PreOrderItem preOrderItem = preOrderItemRepository.findById(id)
+        PreOrderItem preOrderItem = preOrderItemRepository.findById(preOrderDTO.id())
                 .orElseThrow(() -> new EntityNotFoundException("PreOrderItem not found with id: " + id));
 
         Optional<Article> optionalArticle;
@@ -145,8 +145,9 @@ public class PreOrderServiceImpl implements PreOrderService {
     }
 
     @Override
-    public void deletePreOrder(Long id) {
-        preOrderItemRepository.deleteById(id);
+    @Transactional
+    public void deletePreOrderArticle(Long id) {
+        preOrderItemRepository.deleteByArticleId(id);
     }
 
     @Override
@@ -181,9 +182,10 @@ public class PreOrderServiceImpl implements PreOrderService {
 
     private static ArticleDTO toAllItem(PreOrderItem preOrderItem) {
         return new ArticleDTO(
-                preOrderItem.getId(),
+                preOrderItem.getArticle().getId(),
                 preOrderItem.getArticle().getBrand(),
                 preOrderItem.getArticle().getArtNum(),
+                preOrderItem.getArticle().getCodeDeplan(),
                 preOrderItem.getArticle().getName(),
                 preOrderItem.getArticle().getDescription(),
                 preOrderItem.getQuantityForOrder(),

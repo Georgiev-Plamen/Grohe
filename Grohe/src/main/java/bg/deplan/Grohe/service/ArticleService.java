@@ -22,5 +22,5 @@ public interface ArticleService {
 
     void bulkUpdateArticle(List<AddArticleDTO> updates);
 
-    void deleteArticle(long id);
+    void deleteArticle(Long id);
 }

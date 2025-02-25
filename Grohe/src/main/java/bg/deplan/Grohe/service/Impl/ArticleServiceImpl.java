@@ -82,6 +82,7 @@ public class ArticleServiceImpl implements ArticleService {
                     return;
                 }
                 article.setArtNum(articleDTO.artNum());
+                article.setCodeDeplan(articleDTO.codeDeplan());
                 article.setBarcode(articleDTO.barcode());
                 article.setName(articleDTO.name());
                 article.setDescription(articleDTO.description());
@@ -94,7 +95,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void deleteArticle(long id) {
+    public void deleteArticle(Long id) {
         articleRepository.deleteById(id);
     }
 
@@ -106,6 +107,7 @@ public class ArticleServiceImpl implements ArticleService {
         return new AddArticleDTO(
                 article.getId(),
                 article.getBrand(),
+                article.getCodeDeplan(),
                 article.getArtNum(),
                 article.getName(),
                 article.getDescription(),

@@ -182,7 +182,7 @@
                 </td>
             </form>
                 <td class="action">
-                    <form th:action="@{/orders/delete/{id}(id=${article.id()})}" th:method="DELETE">
+                    <form th:action="@{/orders/delete/{id}(id=*{article.id()})}" th:method="DELETE">
                         <input type="hidden" name="_method" value="delete">
                         <button class="delete-btn" type="submit">Delete</button>
                     </form>

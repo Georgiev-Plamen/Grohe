@@ -14,6 +14,9 @@ public class Article extends BaseEntity{
     @Column(name = "art_num")
     private String artNum;
 
+    @Column(name = "code_deplan")
+    private String codeDeplan;
+
     @Column
     private String description;
 
@@ -105,5 +108,13 @@ public class Article extends BaseEntity{
 
     public void setQuantityInPacket(int quantityInPacket) {
         this.quantityInPacket = quantityInPacket;
+    }
+
+    public String getCodeDeplan() {
+        return codeDeplan;
+    }
+
+    public void setCodeDeplan(String codeDeplan) {
+        this.codeDeplan = codeDeplan;
     }
 }

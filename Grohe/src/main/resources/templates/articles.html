@@ -20,6 +20,7 @@
             const updates = [];
 
             rows.forEach(row => {
+                // Ignore rows with a DELETE form
                 const deleteForm = row.querySelector('form');
                 if (deleteForm) {
                     const methodInput = deleteForm.querySelector('input[name="_method"]');
@@ -30,12 +31,21 @@
 
                 const update = {};
 
+                // Collect all inputs (excluding _csrf)
+                const inputs = row.querySelectorAll('input');
+                inputs.forEach(input => {
+                    if (input.name !== "_csrf") {
+                        update[input.name] = input.value.trim();
+                    }
+                });
+
                 // Collect the article ID
                 const idInput = row.querySelector('input[name="id"]');
                 if (idInput) {
                     update.id = idInput.value.trim();
                 }
 
+                // Collect contenteditable divs
                 const editableDivs = row.querySelectorAll('[contenteditable="true"]');
                 editableDivs.forEach(div => {
                     const hiddenInput = div.nextElementSibling;
@@ -47,6 +57,7 @@
                 updates.push(update);
             });
 
+            // Submit the updates to the server
             try {
                 const response = await fetch('api/receive/bulkUpdateArticle', {
                     method: 'POST',
@@ -64,7 +75,7 @@
                 alert(result);
             } catch (error) {
                 console.error('Error sending PreOrder:', error);
-                alert('Failed to send', error);
+                alert('Failed to send PreOrder: ' + error.message);
             }
         }
     </script>
@@ -76,8 +87,6 @@
     <form th:method="post" th:action="@{/articles/addArticle}" th:object="${articleData}">
         <div class="add-container">
             <input type="hidden" name="brand" th:value="Grohe">
-            <!-- Add other fields here -->
-            <!--Article-->
             <div class="preOrder-entity">
                 <label class="preOrder-label"
                        th:for="artNum">Арт. номер:
@@ -167,61 +176,69 @@
             </div>
 
             <button type="submit">Добави артикул</button>
+        </div>
     </form>
-</div>
-
-<table>
-    <thead>
-    <tr class="table-data">
-        <th th:text="#{article_number}">Артикулен номер</th>
-        <th th:text="#{article_name}">Quantity</th>
-        <th th:text="#{article_description}">Ordered by</th>
-        <th th:text="#{article_img_url}">Order reason</th>
-        <th th:text="#{article_barcode}">Comment</th>
-        <th th:text="#{article_quantity_in_pallet}">Ordered by</th>
-        <th>Изтриване</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="article : ${allArticles}" class="container">
-        <!-- Hidden input for article ID -->
-        <input type="hidden" name="id" th:value="${article.id()}">
-        <td>
-            <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.artNum()}"></div>
-            <input type="hidden" name="artNum" th:value="${article.artNum()}">
-        </td>
-        <td>
-            <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.name()}"></div>
-            <input type="hidden" name="name" th:value="${article.name()}">
-        </td>
-        <td>
-            <div contenteditable="true" oninput="updateHiddenInput(this)"
-                 th:text="${article.description()}"></div>
-            <input type="hidden" name="description" th:value="${article.description()}">
-        </td>
-        <td>
-            <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.imgUrl()}"></div>
-            <input type="hidden" name="imgUrl" th:value="${article.imgUrl()}">
-        </td>
-        <td>
-            <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.barcode()}"></div>
-            <input type="hidden" name="barcode" th:value="${article.barcode()}">
-        </td>
-        <td>
-            <div contenteditable="true" oninput="updateHiddenInput(this)"
-                 th:text="${article.quantityInPallet()}"></div>
-            <input type="hidden" name="quantityInPallet" th:value="${article.quantityInPallet()}">
-        </td>
-        <td>
-            <form th:action="@{/articles/delete/{id}(id=${article.id()})}" th:method="DELETE">
-                <input type="hidden" name="_method" value="delete">
-                <button class="delete-btn" type="submit">Delete</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<button type="button" class="btn btn-primary fix" onclick="submitAllUpdates()">Update All</button>
+    <table>
+        <thead>
+        <tr class="table-data">
+            <th th:text="#{article_codeDeplan}">Артикулен номер Деплан</th>
+            <th th:text="#{article_number}">Артикулен номер</th>
+            <th th:text="#{article_name}">Quantity</th>
+            <th th:text="#{article_description}">Ordered by</th>
+            <th th:text="#{article_img_url}">Order reason</th>
+            <th th:text="#{article_barcode}">Comment</th>
+            <th th:text="#{article_quantity_in_pallet}">Ordered by</th>
+<!--            <th>Изтриване</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="article : ${allArticles}" class="container">
+            <!-- Hidden input for article ID -->
+            <input type="hidden" name="id" th:value="${article.id()}">
+            <td>
+                <div contenteditable="true" oninput="updateHiddenInput(this)"
+                     th:text="${article.codeDeplan()}"></div>
+                <input type="hidden" name="codeDeplan" th:value="${article.codeDeplan()}">
+            </td>
+            <td>
+                <div contenteditable="true" oninput="updateHiddenInput(this)"
+                     th:text="${article.artNum()}"></div>
+                <input type="hidden" name="artNum" th:value="${article.artNum()}">
+            </td>
+            <td>
+                <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.name()}"></div>
+                <input type="hidden" name="name" th:value="${article.name()}">
+            </td>
+            <td>
+                <div contenteditable="true" oninput="updateHiddenInput(this)"
+                     th:text="${article.description()}"></div>
+                <input type="hidden" name="description" th:value="${article.description()}">
+            </td>
+            <td>
+                <div contenteditable="true" oninput="updateHiddenInput(this)"
+                     th:text="${article.imgUrl()}"></div>
+                <input type="hidden" name="imgUrl" th:value="${article.imgUrl()}">
+            </td>
+            <td>
+                <div contenteditable="true" oninput="updateHiddenInput(this)"
+                     th:text="${article.barcode()}"></div>
+                <input type="hidden" name="barcode" th:value="${article.barcode()}">
+            </td>
+            <td>
+                <div contenteditable="true" oninput="updateHiddenInput(this)"
+                     th:text="${article.quantityInPallet()}"></div>
+                <input type="hidden" name="quantityInPallet" th:value="${article.quantityInPallet()}">
+            </td>
+<!--            <td>-->
+<!--                 <form th:action="@{/articles/delete/{id}(id=${article.id()})}" th:method="DELETE">-->
+<!--                     <input type="hidden" name="_method" value="delete">-->
+<!--                     <button class="delete-btn" type="submit">Delete</button>-->
+<!--                 </form>-->
+<!--            </td>-->
+        </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-primary fix" onclick="submitAllUpdates()">Update All</button>
 </div>
 </body>
 </html>

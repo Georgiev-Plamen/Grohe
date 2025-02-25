@@ -22,7 +22,7 @@ public interface PreOrderService {
 
     PreOrderItem findById(Long id);
 
-    void deletePreOrder(Long id);
+    void deletePreOrderArticle(Long id);
 
     List<PreOrderExcelDTO> readPreOrderFromExcel(InputStream inputStream, String brand) throws IOException;
 

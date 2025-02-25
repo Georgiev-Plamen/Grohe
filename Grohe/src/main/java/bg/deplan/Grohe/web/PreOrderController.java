@@ -92,18 +92,26 @@ public class PreOrderController {
         return "redirect:/orders/preOrder";
     }
 
+//    @DeleteMapping("/delete/{id}")
+//    public String deletePreOrderArticle(@PathVariable ("id") Long id) {
+//        boolean isViega = false;
+//
+//        if(preOrderService.findById(id).getArticle().getBrand().equals("Viega")) {
+//            isViega = true;
+//        }
+//        preOrderService.deletePreOrder(id);
+//
+//        if(isViega) {
+//            return "redirect:/orders/preOrderViega";
+//        }
+//
+//        return "redirect:/orders/preOrder";
+//    }
+
     @DeleteMapping("/delete/{id}")
-    public String deletePreOrderArticle(@PathVariable ("id") Long id) {
-        boolean isViega = false;
+    public String deletePreOrderArticle (@PathVariable ("id") Long id) {
 
-        if(preOrderService.findById(id).getArticle().getBrand().equals("Viega")) {
-            isViega = true;
-        }
-        preOrderService.deletePreOrder(id);
-
-        if(isViega) {
-            return "redirect:/orders/preOrderViega";
-        }
+        preOrderService.deletePreOrderArticle(id);
 
         return "redirect:/orders/preOrder";
     }
