@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,53 +20,42 @@
         });
 
         // Function to sync contenteditable divs with hidden inputs
-       async function submitAllUpdates() {
-    const rows = document.querySelectorAll('tbody tr');
-    const updates = [];
-
-    rows.forEach(row => {
-        // Ignore rows with a DELETE form
-        const deleteForm = row.querySelector('form');
-        if (deleteForm) {
-            const methodInput = deleteForm.querySelector('input[name="_method"]');
-            if (methodInput && methodInput.value.toLowerCase() === "delete") {
-                return;
-            }
+        function updateHiddenInput(editableDiv) {
+            const hiddenInput = editableDiv.nextElementSibling;
+            hiddenInput.value = editableDiv.innerText;
         }
 
-        const update = {};
+        // Function to submit all updates
+        async function submitAllUpdates() {
+            const rows = document.querySelectorAll('tbody tr');
+            const updates = [];
 
-        // Collect all inputs (excluding _csrf)
-        const inputs = row.querySelectorAll('input');
-        inputs.forEach(input => {
-            if (input.name !== "_csrf") {
-                update[input.name] = input.value.trim();
-            }
-        });
+            rows.forEach(row => {
+                const update = {};
 
-        // Collect contenteditable divs
-        const editableDivs = row.querySelectorAll('[contenteditable="true"]');
-        editableDivs.forEach(div => {
-            const hiddenInput = div.nextElementSibling;
-            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-                update[hiddenInput.name] = div.textContent.trim();
-            }
-        });
+                // Collect all inputs (excluding _csrf)
+                const inputs = row.querySelectorAll('input');
+                inputs.forEach(input => {
+                    if (input.name !== "_csrf") {
+                        update[input.name] = input.value.trim();
+                    }
+                });
 
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = String(date.getFullYear()).slice(-2);
-            return `${day}.${month}.${year}`;  // Returns in dd.MM.yy format
-        }
+                // Collect contenteditable divs
+                const editableDivs = row.querySelectorAll('[contenteditable="true"]');
+                editableDivs.forEach(div => {
+                    const hiddenInput = div.nextElementSibling;
+                    if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                        update[hiddenInput.name] = div.textContent.trim();
+                    }
+                });
 
-        updates.push(update);
+                updates.push(update);
             });
 
             // Submit the updates to the server
             try {
-                const response = await fetch('api/preorder/receive/bulkUpdatePreOrder', {
+                const response = await fetch('/api/preorder/receive/bulkUpdatePreOrder', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -132,7 +121,6 @@
         <thead>
         <tr>
             <th>Article</th>
-            <th>Name</th>
             <th>Quantity</th>
             <th>Ordered By</th>
             <th>Date</th>
@@ -142,52 +130,45 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="article : ${allArticle}">
-            <!-- Form for each article -->
-            <form th:method="POST" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}" th:object="${article}">
+        <tr th:each="preOrder : ${allPreOrderItems}">
+            <!-- Form for each preOrder -->
+            <form th:method="POST" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}" th:object="${preOrder}">
                 <input type="hidden" name="brand" th:value="Grohe">
-                <input type="hidden" name="id" id="id" th:value="*{id}">
+                <input type="hidden" name="id" th:value="*{id}">
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"
-                         th:value="*{artNum}"></div>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"></div>
                     <input type="hidden" th:field="*{artNum}">
                 </td>
                 <td>
-                    <div th:text="*{name}" th:value="*{name}"></div>
-                </td>
-                <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantityForOrder}"
-                         th:value="*{quantityForOrder}"></div>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantityForOrder}"></div>
                     <input type="hidden" th:field="*{quantityForOrder}">
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderBy}"
-                         th:value="*{orderBy}"></div>
-                    <input type="hidden" th:field="*{orderBy}"/>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderBy}"></div>
+                    <input type="hidden" th:field="*{orderBy}">
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"
-                         th:value="*{date}"></div>
-                    <input type="hidden" th:field="*{date}"/>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"></div>
+                    <input type="hidden" th:field="*{date}">
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderReason}"
-                         th:value="*{orderReason}"></div>
-                    <input type="hidden" th:field="*{orderReason}"/>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderReason}"></div>
+                    <input type="hidden" th:field="*{orderReason}">
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}"
-                         th:value="*{comment}"></div>
-                    <input type="hidden" th:field="*{comment}"/>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}"></div>
+                    <input type="hidden" th:field="*{comment}">
+                </td>
+                <td class="action">
+                    <button type="submit">Update</button>
                 </td>
             </form>
-                <td class="action">
-                    <form th:action="@{/orders/delete/{id}(id=*{article.id()})}" th:method="DELETE">
-                        <input type="hidden" name="_method" value="delete">
-                        <button class="delete-btn" type="submit">Delete</button>
-                    </form>
-                </td>
-
+            <td class="action">
+                <form th:action="@{/orders/delete/{id}(id=*{id})}" th:method="POST">
+                    <input type="hidden" name="_method" value="delete">
+                    <button class="delete-btn" type="submit">Delete</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -195,9 +176,8 @@
     <!-- Single Update Button -->
     <button type="button" class="btn btn-primary" onclick="submitAllUpdates()">Update All</button>
 
-    <form th:method="POST"
-          th:action="@{/orders/importFromExcel}"
-          enctype="multipart/form-data">
+    <!-- Import Form -->
+    <form th:method="POST" th:action="@{/orders/importFromExcel}" enctype="multipart/form-data">
         <label class="file">
             <input type="file" name="file" id="file" aria-label="File browser example" accept=".xlsx" required>
             <input type="hidden" id="brand" name="brand" th:value="Grohe">
@@ -223,8 +203,8 @@
                         <div class="form-group">
                             <form id="downloadForm" th:method="POST" th:action="@{/orders/makeOrder}">
                                 <label for="name" class="col-form-label">Име:</label>
-                                <input type="text" class="form-control" id="name" name="name" th:value="*{name}">
-                                <button type="submit" class="btn btn-primary">Заварши</button>
+                                <input type="text" class="form-control" id="name" name="name">
+                                <button type="submit" class="btn btn-primary">Завърши</button>
                                 <input type="hidden" name="makeOrder" th:value="makeOrder">
                             </form>
                             <a href="/orders/all">Към заявки</a>

@@ -30,6 +30,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -159,6 +160,12 @@ public class PreOrderServiceImpl implements PreOrderService {
                 .toList();
     }
 
+    public List<PreOrderDTO> getAllPreOrder(String brand) {
+        return preOrderItemRepository.findAllByArticle_Brand(brand)
+                .stream().map(PreOrderServiceImpl::toAllPreOrderItem)
+                .toList();
+    }
+
     @Override
     @Transactional
     public void makeOrder(String name, String brand) {
@@ -195,6 +202,19 @@ public class PreOrderServiceImpl implements PreOrderService {
                 preOrderItem.getOrderReason(),
                 preOrderItem.getComment(),
                 preOrderItem.getArticle().getBarcode()
+        );
+    }
+
+    private static PreOrderDTO toAllPreOrderItem(PreOrderItem preOrderItem) {
+        return new PreOrderDTO(
+                preOrderItem.getArticle().getId(),
+                preOrderItem.getArticle().getBrand(),
+                preOrderItem.getArticle().getArtNum(),
+                preOrderItem.getQuantityForOrder(),
+                preOrderItem.getOrderBy(),
+                preOrderItem.getDate(),
+                preOrderItem.getOrderReason(),
+                preOrderItem.getComment()
         );
     }
 
@@ -254,17 +274,6 @@ public class PreOrderServiceImpl implements PreOrderService {
         return preOrderExcelDTOList;
     }
 
-    @Override
-    public void bulkUpdate(List<PreOrderDTO> updates) {
-
-        for (PreOrderDTO preOrderDTO : updates) {
-            Long id = preOrderDTO.id();
-
-            PreOrderItem preOrderItem = preOrderItemRepository.findById(id).get();
-
-        }
-    }
-
     public void listToPreOrderItem(List<PreOrderExcelDTO> preOrderExcelDTOList) {
 
         for (PreOrderExcelDTO preOrderExcelItems : preOrderExcelDTOList) {
@@ -283,7 +292,6 @@ public class PreOrderServiceImpl implements PreOrderService {
             preOrderItem.setQuantityForOrder(preOrderExcelItems.quantityForOrder());
             preOrderItem.setOrderBy("Вили");
             preOrderItem.setDate(preOrderExcelItems.date());
-            //TODO: need to create method that translate cyrillic to latin
             preOrderItem.setOrderReason(checkComment(preOrderExcelItems.comment()));
             preOrderItem.setComment(preOrderExcelItems.comment());
 
