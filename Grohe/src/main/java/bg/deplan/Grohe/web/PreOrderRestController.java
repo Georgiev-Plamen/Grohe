@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("orders/api/preorder")
+@RequestMapping("/api/preorder")
 public class PreOrderRestController {
 
     private PreOrderService preOrderService;

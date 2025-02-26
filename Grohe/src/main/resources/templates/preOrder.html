@@ -130,37 +130,34 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="preOrder : ${allPreOrderItems}">
+        <tr th:each="preOrder : ${allPreOrderItems}" th:object="${preOrder}">
             <!-- Form for each preOrder -->
-            <form th:method="POST" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}" th:object="${preOrder}">
+            <form th:method="POST" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}">
                 <input type="hidden" name="brand" th:value="Grohe">
-                <input type="hidden" name="id" th:value="*{id}">
+                <input type="hidden" name="id" th:value="${preOrder.id()}">
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"></div>
-                    <input type="hidden" th:field="*{artNum}">
+                    <input type="hidden" name="artNum" th:value="*{artNum}">
                 </td>
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantityForOrder}"></div>
-                    <input type="hidden" th:field="*{quantityForOrder}">
+                    <input type="hidden" name="quantityForOrder" th:value="*{quantityForOrder}">
                 </td>
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderBy}"></div>
-                    <input type="hidden" th:field="*{orderBy}">
+                    <input type="hidden" name="orderBy" th:value="*{orderBy}">
                 </td>
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"></div>
-                    <input type="hidden" th:field="*{date}">
+                    <input type="hidden" name="date" th:value="*{date}">
                 </td>
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderReason}"></div>
-                    <input type="hidden" th:field="*{orderReason}">
+                    <input type="hidden" name="orderReason" th:value="*{orderReason}">
                 </td>
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}"></div>
-                    <input type="hidden" th:field="*{comment}">
-                </td>
-                <td class="action">
-                    <button type="submit">Update</button>
+                    <input type="hidden" name="comment" th:value="*{comment}">
                 </td>
             </form>
             <td class="action">
@@ -174,7 +171,7 @@
     </table>
 
     <!-- Single Update Button -->
-    <button type="button" class="btn btn-primary" onclick="submitAllUpdates()">Update All</button>
+    <button type="button" class="btn btn-primary fix" onclick="submitAllUpdates()">Update All</button>
 
     <!-- Import Form -->
     <form th:method="POST" th:action="@{/orders/importFromExcel}" enctype="multipart/form-data">

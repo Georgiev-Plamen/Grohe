@@ -47,9 +47,7 @@ public class PreOrderController {
     public String preOrder(Model model) {
 
         model.addAttribute("preOrderData", preOrderDTO());
-//        model.addAttribute("allArticle", preOrderService.getAllArticle("Grohe"));
         model.addAttribute("allPreOrderItems", preOrderService.getAllPreOrder("Grohe"));
-//        model.addAttribute("article", preOrderDTO());
 
         return "preOrder";
     }
