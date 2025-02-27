@@ -3,6 +3,7 @@ package bg.deplan.Grohe.web;
 import bg.deplan.Grohe.data.OrderRepository;
 import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
 import bg.deplan.Grohe.model.DTOs.OrderDTO;
+import bg.deplan.Grohe.model.DTOs.OrderEditArticleDTO;
 import bg.deplan.Grohe.model.Order;
 import bg.deplan.Grohe.service.ExcelExportService;
 import bg.deplan.Grohe.service.OrderService;
@@ -45,7 +46,7 @@ public class OrderRestController {
     }
 
     @PostMapping("/receive/bulkUpdateOrder")
-    public ResponseEntity<String> bulkUpdateArticle(@RequestBody List<OrderDTO> updates) {
+    public ResponseEntity<String> bulkUpdateArticle(@RequestBody List<OrderEditArticleDTO> updates) {
         try {
             orderService.bulkUpdateArticle(updates);
             return ResponseEntity.ok().body("Update is successful");

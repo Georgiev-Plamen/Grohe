@@ -2,7 +2,10 @@ package bg.deplan.Grohe.service.Impl;
 
 import bg.deplan.Grohe.data.OrderItemRepository;
 import bg.deplan.Grohe.data.OrderRepository;
+import bg.deplan.Grohe.model.Article;
+import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
 import bg.deplan.Grohe.model.DTOs.OrderDTO;
+import bg.deplan.Grohe.model.DTOs.OrderEditArticleDTO;
 import bg.deplan.Grohe.model.Order;
 import bg.deplan.Grohe.model.OrderItem;
 import bg.deplan.Grohe.model.PreOrderItem;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -88,13 +92,21 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
+    //TODO:
     @Override
-    public void bulkUpdateArticle(List<OrderDTO> updates) {
-        for(OrderDTO orderDTO : updates) {
-            Order order = orderRepository.findById(orderDTO.id()).get();
+    public void bulkUpdateArticle(List<OrderEditArticleDTO> updates) {
 
-            order.setItems(orderDTO.articleList());
-            order.setOrderName(orderDTO.orderName());
+        for(OrderEditArticleDTO orderEditArticleDTO : updates) {
+            Order order = orderRepository.findById(orderEditArticleDTO.id()).get();
+
+            List <OrderItem> articleList = order.getItems();
+            for(OrderItem orderItem : articleList) {
+                orderItem.setArticle();
+
+            }
+
+            order.setItems(orderEditArticleDTO.articleList());
+            order.setOrderName(orderEditArticleDTO.orderName());
 
             orderRepository.save(order);
         }

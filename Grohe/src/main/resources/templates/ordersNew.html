@@ -42,63 +42,60 @@
         }
     </script>
     <script>
-        // Set today's date on page load
-     window.addEventListener('DOMContentLoaded', () => {
-         const today = new Date().toISOString().split('T')[0];
-         document.getElementById("currentDate").value = today;
-     });
+        function updateHiddenInput(editableDiv) {
+            const hiddenInput = editableDiv.nextElementSibling;
+            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                hiddenInput.value = editableDiv.innerText;
+            } else {
+                console.error("Hidden input not found or invalid:", hiddenInput);
+            }
+        }
 
-     // Function to sync contenteditable divs with hidden inputs
-     function updateHiddenInput(editableDiv) {
-         const hiddenInput = editableDiv.nextElementSibling;
-         hiddenInput.value = editableDiv.innerText;
-     }
+            // Function to submit all updates
+            async function submitAllUpdates() {
+                const rows = document.querySelectorAll('tbody tr');
+                const updates = [];
 
-     // Function to submit all updates
-     async function submitAllUpdates() {
-         const rows = document.querySelectorAll('tbody tr');
-         const updates = [];
+                rows.forEach(row => {
+                    const update = {};
 
-         rows.forEach(row => {
-             const update = {};
+                    // Collect all inputs (excluding _csrf)
+                    const inputs = row.querySelectorAll('input');
+                    inputs.forEach(input => {
+                        if (input.name !== "_csrf") {
+                            update[input.name] = input.value.trim();
+                        }
+                    });
 
-             // Collect all inputs (excluding _csrf)
-             const inputs = row.querySelectorAll('input');
-             inputs.forEach(input => {
-                 if (input.name !== "_csrf") {
-                     update[input.name] = input.value.trim();
-                 }
-             });
+                    // Collect contenteditable divs
+                    const editableDivs = row.querySelectorAll('[contenteditable="true"]');
+                    editableDivs.forEach(div => {
+                        const hiddenInput = div.nextElementSibling;
+                        if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                            update[hiddenInput.name] = div.textContent.trim();
+                        }
+                    });
 
-             // Collect contenteditable divs
-             const editableDivs = row.querySelectorAll('[contenteditable="true"]');
-             editableDivs.forEach(div => {
-                 const hiddenInput = div.nextElementSibling;
-                 if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-                     update[hiddenInput.name] = div.textContent.trim();
-                 }
-             });
+                    updates.push(update);
+                });
 
-             updates.push(update);
-         });
+                // Submit the updates to the server
+                try {
+                    const response = await fetch('/api/orders/receive/bulkUpdateOrder', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updates)
+                    });
 
-         // Submit the updates to the server
-         try {
-             const response = await fetch('/api/orders/receive/bulkUpdateOrder', {
-                 method: 'POST',
-                 headers: {
-                     'Content-Type': 'application/json'
-                 },
-                 body: JSON.stringify(updates)
-             });
-
-             const result = await response.text();
-             alert(result);
-         } catch (error) {
-             console.error('Error sending PreOrder:', error);
-             alert('Failed to send PreOrder');
-         }
-     }
+                    const result = await response.text();
+                    alert(result);
+                } catch (error) {
+                    console.error('Error sending PreOrder:', error);
+                    alert('Failed to send PreOrder');
+                }
+            }
     </script>
 </head>
 <body>
@@ -175,40 +172,32 @@
             <tbody>
             <tr th:each="article : ${order.articleList}" th:object="${article}">
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)"
-                         th:text="${article.getArticle.artNum}">
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.getArticle.artNum}"></div>
                         <input type="hidden" name="artNum" th:value="${article.getArticle.artNum}">
-                    </div>
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantity}">
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantity}"></div>
                         <input type="hidden" name="quantity" th:value="*{quantity}">
-                    </div>
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderBy}">
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderBy}"></div>
                         <input type="hidden" name="orderBy" th:value="*{orderBy}">
-                    </div>
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{dateOfOrder}">
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{dateOfOrder}"></div>
                         <input type="hidden" name="dateOfOrder" th:value="*{dateOfOrder}">
-                    </div>
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{dateOfDelivery}">
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{dateOfDelivery}"></div>
                         <input type="hidden" name="dateOfDelivery" th:value="*{dateOfDelivery}">
-                    </div>
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderReason}">
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderReason}"></div>
                         <input type="hidden" name="orderReason" th:value="*{orderReason}">
-                    </div>
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}">
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}"></div>
                         <input type="hidden" name="comment" th:value="*{comment}">
-                    </div>
                 </td>
             </tr>
             </tbody>
@@ -231,13 +220,15 @@
             <tr th:each="order : ${allOrders}" th:object="${order}">
                 <!-- Order Name -->
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderName}"></div>
+                    <div th:text="*{orderName}"></div>
+<!--                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderName}"></div>-->
 <!--                    <input type="hidden" th:field="*{orderName}">-->
                 </td>
 
                 <!-- Date -->
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"></div>
+                    <div th:text="*{date}"></div>
+<!--                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"></div>-->
 <!--                    <input type="hidden" th:field="*{date}">-->
                 </td>
 

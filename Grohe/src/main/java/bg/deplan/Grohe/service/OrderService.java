@@ -1,7 +1,9 @@
 package bg.deplan.Grohe.service;
 
 
+import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
 import bg.deplan.Grohe.model.DTOs.OrderDTO;
+import bg.deplan.Grohe.model.DTOs.OrderEditArticleDTO;
 import bg.deplan.Grohe.model.Order;
 import bg.deplan.Grohe.model.PreOrderItem;
 
@@ -23,5 +25,5 @@ public interface OrderService {
 
     List<OrderDTO> findOrdersContainsArt(String artNum);
 
-    void bulkUpdateArticle(List<OrderDTO> updates);
+    void bulkUpdateArticle(List<OrderEditArticleDTO> updates);
 }
