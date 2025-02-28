@@ -99,27 +99,53 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void bulkUpdateArticle(List<OrderEditArticleDTO> updates) {
 
-        for (int i = 0; i < updates.size(); i++) {
-            OrderEditArticleDTO orderEditArticleDTO = updates.get(i);
-            Order order = orderRepository.findById(orderEditArticleDTO.id()).get();
+       for(OrderEditArticleDTO orderEditArticleDTO : updates) {
 
-            OrderItem orderItem = order.getItems().get(i);
 
-            Optional<Article> optionalArticle = articleService.findByArtNum(orderEditArticleDTO.artNum());
+            Order order = orderRepository.findById(orderEditArticleDTO.orderId()).get();
 
-            if (optionalArticle.isEmpty()) {
-                articleService.createArticleByArtName(orderEditArticleDTO.artNum(), orderEditArticleDTO.brand());
-                optionalArticle = articleService.findByArtNum(orderEditArticleDTO.artNum());
+            OrderItem orderItem = order.getItems().get(orderEditArticleDTO.index());
+
+            if(orderEditArticleDTO.artNum() != null) {
+                Optional<Article> optionalArticle = articleService.findByArtNum(orderEditArticleDTO.artNum());
+                if(optionalArticle.isEmpty()) {
+                    articleService.createArticleByArtName(orderEditArticleDTO.artNum(), orderEditArticleDTO.brand());
+                    optionalArticle = articleService.findByArtNum(orderEditArticleDTO.artNum());
+                }
+
+                orderItem.setArticle(optionalArticle.get());
             }
 
             // Update the orderItem with the new data
-            orderItem.setArticle(optionalArticle.get());
-            orderItem.setQuantity(orderEditArticleDTO.quantity());
-            orderItem.setOrderBy(orderEditArticleDTO.orderBy());
-            orderItem.setDateOfOrder(orderEditArticleDTO.dateOfOrder());
-            orderItem.setOrderReason(orderEditArticleDTO.orderReason());
-            orderItem.setComment(orderEditArticleDTO.comment());
-            orderItem.setDateOfDelivery(orderEditArticleDTO.dateOfDelivery());
+
+           if(orderEditArticleDTO.quantity() != null) {
+               orderItem.setQuantity(orderEditArticleDTO.quantity());
+           }
+
+           if(orderEditArticleDTO.orderBy() != null) {
+               orderItem.setOrderBy(orderEditArticleDTO.orderBy());
+           }
+
+           if(orderEditArticleDTO.dateOfOrder() != null) {
+               orderItem.setDateOfOrder(orderEditArticleDTO.dateOfOrder());
+           }
+
+           if(orderEditArticleDTO.comment() != null) {
+               orderItem.setOrderReason(orderEditArticleDTO.orderReason());
+           }
+
+           if(orderEditArticleDTO.dateOfDelivery() != null) {
+               orderItem.setDateOfDelivery(orderEditArticleDTO.dateOfDelivery());
+           }
+
+           if(orderEditArticleDTO.orderReason() != null) {
+               orderItem.setOrderReason(orderEditArticleDTO.orderReason());
+           }
+
+           if(orderEditArticleDTO.comment() != null) {
+               orderItem.setComment(orderEditArticleDTO.comment());
+           }
+
 
             orderItemRepository.save(orderItem);
         }

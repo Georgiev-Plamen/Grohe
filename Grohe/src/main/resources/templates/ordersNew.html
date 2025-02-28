@@ -59,6 +59,8 @@
                     const row = editableDiv.closest('tr');
                     const rowId = row.querySelector('input[name="articleID"]').value;
                     const orderId = row.querySelector('input[name="id"]').value; // Fetch orderId
+                    const rowsInOrder = Array.from(row.closest('tbody').querySelectorAll('tr')); // Get all rows in the same order
+                    const index = rowsInOrder.indexOf(row); // Get the index of the current row
 
                     if (!editedData.has(rowId)) {
                         editedData.set(rowId, {});
@@ -69,8 +71,9 @@
                         editedData.get(rowId)[hiddenInput.name] = editableDiv.textContent.trim();
                     }
 
-                    // Include orderId in the edited data
+                    // Include orderId and index in the edited data
                     editedData.get(rowId).orderId = orderId;
+                    editedData.get(rowId).index = index; // Store the index
 
                     console.log("Edited Data after contenteditable change:", editedData);
                 });
@@ -82,6 +85,8 @@
                     const row = input.closest('tr');
                     const rowId = row.querySelector('input[name="articleID"]').value;
                     const orderId = row.querySelector('input[name="id"]').value; // Fetch orderId
+                    const rowsInOrder = Array.from(row.closest('tbody').querySelectorAll('tr')); // Get all rows in the same order
+                    const index = rowsInOrder.indexOf(row); // Get the index of the current row
 
                     if (!editedData.has(rowId)) {
                         editedData.set(rowId, {});
@@ -89,8 +94,9 @@
 
                     editedData.get(rowId)[input.name] = input.value.trim();
 
-                    // Include orderId in the edited data
+                    // Include orderId and index in the edited data
                     editedData.get(rowId).orderId = orderId;
+                    editedData.get(rowId).index = index; // Store the index
 
                     console.log("Edited Data after input change:", editedData);
                 });
@@ -106,6 +112,7 @@
                     return {
                         articleID: rowId,
                         orderId: data.orderId, // Include orderId
+                        index: data.index, // Include index
                         ...data
                     };
                 });

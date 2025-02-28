@@ -5,8 +5,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 
 public record OrderEditArticleDTO(
-        Long id,
+        Long orderId,
         Long articleID,
+        int index,
         String brand,
         String artNum,
         String quantity,
