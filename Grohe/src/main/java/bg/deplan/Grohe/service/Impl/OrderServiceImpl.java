@@ -9,6 +9,7 @@ import bg.deplan.Grohe.model.DTOs.OrderEditArticleDTO;
 import bg.deplan.Grohe.model.Order;
 import bg.deplan.Grohe.model.OrderItem;
 import bg.deplan.Grohe.model.PreOrderItem;
+import bg.deplan.Grohe.service.ArticleService;
 import bg.deplan.Grohe.service.OrderService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ExcelExportServiceImpl excelExportService;
+    @Autowired
+    private ArticleService articleService;
 
     @Override
     public Order createOrder(List<PreOrderItem> preOrderItems, String name, String brand) {
@@ -96,19 +99,29 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void bulkUpdateArticle(List<OrderEditArticleDTO> updates) {
 
-        for(OrderEditArticleDTO orderEditArticleDTO : updates) {
+        for (int i = 0; i < updates.size(); i++) {
+            OrderEditArticleDTO orderEditArticleDTO = updates.get(i);
             Order order = orderRepository.findById(orderEditArticleDTO.id()).get();
 
-            List <OrderItem> articleList = order.getItems();
-            for(OrderItem orderItem : articleList) {
-                orderItem.setArticle();
+            OrderItem orderItem = order.getItems().get(i);
 
+            Optional<Article> optionalArticle = articleService.findByArtNum(orderEditArticleDTO.artNum());
+
+            if (optionalArticle.isEmpty()) {
+                articleService.createArticleByArtName(orderEditArticleDTO.artNum(), orderEditArticleDTO.brand());
+                optionalArticle = articleService.findByArtNum(orderEditArticleDTO.artNum());
             }
 
-            order.setItems(orderEditArticleDTO.articleList());
-            order.setOrderName(orderEditArticleDTO.orderName());
+            // Update the orderItem with the new data
+            orderItem.setArticle(optionalArticle.get());
+            orderItem.setQuantity(orderEditArticleDTO.quantity());
+            orderItem.setOrderBy(orderEditArticleDTO.orderBy());
+            orderItem.setDateOfOrder(orderEditArticleDTO.dateOfOrder());
+            orderItem.setOrderReason(orderEditArticleDTO.orderReason());
+            orderItem.setComment(orderEditArticleDTO.comment());
+            orderItem.setDateOfDelivery(orderEditArticleDTO.dateOfDelivery());
 
-            orderRepository.save(order);
+            orderItemRepository.save(orderItem);
         }
     }
 

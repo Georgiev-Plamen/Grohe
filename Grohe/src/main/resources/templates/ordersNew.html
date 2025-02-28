@@ -42,44 +42,76 @@
         }
     </script>
     <script>
-        function updateHiddenInput(editableDiv) {
-            const hiddenInput = editableDiv.nextElementSibling;
-            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-                hiddenInput.value = editableDiv.innerText;
-            } else {
-                console.error("Hidden input not found or invalid:", hiddenInput);
+        document.addEventListener('DOMContentLoaded', () => {
+            const editedData = new Map();
+
+            // Function to update hidden inputs when contenteditable divs are edited
+            function updateHiddenInput(editableDiv) {
+                const hiddenInput = editableDiv.nextElementSibling;
+                if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                    hiddenInput.value = editableDiv.textContent.trim();
+                }
             }
-        }
+
+            // Function to track changes in contenteditable divs
+            function trackEditableChanges(editableDiv) {
+                editableDiv.addEventListener('input', () => {
+                    const row = editableDiv.closest('tr');
+                    const rowId = row.querySelector('input[name="articleID"]').value;
+                    const orderId = row.querySelector('input[name="id"]').value; // Fetch orderId
+
+                    if (!editedData.has(rowId)) {
+                        editedData.set(rowId, {});
+                    }
+
+                    const hiddenInput = editableDiv.nextElementSibling;
+                    if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                        editedData.get(rowId)[hiddenInput.name] = editableDiv.textContent.trim();
+                    }
+
+                    // Include orderId in the edited data
+                    editedData.get(rowId).orderId = orderId;
+
+                    console.log("Edited Data after contenteditable change:", editedData);
+                });
+            }
+
+            // Function to track changes in input fields
+            function trackInputChanges(input) {
+                input.addEventListener('change', () => {
+                    const row = input.closest('tr');
+                    const rowId = row.querySelector('input[name="articleID"]').value;
+                    const orderId = row.querySelector('input[name="id"]').value; // Fetch orderId
+
+                    if (!editedData.has(rowId)) {
+                        editedData.set(rowId, {});
+                    }
+
+                    editedData.get(rowId)[input.name] = input.value.trim();
+
+                    // Include orderId in the edited data
+                    editedData.get(rowId).orderId = orderId;
+
+                    console.log("Edited Data after input change:", editedData);
+                });
+            }
+
+            // Attach event listeners to all contenteditable divs and input fields
+            document.querySelectorAll('[contenteditable="true"]').forEach(trackEditableChanges);
+            document.querySelectorAll('input').forEach(trackInputChanges);
 
             // Function to submit all updates
             async function submitAllUpdates() {
-                const rows = document.querySelectorAll('tbody tr');
-                const updates = [];
-
-                rows.forEach(row => {
-                    const update = {};
-
-                    // Collect all inputs (excluding _csrf)
-                    const inputs = row.querySelectorAll('input');
-                    inputs.forEach(input => {
-                        if (input.name !== "_csrf") {
-                            update[input.name] = input.value.trim();
-                        }
-                    });
-
-                    // Collect contenteditable divs
-                    const editableDivs = row.querySelectorAll('[contenteditable="true"]');
-                    editableDivs.forEach(div => {
-                        const hiddenInput = div.nextElementSibling;
-                        if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-                            update[hiddenInput.name] = div.textContent.trim();
-                        }
-                    });
-
-                    updates.push(update);
+                const updates = Array.from(editedData.entries()).map(([rowId, data]) => {
+                    return {
+                        articleID: rowId,
+                        orderId: data.orderId, // Include orderId
+                        ...data
+                    };
                 });
 
-                // Submit the updates to the server
+                console.log("Updates to be submitted:", updates);
+
                 try {
                     const response = await fetch('/api/orders/receive/bulkUpdateOrder', {
                         method: 'POST',
@@ -91,11 +123,20 @@
 
                     const result = await response.text();
                     alert(result);
+                    editedData.clear();
                 } catch (error) {
-                    console.error('Error sending PreOrder:', error);
-                    alert('Failed to send PreOrder');
+                    console.error('Error sending updates:', error);
+                    alert('Failed to send updates');
                 }
             }
+
+            // Use event delegation to handle clicks on any "Update All" button
+            document.addEventListener('click', (event) => {
+                if (event.target.classList.contains('fix')) {
+                    submitAllUpdates();
+                }
+            });
+        });
     </script>
 </head>
 <body>
@@ -171,6 +212,9 @@
             </thead>
             <tbody>
             <tr th:each="article : ${order.articleList}" th:object="${article}">
+                <input type="hidden" name="brand" th:value="Grohe">
+                <input type="hidden" name="id" th:value="${order.id()}">
+                <input type="hidden" name="articleID" th:value="${article.getId()}">
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.getArticle.artNum}"></div>
                         <input type="hidden" name="artNum" th:value="${article.getArticle.artNum}">

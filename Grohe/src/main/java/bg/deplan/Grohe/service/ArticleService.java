@@ -7,6 +7,7 @@ import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
 import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ArticleService {
 
@@ -18,9 +19,13 @@ public interface ArticleService {
 
     void editArticle(AddArticleDTO addArticleDTO);
 
-    Article findById(Long id);
+    Optional<Article> findById(Long id);
+
+    Optional<Article> findByArtNum(String artNum);
 
     void bulkUpdateArticle(List<AddArticleDTO> updates);
 
     void deleteArticle(Long id);
+
+    void createArticleByArtName(String artName, String brand);
 }

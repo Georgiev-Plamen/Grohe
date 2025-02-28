@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -67,8 +68,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Article findById(Long id) {
-        return articleRepository.findById(id).get();
+    public Optional<Article> findById(Long id) {
+        return articleRepository.findById(id);
     }
 
     @Override
@@ -99,8 +100,18 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.deleteById(id);
     }
 
-    public Article findByArtNum(String s) {
-        return articleRepository.findByArtNum(s).get();
+    @Override
+    public void createArticleByArtName(String artName, String brand) {
+        Article article = new Article();
+        article.setArtNum(artName);
+        article.setBrand(brand);
+
+        articleRepository.save(article);
+    }
+
+    @Override
+    public Optional<Article> findByArtNum(String s) {
+        return articleRepository.findByArtNum(s);
     }
 
     private static AddArticleDTO toAllArticle(Article article) {
