@@ -101,8 +101,11 @@ public class OrderServiceImpl implements OrderService {
 
        for(OrderEditArticleDTO orderEditArticleDTO : updates) {
 
-
             Order order = orderRepository.findById(orderEditArticleDTO.orderId()).get();
+
+            if(orderEditArticleDTO.orderName() != null) {
+                order.setOrderName(orderEditArticleDTO.orderName());
+            }
 
             OrderItem orderItem = order.getItems().get(orderEditArticleDTO.index());
 

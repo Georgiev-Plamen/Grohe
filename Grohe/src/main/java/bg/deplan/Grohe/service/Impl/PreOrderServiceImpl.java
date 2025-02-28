@@ -71,7 +71,6 @@ public class PreOrderServiceImpl implements PreOrderService {
         return preOrderItemRepository.save(preOrder);
     }
 
-
     public void addItem(ArticleDTO articleDTO) {
         PreOrderItem preOrderItem = new PreOrderItem();
 
@@ -334,6 +333,10 @@ public class PreOrderServiceImpl implements PreOrderService {
                 return "Project " + translateComment;
             }
             if (currentWord.contains("ofert")) {
+                return "Project " + translateComment;
+            }
+
+            if (currentWord.contains("proje")) {
                 return "Project " + translateComment;
             }
         }
