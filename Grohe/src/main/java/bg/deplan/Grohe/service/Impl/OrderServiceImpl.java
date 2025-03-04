@@ -133,10 +133,6 @@ public class OrderServiceImpl implements OrderService {
                orderItem.setDateOfOrder(orderEditArticleDTO.dateOfOrder());
            }
 
-           if(orderEditArticleDTO.comment() != null) {
-               orderItem.setOrderReason(orderEditArticleDTO.orderReason());
-           }
-
            if(orderEditArticleDTO.dateOfDelivery() != null) {
                orderItem.setDateOfDelivery(orderEditArticleDTO.dateOfDelivery());
            }

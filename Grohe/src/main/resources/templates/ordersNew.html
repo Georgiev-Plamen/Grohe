@@ -42,59 +42,38 @@
         }
     </script>
     <script>
-        // Function to update hidden inputs when contenteditable divs are edited
-        function updateHiddenInput(editableDiv) {
-            const hiddenInput = editableDiv.nextElementSibling;
-            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-                hiddenInput.value = editableDiv.textContent.trim();
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
             const editedData = new Map();
+
+            // Function to update hidden inputs when contenteditable divs are edited
+            function updateHiddenInput(editableDiv) {
+                const hiddenInput = editableDiv.nextElementSibling;
+                if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                    hiddenInput.value = editableDiv.textContent.trim();
+                }
+            }
 
             // Function to track changes in contenteditable divs
             function trackEditableChanges(editableDiv) {
                 editableDiv.addEventListener('input', () => {
-                    const table = editableDiv.closest('table');
-                    const orderNameDiv = table.querySelector('th div[contenteditable="true"]'); // Get the orderName div
                     const row = editableDiv.closest('tr');
+                    const rowId = row.querySelector('input[name="articleID"]').value;
+                    const orderId = row.querySelector('input[name="id"]').value; // Fetch orderId
+                    const rowsInOrder = Array.from(row.closest('tbody').querySelectorAll('tr')); // Get all rows in the same order
+                    const index = rowsInOrder.indexOf(row); // Get the index of the current row
 
-                    let rowId, orderId, orderName;
-
-                    if (row) {
-                        // For fields inside a row (e.g., article details)
-                        rowId = row.querySelector('input[name="articleID"]').value;
-                        orderId = row.querySelector('input[name="id"]').value;
-                        orderName = orderNameDiv.textContent.trim(); // Get the orderName from the table header
-                    } else {
-                        // For the orderName field itself
-                        rowId = 'orderName'; // Use a unique identifier for the orderName field
-
-                        // Add a null check for the orderId input
-                        const orderIdInput = table.querySelector('th input[name="id"]');
-                        if (!orderIdInput) {
-                            console.error('Order ID input not found in the table header.');
-                            return;
-                        }
-                        orderId = orderIdInput.value; // Fetch orderId from the table header
-
-                        orderName = editableDiv.textContent.trim(); // Get the updated orderName
-                    }
-
-                    if (!editedData.has(orderId)) {
-                        editedData.set(orderId, {});
+                    if (!editedData.has(rowId)) {
+                        editedData.set(rowId, {});
                     }
 
                     const hiddenInput = editableDiv.nextElementSibling;
                     if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-                        editedData.get(orderId)[hiddenInput.name] = editableDiv.textContent.trim();
+                        editedData.get(rowId)[hiddenInput.name] = editableDiv.textContent.trim();
                     }
 
-                    // Include orderName in the edited data
-                    editedData.get(orderId).orderId = orderId;
-                    editedData.get(orderId).orderName = orderName; // Include orderName
-                    editedData.get(orderId).index = row ? Array.from(row.closest('tbody').querySelectorAll('tr')).indexOf(row) : 0; // Store the index
+                    // Include orderId and index in the edited data
+                    editedData.get(rowId).orderId = orderId;
+                    editedData.get(rowId).index = index; // Store the index
 
                     console.log("Edited Data after contenteditable change:", editedData);
                 });
@@ -104,23 +83,20 @@
             function trackInputChanges(input) {
                 input.addEventListener('change', () => {
                     const row = input.closest('tr');
-                    const table = row.closest('table');
-                    const orderNameDiv = table.querySelector('th div[contenteditable="true"]'); // Get the orderName div
-
                     const rowId = row.querySelector('input[name="articleID"]').value;
-                    const orderId = row.querySelector('input[name="id"]').value;
-                    const orderName = orderNameDiv.textContent.trim(); // Get the orderName from the table header
+                    const orderId = row.querySelector('input[name="id"]').value; // Fetch orderId
+                    const rowsInOrder = Array.from(row.closest('tbody').querySelectorAll('tr')); // Get all rows in the same order
+                    const index = rowsInOrder.indexOf(row); // Get the index of the current row
 
-                    if (!editedData.has(orderId)) {
-                        editedData.set(orderId, {});
+                    if (!editedData.has(rowId)) {
+                        editedData.set(rowId, {});
                     }
 
-                    editedData.get(orderId)[input.name] = input.value.trim();
+                    editedData.get(rowId)[input.name] = input.value.trim();
 
-                    // Include orderName in the edited data
-                    editedData.get(orderId).orderId = orderId;
-                    editedData.get(orderId).orderName = orderName; // Include orderName
-                    editedData.get(orderId).index = Array.from(row.closest('tbody').querySelectorAll('tr')).indexOf(row); // Store the index
+                    // Include orderId and index in the edited data
+                    editedData.get(rowId).orderId = orderId;
+                    editedData.get(rowId).index = index; // Store the index
 
                     console.log("Edited Data after input change:", editedData);
                 });
@@ -132,10 +108,11 @@
 
             // Function to submit all updates
             async function submitAllUpdates() {
-                const updates = Array.from(editedData.entries()).map(([orderId, data]) => {
+                const updates = Array.from(editedData.entries()).map(([rowId, data]) => {
                     return {
-                        orderId: orderId, // Include orderId
-                        orderName: data.orderName, // Include orderName
+                        articleID: rowId,
+                        orderId: data.orderId, // Include orderId
+                        index: data.index, // Include index
                         ...data
                     };
                 });
@@ -225,11 +202,7 @@
         <table th:attr="id='orderDetails-' + ${order.id}" class="order-details-table" style="display: none;">
             <thead>
             <tr>
-                <th>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${order.orderName()}"></div>
-                    <input type="hidden" name="orderName" th:value="${order.orderName()}">
-                    <input type="hidden" name="id" th:value="${order.id()}">
-                </th>
+                <th th:text="${order.orderName()}"></th>
                 <th><a href="#" class="update-order"
                        th:attr="onclick='showOrderDetails(' + ${order.id} + ')'">Затвори</a></th>
             </tr>
@@ -250,8 +223,7 @@
                 <input type="hidden" name="id" th:value="${order.id()}">
                 <input type="hidden" name="articleID" th:value="${article.getId()}">
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)"
-                         th:text="${article.getArticle.artNum}"></div>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.getArticle.artNum}"></div>
                     <input type="hidden" name="artNum" th:value="${article.getArticle.artNum}">
                 </td>
                 <td>
