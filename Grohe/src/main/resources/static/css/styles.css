@@ -307,6 +307,7 @@ svg {
 
 .delete-btn {
     background-color: #FF4B5B;
+    padding: 5px;
 
 }
 
@@ -403,3 +404,31 @@ svg {
     top: 5em;
     right: 2em;
     z-index: 1000;
+}
+
+.search-entity {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    margin: 20px
+}
+
+.order-list {
+    width: 100%;
+    max-width: 90%;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+    overflow-x: auto;
+}
+
+.preOrderFile {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-top: 1em;
+}

@@ -12,6 +12,7 @@
     <!-- Bootstrap JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
+
     <script>
         // Set today's date on page load
         window.addEventListener('DOMContentLoaded', () => {
@@ -126,7 +127,7 @@
             <th>Date</th>
             <th>Order Reason</th>
             <th>Comment</th>
-            <th class="action-title">Actions</th>
+            <th class="action-title">🗑</th>
         </tr>
         </thead>
         <tbody>
@@ -163,7 +164,7 @@
             <td class="action">
                 <form th:action="@{/orders/delete/{id}(id=*{id})}" th:method="POST">
                     <input type="hidden" name="_method" value="delete">
-                    <button class="delete-btn" type="submit">Delete</button>
+                    <button class="delete-btn" type="submit">x</button>
                 </form>
             </td>
         </tr>
@@ -175,13 +176,17 @@
 
     <!-- Import Form -->
     <form th:method="POST" th:action="@{/orders/importFromExcel}" enctype="multipart/form-data">
+        <div class="preOrderFile">
         <label class="file">
             <input type="file" name="file" id="file" aria-label="File browser example" accept=".xlsx" required>
             <input type="hidden" id="brand" name="brand" th:value="Grohe">
             <span class="file-custom"></span>
             <button type="submit">Import</button>
-            <button type="button" class="eBtn" data-toggle="modal" data-target="#exampleModal">Make Order</button>
         </label>
+
+            <button type="button" class="eBtn" data-toggle="modal" data-target="#exampleModal">Make Order</button>
+        </div>
+
     </form>
 
     <!-- Popup screen -->

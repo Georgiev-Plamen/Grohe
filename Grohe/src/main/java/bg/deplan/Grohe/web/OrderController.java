@@ -57,6 +57,14 @@ public class OrderController {
         return "ordersNew";
     }
 
+    @PostMapping("/searchOnlyArticle/{artNum}")
+    public String searchOnlyArticle(Model model, @RequestParam("artNum") String artNum) {
+
+        model.addAttribute("ordersWithArt", orderService.findOnlyArticlesInOrder(artNum));
+
+        return "ordersNew";
+    }
+
 //    @GetMapping("/orderNewSearch/{artNum}")
 //    public String orderSearchView(Model model, @RequestParam("artNum") String artNum) {
 //
