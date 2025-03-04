@@ -39,6 +39,57 @@
             searchResults.forEach(table => {
                 table.style.display = 'table';
             });
+
+            // Prevent the default form submission
+            event.preventDefault();
+
+            // Get the form element
+            const form = document.getElementById('searchForm');
+
+            // Check if the checkbox is checked
+            const customActionCheckbox = document.getElementById('customAction');
+
+            if (customActionCheckbox.checked) {
+                // If checked, send a POST request to a different endpoint
+                sendPostRequest('/orders/searchOnlyArticle/', new FormData(form));
+            } else {
+                // If not checked, send a POST request to the original endpoint
+                sendPostRequest(form.action, new FormData(form));
+            }
+        }
+
+        function sendPostRequest(url, formData) {
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // or response.text() depending on the response type
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                    // Handle the response data here
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle errors here
+                });
+        }
+
+        function handleSearchResults() {
+            // Your original function logic here
+            console.log("Handling search results...");
+            // Submit the form programmatically if needed
+            document.getElementById('searchForm').submit();
+        }
+
+        function handleCustomAction() {
+            // Your custom function logic here
+            console.log("Custom action triggered...");
+            // You can perform any other action here
         }
     </script>
     <script>
@@ -57,7 +108,7 @@
             function trackEditableChanges(editableDiv) {
                 editableDiv.addEventListener('input', () => {
                     const table = editableDiv.closest('table');
-                    const orderNameDiv = table.querySelector('th div[contenteditable="true"]'); // Get the orderName div
+                    const orderNameDiv = table.querySelector('th div[name="orderName"]'); // Get the orderName div
                     const row = editableDiv.closest('tr');
 
                     let rowId, orderId, orderName;
@@ -105,7 +156,7 @@
                 input.addEventListener('change', () => {
                     const row = input.closest('tr');
                     const table = row.closest('table');
-                    const orderNameDiv = table.querySelector('th div[contenteditable="true"]'); // Get the orderName div
+                    const orderNameDiv = table.querySelector('th div[name="orderName"]'); // Get the orderName div
 
                     const rowId = row.querySelector('input[name="articleID"]').value;
                     const orderId = row.querySelector('input[name="id"]').value;
@@ -177,9 +228,14 @@
 <div class="container">
     <div class="add-container">
         <div class="preOrder-entity">
-            <form th:method="POST" th:action="@{/orders/search/*{artNum}}" onsubmit="handleSearchResults()">
+            <form id="searchForm" th:method="POST" th:action="@{/orders/search/*{artNum}}" onsubmit="return handleFormSubmit(event)">
                 <label for="artNum">Article:</label>
                 <input type="text" name="artNum" id="artNum" th:value="*{artNum}">
+
+                <!-- Add a checkbox -->
+                <label for="customAction">Цели заявки</label>
+                <input type="checkbox" id="customAction" name="customAction">
+
                 <button class="pre-order-add-btn" type="submit">Search</button>
             </form>
         </div>

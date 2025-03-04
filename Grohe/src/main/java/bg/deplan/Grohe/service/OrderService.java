@@ -26,4 +26,6 @@ public interface OrderService {
     List<OrderDTO> findOrdersContainsArt(String artNum);
 
     void bulkUpdateArticle(List<OrderEditArticleDTO> updates);
+
+    List<OrderDTO> findOnlyArticlesInOrder(String artNum);
 }

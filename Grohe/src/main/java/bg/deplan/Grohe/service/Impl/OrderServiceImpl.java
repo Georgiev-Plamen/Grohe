@@ -154,6 +154,18 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    //TODO:
+    @Override
+    public List<OrderDTO> findOnlyArticlesInOrder(String artNum) {
+        return orderRepository.findAll()
+                .stream()
+                .map(OrderServiceImpl::toAllOrders)
+                .filter(o -> o.articleList()
+                        .stream()
+                        .anyMatch(a -> a.getArticle().getArtNum().contains(artNum)))
+                .toList();
+    }
+
     @Override
     public List<OrderDTO> getAllOrders(String brand) {
         return orderRepository.findAll()
@@ -187,6 +199,5 @@ public class OrderServiceImpl implements OrderService {
                 order.getItems()
                 );
     }
-
 
 }
