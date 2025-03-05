@@ -153,14 +153,20 @@
 
 <div class="container">
     <div class="add-container">
-        <div class="preOrder-entity">
+<!--        <div class="preOrder-entity">-->
             <form th:method="POST" th:action="@{/orders/search/*{artNum}}" onsubmit="handleSearchResults()">
                 <label for="artNum">Article:</label>
                 <input type="text" name="artNum" id="artNum" th:value="*{artNum}">
                 <button class="pre-order-add-btn" type="submit">Search</button>
             </form>
+
+            <form th:method="POST" th:action="@{/orders/searchOrderBy/*{orderBy}}" onsubmit="handleSearchResults()">
+                <label for="orderBy">orderBy:</label>
+                <input type="text" name="orderBy" id="orderBy" th:value="*{orderBy}">
+                <button class="pre-order-add-btn" type="submit">Search</button>
+            </form>
         </div>
-    </div>
+<!--    </div>-->
 
     <!-- tables for Search details -->
     <div th:each="order : ${ordersWithArt}">

@@ -65,6 +65,14 @@ public class OrderController {
         return "ordersNew";
     }
 
+    @PostMapping("/searchOrderBy/{orderBy}")
+    public String searchOrderBy(Model model, @RequestParam("orderBy") String orderBy) {
+
+        model.addAttribute("orderWishArt", orderService.findByOrderBy(orderBy));
+
+        return "orderNew";
+    }
+
 //    @GetMapping("/orderNewSearch/{artNum}")
 //    public String orderSearchView(Model model, @RequestParam("artNum") String artNum) {
 //

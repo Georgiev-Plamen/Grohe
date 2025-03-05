@@ -3,9 +3,7 @@ package bg.deplan.Grohe.service.Impl;
 import bg.deplan.Grohe.data.OrderItemRepository;
 import bg.deplan.Grohe.data.OrderRepository;
 import bg.deplan.Grohe.model.Article;
-import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
-import bg.deplan.Grohe.model.DTOs.OrderDTO;
-import bg.deplan.Grohe.model.DTOs.OrderEditArticleDTO;
+import bg.deplan.Grohe.model.DTOs.*;
 import bg.deplan.Grohe.model.Order;
 import bg.deplan.Grohe.model.OrderItem;
 import bg.deplan.Grohe.model.PreOrderItem;
@@ -95,7 +93,7 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
-    //TODO:
+
     @Override
     public void bulkUpdateArticle(List<OrderEditArticleDTO> updates) {
 
@@ -152,19 +150,35 @@ public class OrderServiceImpl implements OrderService {
 
     //TODO:
     @Override
-    public List<OrderDTO> findOnlyArticlesInOrder(String artNum) {
-//        return orderRepository.findAll()
-//                .stream()
-//                .map(OrderServiceImpl::toAllOrders)
-//                .filter(o -> o.articleList()
-//                        .stream()
-//                        .anyMatch(a -> a.getArticle().getArtNum().contains(artNum)))
-//                .toList();
-        return  orderRepository.findAll()
+    @Transactional
+    public List<ArticleFindDTO> findOnlyArticlesInOrder(String artNum) {
+        Long articleId = articleService.findByArtNum(artNum).get().getId();
+
+        return orderItemRepository.findOnlyArticlesInOrder(articleId)
                 .stream()
-                .map(OrderServiceImpl::toAllOrders)
-                .filter(o -> o.brand().equals("Grohe"))
+                .map(this::mapToArticleFindDTO)
                 .toList();
+    }
+
+    @Override
+    public List<ArticleFindDTO> findByOrderBy(String orderBy) {
+
+         return orderItemRepository.findOrderItemsByOrderBy(orderBy).stream()
+                 .map(this::mapToArticleFindDTO)
+                 .toList();
+    }
+
+    private ArticleFindDTO mapToArticleFindDTO(OrderItem orderItem) {
+        return new ArticleFindDTO(
+                orderItem.getArticle().getBrand(),
+                orderItem.getDateOfDelivery(),
+                orderItem.getDateOfOrder(),
+                orderItem.getOrderBy(),
+                orderItem.getOrderReason(),
+                orderItem.getQuantity(),
+                orderItem.articleId(),
+                orderItem.getId()
+        );
     }
 
     @Override
