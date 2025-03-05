@@ -203,6 +203,42 @@
             </tbody>
         </table>
     </div>
+    <!--    TEST-->
+    <div th:each="article : ${ordersWithOnlyArt}">
+        <!--        <table th:attr="id='orderDetails-' + ${order.id}" class="search-result-table" style="display: none;">-->
+        <table class="search-result-table">
+
+            <thead>
+            <tr>
+                <th th:text="${article.orderId()}"></th>
+                <th><a href="#" class="update-order"
+                       th:attr="onclick='showOrderDetails(' + ${order.id} + ')'">Затвори</a></th>
+            </tr>
+            <tr>
+                <th>Article Number</th>
+                <th>Quantity</th>
+                <th>Ordered By</th>
+                <th>Date of Order</th>
+                <th>Date of Delivery</th>
+                <th>Order Reason</th>
+                <th>Comments</th>
+            </tr>
+
+            </thead>
+            <tbody>
+<!--            <tr th:each="article : ${order.articleList}">-->
+                <td th:text="${article.articleId}"></td>
+                <td th:text="${article.quantity}"></td>
+                <td th:text="${article.orderBy}"></td>
+                <td th:text="${article.dateOfOrder}"></td>
+                <td th:text="${article.dateOfDelivery}"></td>
+                <td th:text="${article.orderReason}"></td>
+                <td th:text="${article.comment}"></td>
+<!--            </tr>-->
+            </tbody>
+        </table>
+    </div>
+
     <!-- Hidden tables for order details -->
     <div th:each="order : ${allOrders}">
         <table th:attr="id='orderDetails-' + ${order.id}" class="order-details-table" style="display: none;">

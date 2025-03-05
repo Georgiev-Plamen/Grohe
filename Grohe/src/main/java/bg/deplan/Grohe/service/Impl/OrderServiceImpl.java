@@ -176,6 +176,7 @@ public class OrderServiceImpl implements OrderService {
                 orderItem.getOrderBy(),
                 orderItem.getOrderReason(),
                 orderItem.getQuantity(),
+                orderItem.getComment(),
                 orderItem.articleId(),
                 orderItem.getId()
         );

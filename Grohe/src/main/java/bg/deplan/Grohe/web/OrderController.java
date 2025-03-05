@@ -68,18 +68,18 @@ public class OrderController {
     @PostMapping("/searchOrderBy/{orderBy}")
     public String searchOrderBy(Model model, @RequestParam("orderBy") String orderBy) {
 
-        model.addAttribute("orderWishArt", orderService.findByOrderBy(orderBy));
+        model.addAttribute("ordersWithOnlyArt", orderService.findByOrderBy(orderBy));
 
         return "orderNew";
     }
 
-//    @GetMapping("/orderNewSearch/{artNum}")
-//    public String orderSearchView(Model model, @RequestParam("artNum") String artNum) {
-//
-//        model.addAttribute("ordersWithArt", orderService.findOrdersContainsArt(artNum));
-//
-//        return "orderNewSearch";
-//    }
+    @GetMapping("/orderNewSearch/{artNum}")
+    public String orderSearchView(Model model, @RequestParam("artNum") String artNum) {
+
+        model.addAttribute("ordersWithArt", orderService.findOrdersContainsArt(artNum));
+
+        return "orderNewSearch";
+    }
 
     @PostMapping("/editOrder/{id}")
     public String editOrder(@PathVariable ("id") Long id, @ModelAttribute OrderDTO orderDTO) {
