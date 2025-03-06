@@ -40,6 +40,19 @@
                 table.style.display = 'table';
             });
         }
+
+        function handleSearchByOrderResults() {
+            // Hide all order details tables when performing a new search
+            document.querySelectorAll('.order-details-table-by').forEach(table => {
+                table.style.display = 'none';
+            });
+
+            // Show only the search results (if any)
+            const searchResults = document.querySelectorAll('.search-result-table-by');
+            searchResults.forEach(table => {
+                table.style.display = 'table';
+            });
+        }
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -153,24 +166,23 @@
 
 <div class="container">
     <div class="add-container">
-<!--        <div class="preOrder-entity">-->
-            <form th:method="POST" th:action="@{/orders/search/*{artNum}}" onsubmit="handleSearchResults()">
-                <label for="artNum">Article:</label>
-                <input type="text" name="artNum" id="artNum" th:value="*{artNum}">
-                <button class="pre-order-add-btn" type="submit">Search</button>
-            </form>
+        <!--        <div class="preOrder-entity">-->
+        <form th:method="POST" th:action="@{/orders/search/*{artNum}}" onsubmit="handleSearchResults()">
+            <label for="artNum">Article:</label>
+            <input type="text" name="artNum" id="artNum" th:value="*{artNum}">
+            <button class="pre-order-add-btn" type="submit">Search</button>
+        </form>
 
-            <form th:method="POST" th:action="@{/orders/searchOrderBy/*{orderBy}}" onsubmit="handleSearchResults()">
-                <label for="orderBy">orderBy:</label>
-                <input type="text" name="orderBy" id="orderBy" th:value="*{orderBy}">
-                <button class="pre-order-add-btn" type="submit">Search</button>
-            </form>
-        </div>
-<!--    </div>-->
+        <form th:method="POST" th:action="@{/orders/searchOrderBy/*{orderBy}}" onsubmit="handleSearchByOrderResults()">
+            <label for="orderBy">orderBy:</label>
+            <input type="text" name="orderBy" id="orderBy" th:value="*{orderBy}">
+            <button class="pre-order-add-btn" type="submit">Search</button>
+        </form>
+    </div>
+    <!--    </div>-->
 
     <!-- tables for Search details -->
     <div th:each="order : ${ordersWithArt}">
-        <!--        <table th:attr="id='orderDetails-' + ${order.id}" class="search-result-table" style="display: none;">-->
         <table th:attr="id='orderDetails-' + ${order.id}" class="search-result-table">
 
             <thead>
@@ -204,39 +216,36 @@
         </table>
     </div>
     <!--    TEST-->
-    <div th:each="article : ${ordersWithOnlyArt}">
-        <!--        <table th:attr="id='orderDetails-' + ${order.id}" class="search-result-table" style="display: none;">-->
-        <table class="search-result-table">
+    <div class="search-result-table-by" style="display: none;">
+        <table>
+            <table th:attr="id='order-details-table-by'" class="search-result-table-by">
+                <thead>
+                            <tr>
+                                <th><a href="/orders/allNew" class="update-order">Затвори</a></th>
+                            </tr>
+                <tr>
+                    <th>Article Number</th>
+                    <th>Quantity</th>
+                    <th>Ordered By</th>
+                    <th>Date of Order</th>
+                    <th>Date of Delivery</th>
+                    <th>Order Reason</th>
+                    <th>Comments</th>
+                </tr>
 
-            <thead>
-            <tr>
-                <th th:text="${article.orderId()}"></th>
-                <th><a href="#" class="update-order"
-                       th:attr="onclick='showOrderDetails(' + ${order.id} + ')'">Затвори</a></th>
-            </tr>
-            <tr>
-                <th>Article Number</th>
-                <th>Quantity</th>
-                <th>Ordered By</th>
-                <th>Date of Order</th>
-                <th>Date of Delivery</th>
-                <th>Order Reason</th>
-                <th>Comments</th>
-            </tr>
-
-            </thead>
-            <tbody>
-<!--            <tr th:each="article : ${order.articleList}">-->
-                <td th:text="${article.articleId}"></td>
-                <td th:text="${article.quantity}"></td>
-                <td th:text="${article.orderBy}"></td>
-                <td th:text="${article.dateOfOrder}"></td>
-                <td th:text="${article.dateOfDelivery}"></td>
-                <td th:text="${article.orderReason}"></td>
-                <td th:text="${article.comment}"></td>
-<!--            </tr>-->
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                <tr th:each="article : ${ordersWithOnlyArt}">
+                    <td th:text="${article.articleId}"></td>
+                    <td th:text="${article.quantity}"></td>
+                    <td th:text="${article.orderBy}"></td>
+                    <td th:text="${article.dateOfOrder}"></td>
+                    <td th:text="${article.dateOfDelivery}"></td>
+                    <td th:text="${article.orderReason}"></td>
+                    <td th:text="${article.comment}"></td>
+                </tr>
+                </tbody>
+            </table>
     </div>
 
     <!-- Hidden tables for order details -->
@@ -265,7 +274,8 @@
                 <input type="hidden" name="id" th:value="${order.id()}">
                 <input type="hidden" name="articleID" th:value="${article.getId()}">
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.getArticle.artNum}"></div>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)"
+                         th:text="${article.getArticle.artNum}"></div>
                     <input type="hidden" name="artNum" th:value="${article.getArticle.artNum}">
                 </td>
                 <td>

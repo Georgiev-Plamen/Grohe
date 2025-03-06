@@ -70,7 +70,7 @@ public class OrderController {
 
         model.addAttribute("ordersWithOnlyArt", orderService.findByOrderBy(orderBy));
 
-        return "orderNew";
+        return "ordersNew";
     }
 
     @GetMapping("/orderNewSearch/{artNum}")
@@ -78,7 +78,7 @@ public class OrderController {
 
         model.addAttribute("ordersWithArt", orderService.findOrdersContainsArt(artNum));
 
-        return "orderNewSearch";
+        return "ordersNew";
     }
 
     @PostMapping("/editOrder/{id}")
