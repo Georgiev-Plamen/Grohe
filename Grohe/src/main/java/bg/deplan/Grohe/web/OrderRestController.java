@@ -2,11 +2,13 @@ package bg.deplan.Grohe.web;
 
 import bg.deplan.Grohe.data.OrderRepository;
 import bg.deplan.Grohe.model.DTOs.AddArticleDTO;
+import bg.deplan.Grohe.model.DTOs.ArticleFindDTO;
 import bg.deplan.Grohe.model.DTOs.OrderDTO;
 import bg.deplan.Grohe.model.DTOs.OrderEditArticleDTO;
 import bg.deplan.Grohe.model.Order;
 import bg.deplan.Grohe.service.ExcelExportService;
 import bg.deplan.Grohe.service.OrderService;
+import ch.qos.logback.core.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -55,4 +58,5 @@ public class OrderRestController {
                     .body("Error processing updates: " + e.getMessage());
         }
     }
+
 }
