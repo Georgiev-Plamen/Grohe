@@ -20,7 +20,8 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     @Query("DELETE FROM OrderItem oi WHERE oi.order.id = :orderId")
     void deleteAllByOrderId(@Param("orderId") long id);
 
-    @Query("SELECT oi FROM OrderItem oi WHERE oi.orderBy = :orderBy")
+//    @Query("SELECT oi FROM OrderItem oi WHERE oi.orderBy = :orderBy")
+    @Query("SELECT oi FROM OrderItem oi WHERE oi.orderBy LIKE %:orderBy%")
     List<OrderItem> findOrderItemsByOrderBy(@Param("orderBy") String orderBy);
 
     @Query("SELECT oi FROM OrderItem oi WHERE oi.article = :article")

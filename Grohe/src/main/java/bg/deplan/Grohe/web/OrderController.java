@@ -68,7 +68,8 @@ public class OrderController {
     @PostMapping("/searchOrderBy/{orderBy}")
     public String searchOrderBy(Model model, @RequestParam("orderBy") String orderBy) {
 
-        model.addAttribute("ordersWithOnlyArt", orderService.findByOrderBy(orderBy));
+        model.addAttribute("articlesByUser", orderService.findByOrderBy(orderBy));
+        model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
 
         return "ordersNew";
     }

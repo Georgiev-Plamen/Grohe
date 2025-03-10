@@ -240,8 +240,8 @@
 
                 </thead>
                 <tbody>
-                <tr th:each="article : ${ordersWithOnlyArt}">
-                    <td th:text="${article.orderName"}></td>
+                <tr th:each="article : ${articlesByUser}">
+                    <td th:text="${article.orderName}"></td>
                     <td th:text="${article.article}"></td>
                     <td th:text="${article.quantity}"></td>
                     <td th:text="${article.orderBy}"></td>
