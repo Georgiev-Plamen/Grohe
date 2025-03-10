@@ -227,6 +227,7 @@
                                 <th><a href="/orders/allNew" class="update-order">Затвори</a></th>
                             </tr>
                 <tr>
+                    <th>Order</th>
                     <th>Article Number</th>
                     <th>Quantity</th>
                     <th>Ordered By</th>
@@ -234,11 +235,13 @@
                     <th>Date of Delivery</th>
                     <th>Order Reason</th>
                     <th>Comments</th>
+
                 </tr>
 
                 </thead>
                 <tbody>
                 <tr th:each="article : ${ordersWithOnlyArt}">
+                    <td th:text="${article.orderName"}></td>
                     <td th:text="${article.article}"></td>
                     <td th:text="${article.quantity}"></td>
                     <td th:text="${article.orderBy}"></td>

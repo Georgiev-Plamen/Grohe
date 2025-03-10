@@ -81,6 +81,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public String getOrderName(Long orderId) {
+        return orderRepository.getReferenceById(orderId).getOrderName();
+    }
+
+    @Override
     @Transactional
     public List<OrderDTO> findOrdersContainsArt(String artNum) {
         return orderRepository.findAll()
@@ -178,7 +183,8 @@ public class OrderServiceImpl implements OrderService {
                 orderItem.getQuantity(),
                 orderItem.getComment(),
                 articleService.findById(orderItem.articleId()).get().getArtNum(),
-                orderItem.getId()
+                orderItem.getOrder().getOrderName()
+//                getOrderName(orderItem.getOrder().getId())
         );
     }
 

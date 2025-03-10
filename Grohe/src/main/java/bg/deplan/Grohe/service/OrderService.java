@@ -21,6 +21,8 @@ public interface OrderService {
 
     OrderDTO getOrderById(Long orderId);
 
+    String getOrderName(Long orderId);
+
     List<OrderDTO> findOrdersContainsArt(String artNum);
 
     void bulkUpdateArticle(List<OrderEditArticleDTO> updates);
