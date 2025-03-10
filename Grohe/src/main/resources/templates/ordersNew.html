@@ -51,8 +51,8 @@
 
             // Show only the search results (if any)
               // Show only the search results (if any)
-            const searchResults = document.querySelectorAll('.search-result-table-by');
-            searchResults.forEach(table => {
+            const searchResultsBy = document.querySelectorAll('.search-result-table-by');
+            searchResultsBy.forEach(table => {
                 table.style.display = 'table';
             });
         }
@@ -239,7 +239,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="article : ${ordersWithOnlyArt}">
-                    <td th:text="${article.articleId}"></td>
+                    <td th:text="${article.article}"></td>
                     <td th:text="${article.quantity}"></td>
                     <td th:text="${article.orderBy}"></td>
                     <td th:text="${article.dateOfOrder}"></td>
