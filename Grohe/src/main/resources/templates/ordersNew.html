@@ -41,7 +41,10 @@
             });
         }
 
-        function handleSearchByOrderResults() {
+        function handleSearchByOrderResults(event) {
+            event.preventDefault(); // Prevent form submission
+            console.log('Script is running'); // Debug: Check if function is called
+
             // Hide all order details tables when performing a new search
             document.querySelectorAll('.order-details-table-by').forEach(table => {
                 table.style.display = 'none';
@@ -49,9 +52,18 @@
 
             // Show only the search results (if any)
             const searchResults = document.querySelectorAll('.search-result-table-by');
-            searchResults.forEach(table => {
-                table.style.display = 'table';
-            });
+            console.log('Selected elements:', searchResults); // Debug: Check if elements are selected
+
+            if (searchResults.length === 0) {
+                console.error('No elements found with class "search-result-table-by"');
+            } else {
+                searchResults.forEach(div => {
+                    console.log('Processing div:', div); // Debug: Check if each div is processed
+                    div.style.display = 'table'; // or 'block'
+                });
+            }
+
+            event.target.submit();
         }
     </script>
     <script>
@@ -173,7 +185,7 @@
             <button class="pre-order-add-btn" type="submit">Search</button>
         </form>
 
-        <form th:method="POST" th:action="@{/orders/searchOrderBy/*{orderBy}}" onsubmit="handleSearchByOrderResults()">
+        <form th:method="POST" th:action="@{/orders/searchOrderBy/*{orderBy}}" onsubmit="handleSearchByOrderResults(event)">
             <label for="orderBy">orderBy:</label>
             <input type="text" name="orderBy" id="orderBy" th:value="*{orderBy}">
             <button class="pre-order-add-btn" type="submit">Search</button>
@@ -217,7 +229,6 @@
     </div>
     <!--    TEST-->
     <div class="search-result-table-by" style="display: none;">
-        <table>
             <table th:attr="id='order-details-table-by'" class="search-result-table-by">
                 <thead>
                             <tr>
