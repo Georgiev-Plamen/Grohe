@@ -171,20 +171,20 @@
     <div class="add-container">
         <!--        <div class="preOrder-entity">-->
         <form th:method="POST" th:action="@{/orders/search/*{artNum}}" onsubmit="handleSearchResults()">
-            <label for="artNum">Article:</label>
+            <label for="artNum">Заявки включващи артикул:</label>
             <input type="text" name="artNum" id="artNum" th:value="*{artNum}">
-            <button class="pre-order-add-btn" type="submit">Search</button>
+            <button class="pre-order-add-btn" type="submit">Търси</button>
         </form>
 
         <form th:method="POST" th:action="@{/orders/searchOrderBy/{orderBy}}" onsubmit="handleSearchByOrderResults()">
-            <label for="orderBy">orderBy:</label>
+            <label for="orderBy">Заявени артикули от потребител:</label>
             <input type="text" name="orderBy" id="orderBy" th:value="*{orderBy}">
-            <button class="pre-order-add-btn" type="submit">Search</button>
+            <button class="pre-order-add-btn" type="submit">Търси</button>
         </form>
         <form th:method="POST" th:action="@{/orders/searchOnlyArticle/*{artNum}}" onsubmit="handleSearchByOrderResults()">
-            <label for="artNum">Only article:</label>
+            <label for="artNum">Търсене на артикул:</label>
             <input type="text" name="artNum" id="artNumOnly" th:value="*{artNum}">
-            <button class="pre-order-add-btn" type="submit">Search</button>
+            <button class="pre-order-add-btn" type="submit">Търси</button>
         </form>
     </div>
     <!--    </div>-->
@@ -232,14 +232,14 @@
                                 <th><a href="/orders/allNew" class="update-order">Затвори</a></th>
                             </tr>
                 <tr>
-                    <th>Order</th>
-                    <th>Article Number</th>
-                    <th>Quantity</th>
-                    <th>Ordered By</th>
-                    <th>Date of Order</th>
-                    <th>Date of Delivery</th>
+                    <th>Заявка</th>
+                    <th>Артикул</th>
+                    <th>Количество</th>
+                    <th>Поръчано от</th>
+                    <th>Дата на поръчка</th>
+                    <th>Дата на доставка</th>
                     <th>Order Reason</th>
-                    <th>Comments</th>
+                    <th>Коментар</th>
 
                 </tr>
 

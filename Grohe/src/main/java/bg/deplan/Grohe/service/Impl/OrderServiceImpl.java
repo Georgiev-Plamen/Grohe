@@ -161,7 +161,7 @@ public class OrderServiceImpl implements OrderService {
 
         List<Long> articleIds = articleService.findArticleIds(artNum);
 
-        List<OrderItem> orderItems = orderItemRepository.findOrderItemsByOrderBy(artNum);
+        List<OrderItem> orderItems = orderItemRepository.findOrderItemsByIDs(articleIds);
 
         return orderItems.stream()
                     .map(this::mapToArticleFindDTO)

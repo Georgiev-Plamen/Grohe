@@ -114,6 +114,7 @@ body {
     display:flex;
     flex-direction: row;
     align-items: anchor-center;
+    justify-content: space-evenly
 }
 
 h1 {

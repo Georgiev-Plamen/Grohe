@@ -116,7 +116,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<Long> findArticleIds(String artNum) {
-        return articleRepository.findIdsByArtNum(artNum);
+        return articleRepository.findIdsByArtNumContaining(artNum);
     }
 
 
