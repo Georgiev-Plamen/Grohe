@@ -24,6 +24,6 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     @Query("SELECT oi FROM OrderItem oi WHERE oi.orderBy LIKE %:orderBy%")
     List<OrderItem> findOrderItemsByOrderBy(@Param("orderBy") String orderBy);
 
-    @Query("SELECT oi FROM OrderItem oi WHERE oi.article = :article")
+    @Query("SELECT oi FROM OrderItem oi WHERE oi.article.id = :article")
     List<OrderItem> findOnlyArticlesInOrder(@Param("article") long article);
 }

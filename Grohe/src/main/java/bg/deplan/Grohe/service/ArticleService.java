@@ -23,6 +23,8 @@ public interface ArticleService {
 
     Optional<Article> findByArtNum(String artNum);
 
+    List<Long> findArticleIds(String artNum);
+
     void bulkUpdateArticle(List<AddArticleDTO> updates);
 
     void deleteArticle(Long id);

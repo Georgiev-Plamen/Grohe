@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -157,12 +158,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public List<ArticleFindDTO> findOnlyArticlesInOrder(String artNum) {
-        Long articleId = articleService.findByArtNum(artNum).get().getId();
 
-        return orderItemRepository.findOnlyArticlesInOrder(articleId)
-                .stream()
-                .map(this::mapToArticleFindDTO)
-                .toList();
+        List<Long> articleIds = articleService.findArticleIds(artNum);
+
+        List<OrderItem> orderItems = orderItemRepository.findOrderItemsByOrderBy(artNum);
+
+        return orderItems.stream()
+                    .map(this::mapToArticleFindDTO)
+                    .toList();
     }
 
     @Override

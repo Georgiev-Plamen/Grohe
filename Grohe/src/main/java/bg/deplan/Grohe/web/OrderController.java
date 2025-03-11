@@ -60,7 +60,8 @@ public class OrderController {
     @PostMapping("/searchOnlyArticle/{artNum}")
     public String searchOnlyArticle(Model model, @RequestParam("artNum") String artNum) {
 
-        model.addAttribute("ordersWithArt", orderService.findOnlyArticlesInOrder(artNum));
+        model.addAttribute("articlesByParam", orderService.findOnlyArticlesInOrder(artNum));
+        model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
 
         return "ordersNew";
     }
@@ -68,7 +69,7 @@ public class OrderController {
     @PostMapping("/searchOrderBy/{orderBy}")
     public String searchOrderBy(Model model, @RequestParam("orderBy") String orderBy) {
 
-        model.addAttribute("articlesByUser", orderService.findByOrderBy(orderBy));
+        model.addAttribute("articlesByParam", orderService.findByOrderBy(orderBy));
         model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
 
         return "ordersNew";

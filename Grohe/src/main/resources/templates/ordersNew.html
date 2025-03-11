@@ -181,6 +181,11 @@
             <input type="text" name="orderBy" id="orderBy" th:value="*{orderBy}">
             <button class="pre-order-add-btn" type="submit">Search</button>
         </form>
+        <form th:method="POST" th:action="@{/orders/searchOnlyArticle/*{artNum}}" onsubmit="handleSearchByOrderResults()">
+            <label for="artNum">Only article:</label>
+            <input type="text" name="artNum" id="artNumOnly" th:value="*{artNum}">
+            <button class="pre-order-add-btn" type="submit">Search</button>
+        </form>
     </div>
     <!--    </div>-->
 
@@ -240,7 +245,7 @@
 
                 </thead>
                 <tbody>
-                <tr th:each="article : ${articlesByUser}">
+                <tr th:each="article : ${articlesByParam}">
                     <td th:text="${article.orderName}"></td>
                     <td th:text="${article.article}"></td>
                     <td th:text="${article.quantity}"></td>

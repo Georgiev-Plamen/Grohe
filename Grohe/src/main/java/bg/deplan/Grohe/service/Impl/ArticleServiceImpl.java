@@ -114,6 +114,12 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.findByArtNum(s);
     }
 
+    @Override
+    public List<Long> findArticleIds(String artNum) {
+        return articleRepository.findIdsByArtNum(artNum);
+    }
+
+
     private static AddArticleDTO toAllArticle(Article article) {
         return new AddArticleDTO(
                 article.getId(),
