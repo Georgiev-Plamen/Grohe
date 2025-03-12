@@ -29,6 +29,13 @@ public class ArticleController {
         return "articles";
     }
 
+    @GetMapping("/articlesViega")
+    public String allViegaArticles(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        model.addAttribute("articleData", addArticleDTO());
+        model.addAttribute("allArticles", articleService.getAllArticle("Viega"));
+        return "articlesViega";
+    }
+
     @PostMapping("/addArticle")
     public String addArticle(AddArticleDTO addArticleDTO) {
         articleService.addArticle(addArticleDTO);
