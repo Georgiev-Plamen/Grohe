@@ -26,6 +26,7 @@
                     detailsTable.style.display = 'none';
                 }
             }
+
         }
 
         function handleSearchResults() {
@@ -37,22 +38,6 @@
             // Show only the search results (if any)
             const searchResults = document.querySelectorAll('.search-result-table');
             searchResults.forEach(table => {
-                table.style.display = 'table';
-            });
-        }
-
-        function handleSearchByOrderResults() {
-            console.log('Script is running'); // Debug: Check if function is called
-
-            // Hide all order details tables when performing a new search
-            document.querySelectorAll('.search-result-table-by').forEach(table => {
-                     table.style.display = 'none';
-            });
-
-            // Show only the search results (if any)
-              // Show only the search results (if any)
-            const searchResultsBy = document.querySelectorAll('.search-result-table-by');
-            searchResultsBy.forEach(table => {
                 table.style.display = 'table';
             });
         }
@@ -176,12 +161,12 @@
             <button class="pre-order-add-btn" type="submit">Търси</button>
         </form>
 
-        <form th:method="POST" th:action="@{/orders/searchOrderBy/{orderBy}}" onsubmit="handleSearchByOrderResults()">
+        <form th:method="POST" th:action="@{/orders/searchOrderBy/{orderBy}}">
             <label for="orderBy">Заявени артикули от потребител:</label>
             <input type="text" name="orderBy" id="orderBy" th:value="*{orderBy}">
             <button class="pre-order-add-btn" type="submit">Търси</button>
         </form>
-        <form th:method="POST" th:action="@{/orders/searchOnlyArticle/*{artNum}}" onsubmit="handleSearchByOrderResults()">
+        <form th:method="POST" th:action="@{/orders/searchOnlyArticle/*{artNum}}">
             <label for="artNum">Търсене на артикул:</label>
             <input type="text" name="artNum" id="artNumOnly" th:value="*{artNum}">
             <button class="pre-order-add-btn" type="submit">Търси</button>
@@ -190,7 +175,7 @@
     <!--    </div>-->
 
     <!-- tables for Search details -->
-    <div th:each="order : ${ordersWithArt}">
+    <div th:each="order : ${ordersWithArt}" class="search-result-table-by-param">
         <table th:attr="id='orderDetails-' + ${order.id}" class="search-result-table">
 
             <thead>
@@ -225,8 +210,9 @@
     </div>
     <!--    TEST-->
     <div>
-            <table class="search-result-table-by">
-<!--            <table>-->
+
+        <table class="search-result-table-by-param"
+               th:style="${articlesByParam != null and !articlesByParam.empty} ? 'display: table;' : 'display: none;'">
                 <thead>
                             <tr>
                                 <th><a href="/orders/allNew" class="update-order">Затвори</a></th>

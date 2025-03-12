@@ -433,3 +433,7 @@ svg {
         align-items: baseline;
         margin-top: 1em;
 }
+
+.search-result-table-by-param {
+    margin-top: 1em;
+}
