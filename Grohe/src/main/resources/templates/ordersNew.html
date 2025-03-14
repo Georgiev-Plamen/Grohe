@@ -213,36 +213,36 @@
 
         <table class="search-result-table-by-param"
                th:style="${articlesByParam != null and !articlesByParam.empty} ? 'display: table;' : 'display: none;'">
-                <thead>
-                            <tr>
-                                <th><a href="/orders/allNew" class="update-order">Затвори</a></th>
-                            </tr>
-                <tr>
-                    <th>Заявка</th>
-                    <th>Артикул</th>
-                    <th>Количество</th>
-                    <th>Поръчано от</th>
-                    <th>Дата на поръчка</th>
-                    <th>Дата на доставка</th>
-                    <th>Order Reason</th>
-                    <th>Коментар</th>
+            <thead>
+            <tr>
+                <th><a href="/orders/allNew" class="update-order">Затвори</a></th>
+            </tr>
+            <tr>
+                <th>Заявка</th>
+                <th>Артикул</th>
+                <th>Количество</th>
+                <th>Поръчано от</th>
+                <th>Дата на поръчка</th>
+                <th>Дата на доставка</th>
+                <th>Order Reason</th>
+                <th>Коментар</th>
 
-                </tr>
+            </tr>
 
-                </thead>
-                <tbody>
-                <tr th:each="article : ${articlesByParam}">
-                    <td th:text="${article.orderName}"></td>
-                    <td th:text="${article.article}"></td>
-                    <td th:text="${article.quantity}"></td>
-                    <td th:text="${article.orderBy}"></td>
-                    <td th:text="${article.dateOfOrder}"></td>
-                    <td th:text="${article.dateOfDelivery}"></td>
-                    <td th:text="${article.orderReason}"></td>
-                    <td th:text="${article.comment}"></td>
-                </tr>
-                </tbody>
-            </table>
+            </thead>
+            <tbody>
+            <tr th:each="article : ${articlesByParam}">
+                <td th:text="${article.orderName}"></td>
+                <td th:text="${article.article}"></td>
+                <td th:text="${article.quantity}"></td>
+                <td th:text="${article.orderBy}"></td>
+                <td th:text="${article.dateOfOrder}"></td>
+                <td th:text="${article.dateOfDelivery}"></td>
+                <td th:text="${article.orderReason}"></td>
+                <td th:text="${article.comment}"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 
     <!-- Hidden tables for order details -->
@@ -313,7 +313,8 @@
             <tr>
                 <th th:text="#{orders_name}">Order name</th>
                 <th th:text="#{orders_date}">Order date</th>
-                <th>Actions</th>
+                <th></th>
+                <th class="action-title">🗑</th>
             </tr>
             </thead>
             <tbody>
@@ -335,25 +336,16 @@
                 <!-- Actions (Update, Delete, Open) -->
                 <td>
                     <div class="action-column">
-                        <!--                        &lt;!&ndash; Edit Form &ndash;&gt;-->
-                        <!--                        <form id="editForm-${order.id}" th:method="POST"-->
-                        <!--                              th:action="@{/orders/editOrder/{id}(id=${order.id})}" th:object="${order}">-->
-                        <!--                            <input type="hidden" name="brand" th:value="Grohe">-->
-                        <!--                            <a href="#" class="update-order"-->
-                        <!--                               onclick="document.getElementById('editForm-${order.id}').submit();">Обновяване</a>-->
-                        <!--                        </form>-->
-
-                        <!-- Delete Form -->
-                        <form id="deleteForm-${order.id}" th:method="POST"
-                              th:action="@{/orders/deleteOrder/{id}(id=${order.id})}" th:object="${order}">
-                            <a href="#" class="update-order"
-                               onclick="document.getElementById('deleteForm-${order.id}').submit();">Изтриване</a>
-                        </form>
-
-                        <!-- Open Order Details -->
                         <a href="#" class="update-order"
                            th:attr="onclick='showOrderDetails(' + ${order.id} + '); window.scrollTo(0, 0);'">Отвори</a>
                     </div>
+                </td>
+                <td>
+                    <form id="deleteForm-${order.id}" th:method="POST"
+                          th:action="@{/orders/deleteOrder/{id}(id=${order.id})}" th:object="${order}">
+                        <button class="delete-btn" href="#"
+                           onclick="document.getElementById('deleteForm-${order.id}').submit();">x</button>
+                    </form>
                 </td>
             </tr>
             </tbody>
