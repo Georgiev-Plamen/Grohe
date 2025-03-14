@@ -1,9 +1,7 @@
 package bg.deplan.Grohe.data;
 
 
-import bg.deplan.Grohe.model.DTOs.ArticleDTO;
-import bg.deplan.Grohe.model.DTOs.ArticleFindDTO;
-import bg.deplan.Grohe.model.DTOs.OrderDTO;
+
 import bg.deplan.Grohe.model.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -29,4 +27,7 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
     @Query("SELECT oi FROM OrderItem oi WHERE oi.article.id IN :ids")
     List<OrderItem> findOrderItemsByIDs(@Param("ids") List<Long> ids);
+
+    @Query("SELECT oi FROM OrderItem oi WHERE oi.order.id = :id")
+    List<OrderItem> findOrderItemsByOrderID(@Param("id") Long id);
 }

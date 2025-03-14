@@ -7,8 +7,8 @@ import java.util.List;
 
 
 @Entity
-@Table(name ="orders")
-public class Order extends BaseEntity {
+@Table(name ="delete_orders")
+public class DeleteOrder extends BaseEntity {
 
     private String brand;
 
@@ -18,10 +18,10 @@ public class Order extends BaseEntity {
     @Column(name = "date")
     private LocalDate date;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<OrderItem> items;
+    @OneToMany(mappedBy = "deleteOrder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<DeleteOrderItem> items;
 
-    public Order() {
+    public DeleteOrder() {
     }
 
     public String getBrand() {
@@ -48,11 +48,11 @@ public class Order extends BaseEntity {
         this.date = date;
     }
 
-    public List<OrderItem> getItems() {
+    public List<DeleteOrderItem> getItems() {
         return items;
     }
 
-    public void setItems(List<OrderItem> items) {
+    public void setItems(List<DeleteOrderItem> items) {
         this.items = items;
     }
 }

@@ -1,15 +1,15 @@
 package bg.deplan.Grohe.service.Impl;
 
+import bg.deplan.Grohe.data.DeleteOrderItemRepository;
+import bg.deplan.Grohe.data.DeleteOrderRepository;
 import bg.deplan.Grohe.data.OrderItemRepository;
 import bg.deplan.Grohe.data.OrderRepository;
-import bg.deplan.Grohe.model.Article;
+import bg.deplan.Grohe.model.*;
 import bg.deplan.Grohe.model.DTOs.*;
-import bg.deplan.Grohe.model.Order;
-import bg.deplan.Grohe.model.OrderItem;
-import bg.deplan.Grohe.model.PreOrderItem;
 import bg.deplan.Grohe.service.ArticleService;
 import bg.deplan.Grohe.service.OrderService;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +21,15 @@ import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+
+    @Autowired
+    ModelMapper modelMapper;
+
+    @Autowired
+    private DeleteOrderRepository deleteOrderRepository;
+
+    @Autowired
+    private DeleteOrderItemRepository deleteOrderItemRepository;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -69,8 +78,31 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void deleteOrder(Long id) {
-        orderItemRepository.deleteAllByOrderId(id);
-        orderRepository.deleteById(id);
+        Order order = orderRepository.getReferenceById(id);
+        List <OrderItem> orderItems = order.getItems();
+
+        DeleteOrder deleteOrder = new DeleteOrder() ;
+        deleteOrder.setBrand(order.getBrand());
+        deleteOrder.setOrderName(order.getOrderName());
+        deleteOrder.setDate(order.getDate());
+
+        List<DeleteOrderItem> deleteOrderItems = new ArrayList<>();
+
+        for(OrderItem orderItem :orderItems) {
+            DeleteOrderItem deleteOrderItem = new DeleteOrderItem();
+            deleteOrderItem.setId(null);
+            modelMapper.map(orderItem, deleteOrderItem);
+            deleteOrderItem.setDeleteOrder(deleteOrder);
+            deleteOrderItems.add(deleteOrderItem);
+        }
+
+        deleteOrder.setItems(deleteOrderItems);
+//        deleteOrderItemRepository.saveAll(deleteOrderItems);
+
+        deleteOrderRepository.save(deleteOrder);
+
+//        orderItemRepository.deleteAllByOrderId(id);
+//        orderRepository.deleteById(id);
     }
 
     @Override
