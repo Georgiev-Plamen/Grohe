@@ -79,17 +79,41 @@ public class ArticleServiceImpl implements ArticleService {
 
                 Article article = articleRepository.findById(id).get();
 
-                if (articleDTO.artNum().isEmpty()) {
-                    return;
+//                if (articleDTO.artNum().isEmpty()) {
+//                    return;
+//                }
+
+                if(articleDTO.artNum() != null) {
+                    article.setArtNum(articleDTO.artNum());
                 }
-                article.setArtNum(articleDTO.artNum());
-                article.setCodeDeplan(articleDTO.codeDeplan());
-                article.setBarcode(articleDTO.barcode());
-                article.setName(articleDTO.name());
-                article.setDescription(articleDTO.description());
-                article.setImageUrl(articleDTO.imgUrl());
-                article.setBarcode(articleDTO.barcode());
-                article.setQuantityInPallet(articleDTO.quantityInPallet());
+
+                if(articleDTO.codeDeplan() != null) {
+                    article.setCodeDeplan(articleDTO.codeDeplan());
+                }
+
+                if(articleDTO.barcode() != null) {
+                    article.setBarcode(articleDTO.barcode());
+                }
+
+                if(articleDTO.name() != null) {
+                    article.setName(articleDTO.name());
+                }
+
+                if(articleDTO.description() != null) {
+                    article.setDescription(articleDTO.description());
+                }
+
+                if(articleDTO.imgUrl() != null) {
+                    article.setImageUrl(articleDTO.imgUrl());
+                }
+
+                if(articleDTO.barcode() != null) {
+                    article.setBarcode(articleDTO.barcode());
+                }
+
+                if(articleDTO.quantityInPallet() != null) {
+                    article.setQuantityInPallet(articleDTO.quantityInPallet());
+                }
 
                 articleRepository.save(article);
         }

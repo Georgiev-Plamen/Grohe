@@ -9,6 +9,6 @@ public record AddArticleDTO (
         String description,
         String imgUrl,
         String barcode,
-        int quantityInPallet
+        Integer quantityInPallet
 ) {
 }
