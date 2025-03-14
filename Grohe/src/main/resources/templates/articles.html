@@ -8,80 +8,91 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script>
-        function updateHiddenInput(div) {
-            const hiddenInput = div.nextElementSibling;
-            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-                hiddenInput.value = div.textContent.trim();
+        document.addEventListener('DOMContentLoaded', () => {
+            const editedData = new Map();
+
+            function updateHiddenInput(editableDiv) {
+                const hiddenInput = editableDiv.nextElementSibling;
+                if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                    hiddenInput.value = editableDiv.textContent.trim();
+                }
             }
-        }
 
-        async function submitAllUpdates() {
-            const rows = document.querySelectorAll('tbody tr');
-            const updates = [];
+            function trackEditableChanges(editableDiv) {
+                editableDiv.addEventListener('input', () => {
+                    const row = editableDiv.closest('tr');
+                    const id = row.querySelector('input[name="id"]').value;
+                    const fieldName = editableDiv.nextElementSibling.name;
+                    const newValue = editableDiv.textContent.trim();
 
-            rows.forEach(row => {
-                // Ignore rows with a DELETE form
-                const deleteForm = row.querySelector('form');
-                if (deleteForm) {
-                    const methodInput = deleteForm.querySelector('input[name="_method"]');
-                    if (methodInput && methodInput.value.toLowerCase() === "delete") {
-                        return;
+                    if (!editedData.has(id)) {
+                        editedData.set(id, {});
                     }
-                }
+                    editedData.get(id)[fieldName] = newValue;
 
-                const update = {};
+                    console.log("Edited Data after contenteditable change:", editedData);
+                });
+            }
 
-                // Collect all inputs (excluding _csrf)
-                const inputs = row.querySelectorAll('input');
-                inputs.forEach(input => {
-                    if (input.name !== "_csrf") {
-                        update[input.name] = input.value.trim();
+            function trackInputChanges(input) {
+                input.addEventListener('change', () => {
+                    const row = input.closest('tr');
+                    const id = row.querySelector('input[name="id"]').value;
+                    const fieldName = input.name;
+                    const newValue = input.value.trim();
+
+                    if (!editedData.has(id)) {
+                        editedData.set(id, {});
                     }
+                    editedData.get(id)[fieldName] = newValue;
+
+                    console.log("Edited Data after input change:", editedData);
+                });
+            }
+
+            document.querySelectorAll('[contenteditable="true"]').forEach(trackEditableChanges);
+            document.querySelectorAll('input').forEach(trackInputChanges);
+
+            async function submitAllUpdates() {
+                const updates = Array.from(editedData.entries()).map(([id, changes]) => {
+                    return {
+                        id,
+                        ...changes
+                    };
                 });
 
-                // Collect the article ID
-                const idInput = row.querySelector('input[name="id"]');
-                if (idInput) {
-                    update.id = idInput.value.trim();
+                console.log("Updates to be submitted:", updates);
+
+                try {
+                    const response = await fetch('api/receive/bulkUpdateArticle', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updates)
+                    });
+
+                    const result = await response.text();
+                    alert(result);
+                    editedData.clear();
+                } catch (error) {
+                    console.error('Error sending updates:', error);
+                    alert('Failed to send updates');
                 }
+            }
 
-                // Collect contenteditable divs
-                const editableDivs = row.querySelectorAll('[contenteditable="true"]');
-                editableDivs.forEach(div => {
-                    const hiddenInput = div.nextElementSibling;
-                    if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-                        update[hiddenInput.name] = div.textContent.trim();
-                    }
-                });
-
-                updates.push(update);
+            // Use event delegation to handle clicks on any "Update All" button
+            document.addEventListener('click', (event) => {
+                if (event.target.classList.contains('fix')) {
+                    submitAllUpdates();
+                }
             });
-
-            // Submit the updates to the server
-            try {
-                const response = await fetch('api/receive/bulkUpdateArticle', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(updates)
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const result = await response.text();
-                alert(result);
-            } catch (error) {
-                console.error('Error sending PreOrder:', error);
-                alert('Failed to send PreOrder: ' + error.message);
-            }
-        }
+        });
     </script>
 </head>
 <body>
 <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
+
 <div class="container">
     <h1>Артикули</h1>
     <form th:method="post" th:action="@{/articles/addArticle}" th:object="${articleData}">
@@ -188,7 +199,7 @@
             <th th:text="#{article_img_url}">Order reason</th>
             <th th:text="#{article_barcode}">Comment</th>
             <th th:text="#{article_quantity_in_pallet}">Ordered by</th>
-<!--            <th>Изтриване</th>-->
+            <!--            <th>Изтриване</th>-->
         </tr>
         </thead>
         <tbody>
@@ -229,12 +240,12 @@
                      th:text="${article.quantityInPallet()}"></div>
                 <input type="hidden" name="quantityInPallet" th:value="${article.quantityInPallet()}">
             </td>
-<!--            <td>-->
-<!--                 <form th:action="@{/articles/delete/{id}(id=${article.id()})}" th:method="DELETE">-->
-<!--                     <input type="hidden" name="_method" value="delete">-->
-<!--                     <button class="delete-btn" type="submit">Delete</button>-->
-<!--                 </form>-->
-<!--            </td>-->
+            <!--            <td>-->
+            <!--                 <form th:action="@{/articles/delete/{id}(id=${article.id()})}" th:method="DELETE">-->
+            <!--                     <input type="hidden" name="_method" value="delete">-->
+            <!--                     <button class="delete-btn" type="submit">Delete</button>-->
+            <!--                 </form>-->
+            <!--            </td>-->
         </tr>
         </tbody>
     </table>
