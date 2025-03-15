@@ -78,13 +78,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void deleteOrder(Long id) {
-        Order order = orderRepository.getReferenceById(id);
+        Order order = orderRepository.getOrdersById(id);
         List <OrderItem> orderItems = order.getItems();
 
         DeleteOrder deleteOrder = new DeleteOrder() ;
         deleteOrder.setBrand(order.getBrand());
         deleteOrder.setOrderName(order.getOrderName());
         deleteOrder.setDate(order.getDate());
+        deleteOrderRepository.save(deleteOrder);
 
         List<DeleteOrderItem> deleteOrderItems = new ArrayList<>();
 
@@ -94,15 +95,14 @@ public class OrderServiceImpl implements OrderService {
             modelMapper.map(orderItem, deleteOrderItem);
             deleteOrderItem.setDeleteOrder(deleteOrder);
             deleteOrderItems.add(deleteOrderItem);
+
+            deleteOrderItem.setDeleteOrder(deleteOrder);
+            deleteOrderItemRepository.save(deleteOrderItem);
         }
 
-        deleteOrder.setItems(deleteOrderItems);
-//        deleteOrderItemRepository.saveAll(deleteOrderItems);
+        orderItemRepository.deleteAll(orderItems);
+        orderRepository.delete(order);
 
-        deleteOrderRepository.save(deleteOrder);
-
-//        orderItemRepository.deleteAllByOrderId(id);
-//        orderRepository.deleteById(id);
     }
 
     @Override
