@@ -230,7 +230,9 @@ public class PreOrderServiceImpl implements PreOrderService {
     public void listToPreOrderItem(List<PreOrderExcelDTO> preOrderExcelDTOList) {
 
         for (PreOrderExcelDTO preOrderExcelItems : preOrderExcelDTOList) {
-            Optional<Article> optionalArticle = articleRepository.findByArtNum(preOrderExcelItems.artNum());
+            //TODO: need test with different article ( dublicate result, not uniqe)
+//            Optional<Article> optionalArticle = articleRepository.findByArtNum(preOrderExcelItems.artNum());
+            Optional<Article> optionalArticle = articleRepository.findByAccurateArtNum(preOrderExcelItems.artNum());
             PreOrderItem preOrderItem = new PreOrderItem();
 
             if (optionalArticle.isEmpty()) {

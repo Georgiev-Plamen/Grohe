@@ -18,4 +18,6 @@ public interface ArticleRepository extends JpaRepository <Article, Long> {
     @Query("SELECT a.id FROM Article a WHERE a.artNum LIKE %:artNum%")
     List<Long> findIdsByArtNumContaining(@Param("artNum") String artNum);
 
+    @Query("SELECT a FROM Article a WHERE a.artNum = :artNum")
+    Optional<Article> findByAccurateArtNum(@Param("artNum") String artNum);
 }
