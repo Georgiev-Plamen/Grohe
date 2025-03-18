@@ -10,10 +10,7 @@ import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderExcelDTO;
 import bg.deplan.Grohe.model.PreOrderItem;
-import bg.deplan.Grohe.service.ArticleService;
-import bg.deplan.Grohe.service.ExcelExportService;
-import bg.deplan.Grohe.service.OrderService;
-import bg.deplan.Grohe.service.PreOrderService;
+import bg.deplan.Grohe.service.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.apache.poi.ss.usermodel.Row;
@@ -52,11 +49,13 @@ public class PreOrderServiceImpl implements PreOrderService {
     private final OrderItemRepository orderItemRepository;
     @Autowired
     private final ExcelExportService excelExportService;
+    @Autowired
+    private final ExcelImportService excelImportService;
 
     @Autowired
     private OrderService orderService;
 
-    public PreOrderServiceImpl(ResourceLoader resourceLoader, ArticleRepository articleRepository, ArticleService articleService, PreOrderItemRepository preOrderItemRepository, OrderRepository orderRepository, OrderItemRepository orderItemRepository, ExcelExportService excelExportService, OrderService orderService) {
+    public PreOrderServiceImpl(ResourceLoader resourceLoader, ArticleRepository articleRepository, ArticleService articleService, PreOrderItemRepository preOrderItemRepository, OrderRepository orderRepository, OrderItemRepository orderItemRepository, ExcelExportService excelExportService, ExcelImportService excelImportService, OrderService orderService) {
         this.resourceLoader = resourceLoader;
         this.articleRepository = articleRepository;
         this.articleService = articleService;
@@ -64,6 +63,7 @@ public class PreOrderServiceImpl implements PreOrderService {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.excelExportService = excelExportService;
+        this.excelImportService = excelImportService;
         this.orderService = orderService;
     }
 
@@ -220,55 +220,8 @@ public class PreOrderServiceImpl implements PreOrderService {
 
     public List<PreOrderExcelDTO> readPreOrderFromExcel(InputStream inputStream, String brand) throws IOException {
         // List to store the parsed DTOs
-        List<PreOrderExcelDTO> preOrderExcelDTOList = new ArrayList<>();
+        List<PreOrderExcelDTO> preOrderExcelDTOList = excelImportService.readPreOrderFromExcel(inputStream, brand);
 
-        // Use the provided InputStream to read the Excel file
-        try (Workbook workbook = new XSSFWorkbook(inputStream)) {
-            // Assuming the data is in the first sheet
-            Sheet sheet = workbook.getSheetAt(0);
-            int lastRow = sheet.getLastRowNum() - 3;
-
-            // Iterate over rows, starting from the 10th row (skip the header)
-            for (int i = 9; i < lastRow; i++) {
-                Row row = sheet.getRow(i);
-
-                if (row != null) {
-                    // Read article number
-                    Cell artNumCell = row.getCell(1);
-                    String artNum;
-                    if (artNumCell.getCellType() == CellType.NUMERIC) {
-                        artNum = String.valueOf((long) artNumCell.getNumericCellValue());
-                    } else {
-                        artNum = artNumCell.getStringCellValue();
-                    }
-
-                    // Read quantity for order
-                    Cell quantityCell = row.getCell(3);
-                    String quantityForOrder;
-                    if (quantityCell.getCellType() == CellType.NUMERIC) {
-                        quantityForOrder = String.valueOf((int) quantityCell.getNumericCellValue());
-                    } else {
-                        quantityForOrder = quantityCell.getStringCellValue();
-                    }
-
-                    // Read comment
-                    String comment = row.getCell(10).getStringCellValue();
-
-                    // Create DTO and add it to the list
-                    PreOrderExcelDTO preOrderExcelDTO = new PreOrderExcelDTO(
-                            brand,
-                            artNum,
-                            quantityForOrder,
-                            LocalDate.now(), // Use current date
-                            comment
-                    );
-
-                    preOrderExcelDTOList.add(preOrderExcelDTO);
-                }
-            }
-        }
-
-        // Convert the list of DTOs to PreOrderItem (if needed)
         listToPreOrderItem(preOrderExcelDTOList);
 
         return preOrderExcelDTOList;
