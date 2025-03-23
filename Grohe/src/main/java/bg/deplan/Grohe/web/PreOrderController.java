@@ -40,7 +40,7 @@ public class PreOrderController {
 
     @ModelAttribute("preOrderData")
     public PreOrderDTO preOrderDTO() {
-        return new PreOrderDTO(0l,"","","","",LocalDate.now(), "","");
+        return new PreOrderDTO(0l,"","","","",LocalDate.now(), "","",false);
     }
 
     @GetMapping("/preOrder")

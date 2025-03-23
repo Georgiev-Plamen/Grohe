@@ -16,6 +16,7 @@ public class PreOrderItem extends BaseEntity{
     private String orderReason;
     private String comment;
     private LocalDate date;
+    private boolean isHold;
 
     public PreOrderItem() {
     }
@@ -72,4 +73,11 @@ public class PreOrderItem extends BaseEntity{
         this.date = date;
     }
 
+    public boolean isHold() {
+        return isHold;
+    }
+
+    public void setHold(boolean hold) {
+        isHold = hold;
+    }
 }

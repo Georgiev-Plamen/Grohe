@@ -14,7 +14,7 @@ public interface PreOrderItemRepository extends JpaRepository <PreOrderItem, Lon
 
     List<PreOrderItem> findAllByArticle_Brand(String brand);
 
-    void deleteAllByArticle_Brand(String brand);
+    void deleteAllByArticle_BrandAndIsHoldIsFalse(String brand);
 
     @Modifying
     @Query("DELETE FROM PreOrderItem p WHERE p.id = :id")

@@ -20,10 +20,18 @@
             document.getElementById("currentDate").value = today;
         });
 
+
         // Function to sync contenteditable divs with hidden inputs
         function updateHiddenInput(editableDiv) {
-            const hiddenInput = editableDiv.nextElementSibling;
-            hiddenInput.value = editableDiv.innerText;
+            if (element.tagName === 'DIV') {
+                // Handle contenteditable div
+                const hiddenInput = element.nextElementSibling;
+                hiddenInput.value = element.innerText;
+            } else if (element.tagName === 'INPUT' && element.type === 'checkbox') {
+                // Handle checkbox
+                const hiddenInput = document.querySelector('input[name="is_hold"]');
+                hiddenInput.value = element.checked ? 'true' : 'false';
+            }
         }
 
         // Function to submit all updates
@@ -50,6 +58,11 @@
                         update[hiddenInput.name] = div.textContent.trim();
                     }
                 });
+
+                const checkbox = row.querySelector('input[type="checkbox"][name="isHold"]');
+                if (checkbox) {
+                    update[checkbox.name] = checkbox.checked ? 'true' : 'false';
+                }
 
                 updates.push(update);
             });
@@ -127,6 +140,7 @@
             <th>Date</th>
             <th>Order Reason</th>
             <th>Comment</th>
+            <th></th>
             <th class="action-title">🗑</th>
         </tr>
         </thead>
@@ -160,7 +174,12 @@
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}"></div>
                     <input type="hidden" name="comment" th:value="*{comment}">
                 </td>
+                <td>
+                    <input type="checkbox" name="isHold" id="hold" oninput="updateHiddenInput(this)" th:checked="*{isHold}">
+                    <input type="hidden" name="isHold" th:value="*{isHold}">
+                </td>
             </form>
+
             <td class="action">
                 <form th:action="@{/orders/delete/{id}(id=*{id})}" th:method="POST">
                     <input type="hidden" name="_method" value="delete">

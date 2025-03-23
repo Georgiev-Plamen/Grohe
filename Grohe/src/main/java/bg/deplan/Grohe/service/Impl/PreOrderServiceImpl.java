@@ -90,6 +90,7 @@ public class PreOrderServiceImpl implements PreOrderService {
         preOrderItem.setDate(articleDTO.date());
         preOrderItem.setOrderReason(articleDTO.orderReason());
         preOrderItem.setComment(articleDTO.comment());
+        preOrderItem.setHold(false);
 
         preOrderItemRepository.save(preOrderItem);
     }
@@ -137,6 +138,12 @@ public class PreOrderServiceImpl implements PreOrderService {
             preOrderItem.setComment(preOrderDTO.comment());
         }
 
+        if(preOrderDTO.isHold()){
+            preOrderItem.setHold(true);
+        } else {
+            preOrderItem.setHold(false);
+        }
+
         preOrderItemRepository.save(preOrderItem);
     }
 
@@ -169,11 +176,11 @@ public class PreOrderServiceImpl implements PreOrderService {
     @Override
     @Transactional
     public void makeOrder(String name, String brand) {
-
-        List<PreOrderItem> preOrderList = preOrderItemRepository.findAllByArticle_Brand(brand);
-        orderService.createOrder(preOrderList, name, brand);
-        preOrderItemRepository.deleteAllByArticle_Brand(brand);
+                    List<PreOrderItem> preOrderList = preOrderItemRepository.findAllByArticle_Brand(brand);
+            orderService.createOrder(preOrderList, name, brand);
+            preOrderItemRepository.deleteAllByArticle_BrandAndIsHoldIsFalse(brand);
     }
+
 
     @Override
     @Transactional
@@ -181,7 +188,7 @@ public class PreOrderServiceImpl implements PreOrderService {
 
         List<PreOrderItem> PreOrderItem = preOrderItemRepository.findAllByArticle_Brand(brand);
         orderService.createOrder(PreOrderItem, name, brand);
-        preOrderItemRepository.deleteAllByArticle_Brand(brand);
+        preOrderItemRepository.deleteAllByArticle_BrandAndIsHoldIsFalse(brand);
 //        excelExportService.exportOrderToExcel(orderService.lastOrderId());
 
         return true;
@@ -214,7 +221,8 @@ public class PreOrderServiceImpl implements PreOrderService {
                 preOrderItem.getOrderBy(),
                 preOrderItem.getDate(),
                 preOrderItem.getOrderReason(),
-                preOrderItem.getComment()
+                preOrderItem.getComment(),
+                preOrderItem.isHold()
         );
     }
 

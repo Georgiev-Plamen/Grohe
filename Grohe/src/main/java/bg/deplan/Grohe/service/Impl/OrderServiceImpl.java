@@ -52,16 +52,19 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
 
         for (PreOrderItem preOrderItem : preOrderItems) {
-            OrderItem orderItem = new OrderItem();
-            orderItem.setArticle(preOrderItem.getArticle());
-            orderItem.setQuantity(preOrderItem.getQuantityForOrder());
-            orderItem.setOrderBy(preOrderItem.getOrderBy());
-            orderItem.setDateOfOrder(preOrderItem.getDate());
-            orderItem.setOrderReason(preOrderItem.getOrderReason());
-            orderItem.setComment(preOrderItem.getComment());
+            if(!preOrderItem.isHold()) {
 
-            orderItem.setOrder(order);
-            orderItemRepository.save(orderItem);
+                OrderItem orderItem = new OrderItem();
+                orderItem.setArticle(preOrderItem.getArticle());
+                orderItem.setQuantity(preOrderItem.getQuantityForOrder());
+                orderItem.setOrderBy(preOrderItem.getOrderBy());
+                orderItem.setDateOfOrder(preOrderItem.getDate());
+                orderItem.setOrderReason(preOrderItem.getOrderReason());
+                orderItem.setComment(preOrderItem.getComment());
+
+                orderItem.setOrder(order);
+                orderItemRepository.save(orderItem);
+            }
         }
 
 
@@ -131,7 +134,6 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
-
     @Override
     public void bulkUpdateArticle(List<OrderEditArticleDTO> updates) {
 
@@ -186,7 +188,6 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    //TODO:
     @Override
     @Transactional
     public List<ArticleFindDTO> findOnlyArticlesInOrder(String artNum) {

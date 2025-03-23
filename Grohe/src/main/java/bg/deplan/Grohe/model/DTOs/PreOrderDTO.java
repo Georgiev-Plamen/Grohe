@@ -20,6 +20,7 @@ public record PreOrderDTO (
         LocalDate date,
 
         String orderReason,
-        String comment
+        String comment,
+        boolean isHold
 ){
 }
