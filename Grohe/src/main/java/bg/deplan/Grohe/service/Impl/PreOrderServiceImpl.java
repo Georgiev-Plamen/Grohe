@@ -176,7 +176,7 @@ public class PreOrderServiceImpl implements PreOrderService {
     @Override
     @Transactional
     public void makeOrder(String name, String brand) {
-                    List<PreOrderItem> preOrderList = preOrderItemRepository.findAllByArticle_Brand(brand);
+            List<PreOrderItem> preOrderList = preOrderItemRepository.findAllByArticle_Brand(brand);
             orderService.createOrder(preOrderList, name, brand);
             preOrderItemRepository.deleteAllByArticle_BrandAndIsHoldIsFalse(brand);
     }

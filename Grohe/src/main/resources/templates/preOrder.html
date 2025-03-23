@@ -14,23 +14,83 @@
 
 
     <script>
-        // Set today's date on page load
-        window.addEventListener('DOMContentLoaded', () => {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById("currentDate").value = today;
+        // Function to check if at least one checkbox is unchecked
+        function checkCheckboxes() {
+            const checkboxes = document.querySelectorAll('input[name="isHold"]');
+            let atLeastOneUnchecked = false;
+
+            // Check if at least one checkbox is unchecked
+            checkboxes.forEach(checkbox => {
+                if (!checkbox.checked) {
+                    atLeastOneUnchecked = true;
+                }
+            });
+
+            // Enable or disable the "Make Order" button
+            const makeOrderButton = document.querySelector('.eBtn');
+            if (makeOrderButton) {
+                makeOrderButton.disabled = !atLeastOneUnchecked; // Disable if all are checked
+            }
+        }
+
+        // Attach the checkbox check function to checkbox changes
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkboxes = document.querySelectorAll('input[name="isHold"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', checkCheckboxes);
+            });
+
+            // Initial check when the page loads
+            checkCheckboxes();
         });
 
+        // Function to validate if at least one isHold checkbox is unchecked
+        function validateMakeOrder(event) {
+            // Prevent the default form submission
+            event.preventDefault();
+
+            // Get all isHold checkboxes
+            const checkboxes = document.querySelectorAll('input[name="isHold"]');
+            let atLeastOneUnchecked = false;
+
+            // Check if at least one checkbox is unchecked
+            checkboxes.forEach(checkbox => {
+                if (!checkbox.checked) {
+                    atLeastOneUnchecked = true;
+                }
+            });
+
+            // If at least one checkbox is unchecked, submit the form
+            if (atLeastOneUnchecked) {
+                document.getElementById('downloadForm').submit();
+            } else {
+                // Show an alert if all checkboxes are checked
+                alert('Cannot make order. All items are on hold.');
+            }
+        }
+
+        // Attach the validation function to the modal's form submission
+        document.addEventListener('DOMContentLoaded', () => {
+            const makeOrderForm = document.getElementById('downloadForm');
+            if (makeOrderForm) {
+                makeOrderForm.addEventListener('submit', validateMakeOrder);
+            }
+        });
 
         // Function to sync contenteditable divs with hidden inputs
-        function updateHiddenInput(editableDiv) {
+        function updateHiddenInput(element) {
             if (element.tagName === 'DIV') {
                 // Handle contenteditable div
                 const hiddenInput = element.nextElementSibling;
-                hiddenInput.value = element.innerText;
+                if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                    hiddenInput.value = element.innerText.trim();
+                }
             } else if (element.tagName === 'INPUT' && element.type === 'checkbox') {
                 // Handle checkbox
-                const hiddenInput = document.querySelector('input[name="is_hold"]');
-                hiddenInput.value = element.checked ? 'true' : 'false';
+                const hiddenInput = element.nextElementSibling;
+                if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                    hiddenInput.value = element.checked ? 'true' : 'false';
+                }
             }
         }
 
@@ -59,6 +119,7 @@
                     }
                 });
 
+                // Collect checkbox value (isHold)
                 const checkbox = row.querySelector('input[type="checkbox"][name="isHold"]');
                 if (checkbox) {
                     update[checkbox.name] = checkbox.checked ? 'true' : 'false';
@@ -175,7 +236,8 @@
                     <input type="hidden" name="comment" th:value="*{comment}">
                 </td>
                 <td>
-                    <input type="checkbox" name="isHold" id="hold" oninput="updateHiddenInput(this)" th:checked="*{isHold}">
+                    <input type="checkbox" name="isHold" id="hold" oninput="updateHiddenInput(this)"
+                           th:checked="*{isHold}">
                     <input type="hidden" name="isHold" th:value="*{isHold}">
                 </td>
             </form>
@@ -196,16 +258,16 @@
     <!-- Import Form -->
     <form th:method="POST" th:action="@{/orders/importFromExcel}" enctype="multipart/form-data">
         <div class="preOrderFile">
-        <label class="file">
-            <input type="file" name="file" id="file" aria-label="File browser example" accept=".xlsx" required>
-            <input type="hidden" id="brand" name="brand" th:value="Grohe">
-            <span class="file-custom"></span>
-            <button type="submit">Import</button>
-        </label>
+            <label class="file">
+                <input type="file" name="file" id="file" aria-label="File browser example" accept=".xlsx" required>
+                <input type="hidden" id="brand" name="brand" th:value="Grohe">
+                <span class="file-custom"></span>
+                <button type="submit">Import</button>
+            </label>
 
-            <button type="button" class="eBtn" data-toggle="modal" data-target="#exampleModal">Make Order</button>
+            <!-- Make Order Button -->
+            <button type="button" class="eBtn" data-toggle="modal" data-target="#exampleModal" disabled>Make Order</button>
         </div>
-
     </form>
 
     <!-- Popup screen -->
@@ -222,9 +284,10 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
+                            <!-- Make Order Form -->
                             <form id="downloadForm" th:method="POST" th:action="@{/orders/makeOrder}">
                                 <label for="name" class="col-form-label">Име:</label>
-                                <input type="text" class="form-control" id="name" name="name">
+                                <input type="text" class="form-control" id="name" name="name" required>
                                 <button type="submit" class="btn btn-primary">Завърши</button>
                                 <input type="hidden" name="makeOrder" th:value="makeOrder">
                             </form>
