@@ -129,6 +129,7 @@ public class PreOrderController {
 
         // Get the last order ID
         Long lastOrderId = orderService.lastOrderId();
+        String orderName = orderRepository.getOrdersById(lastOrderId).getOrderName();
 
         if (lastOrderId == null) {
             // Handle the case where the last order ID is not available
@@ -145,7 +146,7 @@ public class PreOrderController {
 
         // Return the Excel file as a response
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Order " + lastOrderId + ".xlsx")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + orderName + ".xlsx")
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(excelFile);
 //        return ResponseEntity.ok().body("Successfully create order");

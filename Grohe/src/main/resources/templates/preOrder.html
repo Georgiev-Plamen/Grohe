@@ -21,7 +21,7 @@
 
             // Check if at least one checkbox is unchecked
             checkboxes.forEach(checkbox => {
-                if (!checkbox.checked) {
+                if (!checkbox.checked) { // Check if the checkbox is UNCHECKED
                     atLeastOneUnchecked = true;
                 }
             });
@@ -29,13 +29,15 @@
             // Enable or disable the "Make Order" button
             const makeOrderButton = document.querySelector('.eBtn');
             if (makeOrderButton) {
-                makeOrderButton.disabled = !atLeastOneUnchecked; // Disable if all are checked
+                makeOrderButton.disabled = atLeastOneUnchecked;
+                console.log(makeOrderButton)
             }
+            console.log(atLeastOneUnchecked)
         }
 
         // Attach the checkbox check function to checkbox changes
         document.addEventListener('DOMContentLoaded', () => {
-            const checkboxes = document.querySelectorAll('input[name="isHold"]');
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', checkCheckboxes);
             });
@@ -48,25 +50,6 @@
         function validateMakeOrder(event) {
             // Prevent the default form submission
             event.preventDefault();
-
-            // Get all isHold checkboxes
-            const checkboxes = document.querySelectorAll('input[name="isHold"]');
-            let atLeastOneUnchecked = false;
-
-            // Check if at least one checkbox is unchecked
-            checkboxes.forEach(checkbox => {
-                if (!checkbox.checked) {
-                    atLeastOneUnchecked = true;
-                }
-            });
-
-            // If at least one checkbox is unchecked, submit the form
-            if (atLeastOneUnchecked) {
-                document.getElementById('downloadForm').submit();
-            } else {
-                // Show an alert if all checkboxes are checked
-                alert('Cannot make order. All items are on hold.');
-            }
         }
 
         // Attach the validation function to the modal's form submission
@@ -201,7 +184,7 @@
             <th>Date</th>
             <th>Order Reason</th>
             <th>Comment</th>
-            <th></th>
+            <th class="action-title"></th>
             <th class="action-title">🗑</th>
         </tr>
         </thead>
@@ -266,7 +249,7 @@
             </label>
 
             <!-- Make Order Button -->
-            <button type="button" class="eBtn" data-toggle="modal" data-target="#exampleModal" disabled>Make Order</button>
+            <button type="button" class="eBtn" data-toggle="modal" data-target="#exampleModal">Make Order</button>
         </div>
     </form>
 
@@ -291,7 +274,7 @@
                                 <button type="submit" class="btn btn-primary">Завърши</button>
                                 <input type="hidden" name="makeOrder" th:value="makeOrder">
                             </form>
-                            <a href="/orders/all">Към заявки</a>
+                            <a href="/orders/preOrder">Към заявки</a>
                         </div>
                     </div>
                 </div>
