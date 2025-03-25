@@ -23,6 +23,7 @@
             checkboxes.forEach(checkbox => {
                 if (!checkbox.checked) { // Check if the checkbox is UNCHECKED
                     atLeastOneUnchecked = true;
+                    console.log(atLeastOneUnchecked)
                 }
             });
 
@@ -184,8 +185,9 @@
             <th>Date</th>
             <th>Order Reason</th>
             <th>Comment</th>
-            <th class="action-title"></th>
-            <th class="action-title">🗑</th>
+            <th class="action-title">✋</th>
+            <th class="action-title">&#128465</th>
+<!--            <th class="action-title">🗑</th>-->
         </tr>
         </thead>
         <tbody>
@@ -221,10 +223,9 @@
                 <td>
                     <input type="checkbox" name="isHold" id="hold" oninput="updateHiddenInput(this)"
                            th:checked="*{isHold}">
-                    <input type="hidden" name="isHold" th:value="*{isHold}">
+<!--                    <input type="hidden" name="isHold" th:value="*{isHold}">-->
                 </td>
             </form>
-
             <td class="action">
                 <form th:action="@{/orders/delete/{id}(id=*{id})}" th:method="POST">
                     <input type="hidden" name="_method" value="delete">
