@@ -29,7 +29,7 @@
             // Enable or disable the "Make Order" button
             const makeOrderButton = document.querySelector('.eBtn');
             if (makeOrderButton) {
-                makeOrderButton.disabled = atLeastOneUnchecked;
+                makeOrderButton.disabled = !atLeastOneUnchecked;
                 console.log(makeOrderButton)
             }
             console.log(atLeastOneUnchecked)
