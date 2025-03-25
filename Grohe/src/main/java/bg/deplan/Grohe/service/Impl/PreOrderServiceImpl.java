@@ -280,7 +280,7 @@ public class PreOrderServiceImpl implements PreOrderService {
         for (int i = 0; i < splitComment.length; i++) {
             String currentWord = splitComment[i].toLowerCase();
 
-            if (currentWord.contains("промo")) {
+            if (currentWord.contains("промо")) {
                 return "Promo offer";
             }
 

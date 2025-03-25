@@ -47,20 +47,6 @@
             checkCheckboxes();
         });
 
-        // Function to validate if at least one isHold checkbox is unchecked
-        function validateMakeOrder(event) {
-            // Prevent the default form submission
-            event.preventDefault();
-        }
-
-        // Attach the validation function to the modal's form submission
-        document.addEventListener('DOMContentLoaded', () => {
-            const makeOrderForm = document.getElementById('downloadForm');
-            if (makeOrderForm) {
-                makeOrderForm.addEventListener('submit', validateMakeOrder);
-            }
-        });
-
         // Function to sync contenteditable divs with hidden inputs
         function updateHiddenInput(element) {
             if (element.tagName === 'DIV') {
