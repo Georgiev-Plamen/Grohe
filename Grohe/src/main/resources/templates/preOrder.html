@@ -14,6 +14,13 @@
 
 
     <script>
+
+        // Set today's date on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById("currentDate").value = today;
+        });
+
         // Function to check if at least one checkbox is unchecked
         function checkCheckboxes() {
             const checkboxes = document.querySelectorAll('input[name="isHold"]');
