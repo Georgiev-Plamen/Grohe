@@ -64,9 +64,10 @@ public class PreOrderController {
     }
 
     @PostMapping("/preOrder")
-    public String addToPreOrder(@ModelAttribute ArticleDTO articleDTO) {
+    public String addToPreOrder(@ModelAttribute ArticleDTO articleDTO,
+                                @AuthenticationPrincipal UserDetails userDetails) {
 
-        preOrderService.addItem(articleDTO);
+        preOrderService.addItem(articleDTO, userDetails);
 
         if(articleDTO.brand().equals("Viega")) {
             return "redirect:/orders/preOrderViega";
@@ -139,7 +140,8 @@ public class PreOrderController {
     }
 
     @PostMapping("/makeOrderViega")
-    public String makeOrderViega (@RequestParam ("name") String name, UserDetails userDetails) {
+    public String makeOrderViega (@RequestParam ("name") String name,
+                                  @AuthenticationPrincipal UserDetails userDetails) {
         String brand = "Viega";
         preOrderService.makeOrder(name,brand, userDetails);
 
@@ -155,9 +157,10 @@ public class PreOrderController {
     //TODO: need to create redirectAttributes for errors
     @PostMapping("/importFromExcel")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
-    @RequestParam ("brand") String brand) throws IOException {
+                                   @RequestParam ("brand") String brand,
+                                   @AuthenticationPrincipal UserDetails userDetails) throws IOException {
         if (!file.isEmpty()) {
-            preOrderService.readPreOrderFromExcel(file.getInputStream(), brand);
+            preOrderService.readPreOrderFromExcel(file.getInputStream(), brand, userDetails);
         } else {
             // Handle the case where the file is empty
             throw new IllegalArgumentException("File is empty");

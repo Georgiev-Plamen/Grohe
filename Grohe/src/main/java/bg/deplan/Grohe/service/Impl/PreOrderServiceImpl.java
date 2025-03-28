@@ -1,10 +1,7 @@
 package bg.deplan.Grohe.service.Impl;
 
-import bg.deplan.Grohe.data.ArticleRepository;
-import bg.deplan.Grohe.data.OrderItemRepository;
-import bg.deplan.Grohe.data.OrderRepository;
+import bg.deplan.Grohe.data.*;
 
-import bg.deplan.Grohe.data.PreOrderItemRepository;
 import bg.deplan.Grohe.model.Article;
 import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
@@ -53,11 +50,13 @@ public class PreOrderServiceImpl implements PreOrderService {
     private final ExcelExportService excelExportService;
     @Autowired
     private final ExcelImportService excelImportService;
+    @Autowired
+    private final UserRepository userRepository;
 
     @Autowired
     private OrderService orderService;
 
-    public PreOrderServiceImpl(ResourceLoader resourceLoader, ArticleRepository articleRepository, ArticleService articleService, PreOrderItemRepository preOrderItemRepository, OrderRepository orderRepository, OrderItemRepository orderItemRepository, ExcelExportService excelExportService, ExcelImportService excelImportService, OrderService orderService) {
+    public PreOrderServiceImpl(ResourceLoader resourceLoader, ArticleRepository articleRepository, ArticleService articleService, PreOrderItemRepository preOrderItemRepository, OrderRepository orderRepository, OrderItemRepository orderItemRepository, ExcelExportService excelExportService, ExcelImportService excelImportService, UserRepository userRepository, OrderService orderService) {
         this.resourceLoader = resourceLoader;
         this.articleRepository = articleRepository;
         this.articleService = articleService;
@@ -66,6 +65,7 @@ public class PreOrderServiceImpl implements PreOrderService {
         this.orderItemRepository = orderItemRepository;
         this.excelExportService = excelExportService;
         this.excelImportService = excelImportService;
+        this.userRepository = userRepository;
         this.orderService = orderService;
     }
 
@@ -73,7 +73,7 @@ public class PreOrderServiceImpl implements PreOrderService {
         return preOrderItemRepository.save(preOrder);
     }
 
-    public void addItem(ArticleDTO articleDTO) {
+    public void addItem(ArticleDTO articleDTO, UserDetails userDetails) {
         PreOrderItem preOrderItem = new PreOrderItem();
 
         Optional<Article> optionalArticle = articleRepository.findByArtNum(articleDTO.artNum());
@@ -93,6 +93,7 @@ public class PreOrderServiceImpl implements PreOrderService {
         preOrderItem.setOrderReason(articleDTO.orderReason());
         preOrderItem.setComment(articleDTO.comment());
         preOrderItem.setHold(false);
+        preOrderItem.setUser(userRepository.findByUsername(userDetails.getUsername()).get());
 
         preOrderItemRepository.save(preOrderItem);
     }
@@ -228,16 +229,16 @@ public class PreOrderServiceImpl implements PreOrderService {
         );
     }
 
-    public List<PreOrderExcelDTO> readPreOrderFromExcel(InputStream inputStream, String brand) throws IOException {
+    public List<PreOrderExcelDTO> readPreOrderFromExcel(InputStream inputStream, String brand, UserDetails userDetails) throws IOException {
         // List to store the parsed DTOs
         List<PreOrderExcelDTO> preOrderExcelDTOList = excelImportService.readPreOrderFromExcel(inputStream, brand);
 
-        listToPreOrderItem(preOrderExcelDTOList);
+        listToPreOrderItem(preOrderExcelDTOList, userDetails);
 
         return preOrderExcelDTOList;
     }
 
-    public void listToPreOrderItem(List<PreOrderExcelDTO> preOrderExcelDTOList) {
+    public void listToPreOrderItem(List<PreOrderExcelDTO> preOrderExcelDTOList, UserDetails userDetails) {
 
         for (PreOrderExcelDTO preOrderExcelItems : preOrderExcelDTOList) {
             Optional<Article> optionalArticle = articleRepository.findByAccurateArtNum(preOrderExcelItems.artNum());
@@ -257,6 +258,7 @@ public class PreOrderServiceImpl implements PreOrderService {
             preOrderItem.setDate(preOrderExcelItems.date());
             preOrderItem.setOrderReason(checkComment(preOrderExcelItems.comment()));
             preOrderItem.setComment(preOrderExcelItems.comment());
+            preOrderItem.setUser(userRepository.findByUsername(userDetails.getUsername()).get());
 
             preOrderItemRepository.save(preOrderItem);
         }

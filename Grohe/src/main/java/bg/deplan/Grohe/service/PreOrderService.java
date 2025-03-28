@@ -13,7 +13,7 @@ import java.util.List;
 public interface PreOrderService {
 //    Order finalizeOrder(PreOrder preOrder);
 
-    void addItem(ArticleDTO articleDTO);
+    void addItem(ArticleDTO articleDTO, UserDetails userDetails);
 
     List<ArticleDTO> getAllArticle(String brand);
 
@@ -25,7 +25,7 @@ public interface PreOrderService {
 
     void deletePreOrderArticle(Long id);
 
-    List<PreOrderExcelDTO> readPreOrderFromExcel(InputStream inputStream, String brand) throws IOException;
+    List<PreOrderExcelDTO> readPreOrderFromExcel(InputStream inputStream, String brand, UserDetails userDetails) throws IOException;
 
     List<PreOrderDTO> getAllPreOrder(String brand);
 
