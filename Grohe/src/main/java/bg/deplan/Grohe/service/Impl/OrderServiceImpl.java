@@ -1,9 +1,6 @@
 package bg.deplan.Grohe.service.Impl;
 
-import bg.deplan.Grohe.data.DeleteOrderItemRepository;
-import bg.deplan.Grohe.data.DeleteOrderRepository;
-import bg.deplan.Grohe.data.OrderItemRepository;
-import bg.deplan.Grohe.data.OrderRepository;
+import bg.deplan.Grohe.data.*;
 import bg.deplan.Grohe.model.*;
 import bg.deplan.Grohe.model.DTOs.*;
 import bg.deplan.Grohe.service.ArticleService;
@@ -11,6 +8,7 @@ import bg.deplan.Grohe.service.OrderService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -24,6 +22,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     ModelMapper modelMapper;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private DeleteOrderRepository deleteOrderRepository;
@@ -43,12 +44,13 @@ public class OrderServiceImpl implements OrderService {
     private ArticleService articleService;
 
     @Override
-    public Order createOrder(List<PreOrderItem> preOrderItems, String name, String brand) {
+    public Order createOrder(List<PreOrderItem> preOrderItems, String name, String brand, UserDetails userDetails) {
 
         Order order = new Order();
         order.setDate(LocalDate.now());
         order.setOrderName(name);
         order.setBrand(brand);
+        order.setUser(userRepository.findByUsername(userDetails.getUsername()).get());
         orderRepository.save(order);
 
         for (PreOrderItem preOrderItem : preOrderItems) {

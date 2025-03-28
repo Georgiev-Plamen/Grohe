@@ -4,12 +4,13 @@ package bg.deplan.Grohe.service;
 import bg.deplan.Grohe.model.DTOs.*;
 import bg.deplan.Grohe.model.Order;
 import bg.deplan.Grohe.model.PreOrderItem;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
 public interface OrderService {
 
-    Order createOrder(List<PreOrderItem> preOrderItems, String name, String brand) ;
+    Order createOrder(List<PreOrderItem> preOrderItems, String name, String brand, UserDetails userDetails) ;
 
     List<OrderDTO> getAllOrders(String brand);
 

@@ -10,6 +10,7 @@ import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderExcelDTO;
 import bg.deplan.Grohe.model.PreOrderItem;
+import bg.deplan.Grohe.model.User;
 import bg.deplan.Grohe.service.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -18,6 +19,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 
@@ -175,19 +177,19 @@ public class PreOrderServiceImpl implements PreOrderService {
 
     @Override
     @Transactional
-    public void makeOrder(String name, String brand) {
+    public void makeOrder(String name, String brand, UserDetails userDetails) {
             List<PreOrderItem> preOrderList = preOrderItemRepository.findAllByArticle_Brand(brand);
-            orderService.createOrder(preOrderList, name, brand);
+            orderService.createOrder(preOrderList, name, brand, userDetails);
             preOrderItemRepository.deleteAllByArticle_BrandAndIsHoldIsFalse(brand);
     }
 
 
     @Override
     @Transactional
-    public boolean createAndExportOrder(String name, String brand) throws IOException {
+    public boolean createAndExportOrder(String name, String brand, UserDetails userDetails) throws IOException {
 
         List<PreOrderItem> PreOrderItem = preOrderItemRepository.findAllByArticle_Brand(brand);
-        orderService.createOrder(PreOrderItem, name, brand);
+        orderService.createOrder(PreOrderItem, name, brand, userDetails);
         preOrderItemRepository.deleteAllByArticle_BrandAndIsHoldIsFalse(brand);
 //        excelExportService.exportOrderToExcel(orderService.lastOrderId());
 
@@ -238,8 +240,6 @@ public class PreOrderServiceImpl implements PreOrderService {
     public void listToPreOrderItem(List<PreOrderExcelDTO> preOrderExcelDTOList) {
 
         for (PreOrderExcelDTO preOrderExcelItems : preOrderExcelDTOList) {
-            //TODO: need test with different article ( dublicate result, not uniqe)
-//            Optional<Article> optionalArticle = articleRepository.findByArtNum(preOrderExcelItems.artNum());
             Optional<Article> optionalArticle = articleRepository.findByAccurateArtNum(preOrderExcelItems.artNum());
             PreOrderItem preOrderItem = new PreOrderItem();
 

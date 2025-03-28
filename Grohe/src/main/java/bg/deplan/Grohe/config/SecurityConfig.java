@@ -54,4 +54,9 @@ public class SecurityConfig {
     public AppUserDetailsService appUserDetailsService(UserRepository userRepository) {
         return new AppUserDetailsService(userRepository);
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8();
+    }
 }

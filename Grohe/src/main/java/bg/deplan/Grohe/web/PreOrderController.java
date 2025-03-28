@@ -8,12 +8,13 @@ import bg.deplan.Grohe.service.ArticleService;
 import bg.deplan.Grohe.service.ExcelExportService;
 import bg.deplan.Grohe.service.OrderService;
 import bg.deplan.Grohe.service.PreOrderService;
-import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -91,22 +92,6 @@ public class PreOrderController {
         return "redirect:/orders/preOrder";
     }
 
-//    @DeleteMapping("/delete/{id}")
-//    public String deletePreOrderArticle(@PathVariable ("id") Long id) {
-//        boolean isViega = false;
-//
-//        if(preOrderService.findById(id).getArticle().getBrand().equals("Viega")) {
-//            isViega = true;
-//        }
-//        preOrderService.deletePreOrder(id);
-//
-//        if(isViega) {
-//            return "redirect:/orders/preOrderViega";
-//        }
-//
-//        return "redirect:/orders/preOrder";
-//    }
-
     @DeleteMapping("/delete/{id}")
     public String deletePreOrderArticle (@PathVariable ("id") Long id) {
 
@@ -116,11 +101,12 @@ public class PreOrderController {
     }
 
     @PostMapping("/makeOrder")
-    public ResponseEntity<byte[]> makeOrder(@RequestParam("name") String name) throws IOException {
+    public ResponseEntity<byte[]> makeOrder(@RequestParam("name") String name,
+                                            @AuthenticationPrincipal UserDetails userDetails) throws IOException {
         String brand = "Grohe";
 
         // Create the order
-        boolean isOrderCreated = preOrderService.createAndExportOrder(name, brand);
+        boolean isOrderCreated = preOrderService.createAndExportOrder(name, brand, userDetails);
 
         if (!isOrderCreated) {
             // Handle the case where the order creation failed
@@ -153,9 +139,9 @@ public class PreOrderController {
     }
 
     @PostMapping("/makeOrderViega")
-    public String makeOrderViega (@RequestParam ("name") String name) {
+    public String makeOrderViega (@RequestParam ("name") String name, UserDetails userDetails) {
         String brand = "Viega";
-        preOrderService.makeOrder(name,brand);
+        preOrderService.makeOrder(name,brand, userDetails);
 
         return "redirect:/orders/preOrderViega";
     }

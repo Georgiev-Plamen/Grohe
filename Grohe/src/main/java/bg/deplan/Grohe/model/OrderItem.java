@@ -34,6 +34,8 @@ public class OrderItem extends BaseEntity{
     @Column(name = "date_of_delivery")
     private LocalDate dateOfDelivery;
 
+    @ManyToOne
+    private User user;
 
     public OrderItem() {}
 
@@ -103,5 +105,13 @@ public class OrderItem extends BaseEntity{
 
     public void setDateOfDelivery(LocalDate dateOfDelivery) {
         this.dateOfDelivery = dateOfDelivery;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

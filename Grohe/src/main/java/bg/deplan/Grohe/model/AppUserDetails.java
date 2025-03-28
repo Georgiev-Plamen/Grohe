@@ -2,6 +2,7 @@ package bg.deplan.Grohe.model;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
@@ -20,6 +21,7 @@ public class AppUserDetails extends User {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
 
     public String getFirstName() {
         return firstName;

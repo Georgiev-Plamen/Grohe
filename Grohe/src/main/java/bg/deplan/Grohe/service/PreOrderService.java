@@ -4,6 +4,7 @@ import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderExcelDTO;
 import bg.deplan.Grohe.model.PreOrderItem;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +17,7 @@ public interface PreOrderService {
 
     List<ArticleDTO> getAllArticle(String brand);
 
-    void makeOrder(String name, String brand);
+    void makeOrder(String name, String brand, UserDetails userDetails);
 
     void updateItems(PreOrderDTO preOrderDTO, Long id);
 
@@ -28,5 +29,5 @@ public interface PreOrderService {
 
     List<PreOrderDTO> getAllPreOrder(String brand);
 
-    boolean createAndExportOrder(String name, String brand) throws IOException;
+    boolean createAndExportOrder(String name, String brand, UserDetails userDetails) throws IOException;
 }

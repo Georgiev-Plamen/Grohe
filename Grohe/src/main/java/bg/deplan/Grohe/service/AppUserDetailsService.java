@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 @Service
 public class AppUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
@@ -22,31 +25,26 @@ public class AppUserDetailsService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username)
-            throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // Fetch user from DB
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-        return userRepository
-                .findByUsername(username)
-                .map(AppUserDetailsService::map)
-                .orElseThrow(() -> new UsernameNotFoundException("User with username " + username + " not found"));
-    }
+        // Convert user roles/authorities to GrantedAuthority (if needed)
+        Collection<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
+                .collect(Collectors.toList());
 
-    private static UserDetails map(User user) {
-
+        // Return AppUserDetails (NOT User or UserDetails directly)
         return new AppUserDetails(
                 user.getUsername(),
                 user.getPassword(),
-                user.getRoles().stream().map(Role::getName).map(AppUserDetailsService::map).toList(),
+                authorities,
                 user.getFirstName(),
                 user.getLastName()
         );
     }
 
-    private static GrantedAuthority map(UserRoleEnum role) {
-        return new SimpleGrantedAuthority(
-                "ROLE_" + role
-        );
-    }
 
     public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
