@@ -3,6 +3,7 @@ package bg.deplan.Grohe.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name ="delete_order_items")
@@ -34,6 +35,11 @@ public class DeleteOrderItem extends BaseEntity{
     @Column(name = "date_of_delivery")
     private LocalDate dateOfDelivery;
 
+    @Column(name = "date_of_delete")
+    private LocalDateTime dateOfDelete;
+
+    @ManyToOne
+    private User user;
 
     public DeleteOrderItem() {}
 
@@ -103,5 +109,21 @@ public class DeleteOrderItem extends BaseEntity{
 
     public void setDateOfDelivery(LocalDate dateOfDelivery) {
         this.dateOfDelivery = dateOfDelivery;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public LocalDateTime getDateOfDelete() {
+        return dateOfDelete;
+    }
+
+    public void setDateOfDelete(LocalDateTime dateOfDelete) {
+        this.dateOfDelete = dateOfDelete;
     }
 }

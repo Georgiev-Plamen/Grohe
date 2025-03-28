@@ -3,6 +3,7 @@ package bg.deplan.Grohe.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -20,6 +21,12 @@ public class DeleteOrder extends BaseEntity {
 
     @OneToMany(mappedBy = "deleteOrder", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<DeleteOrderItem> items;
+
+    @ManyToOne
+    private User user;
+
+    @Column(name ="date_of_delete")
+    private LocalDateTime dateOfDelete;
 
     public DeleteOrder() {
     }
@@ -54,5 +61,21 @@ public class DeleteOrder extends BaseEntity {
 
     public void setItems(List<DeleteOrderItem> items) {
         this.items = items;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public LocalDateTime getDateOfDelete() {
+        return dateOfDelete;
+    }
+
+    public void setDateOfDelete(LocalDateTime dateOfDelete) {
+        this.dateOfDelete = dateOfDelete;
     }
 }

@@ -4,6 +4,8 @@ import bg.deplan.Grohe.service.ArticleService;
 import bg.deplan.Grohe.model.DTOs.OrderDTO;
 import bg.deplan.Grohe.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -100,9 +102,10 @@ public class OrderController {
     }
 
     @PostMapping("/deleteOrder/{id}")
-    public String deleteOrder(@PathVariable ("id") Long id) {
+    public String deleteOrder(@PathVariable ("id") Long id,
+                              @AuthenticationPrincipal UserDetails userDetails) {
 
-        orderService.deleteOrder(id);
+        orderService.deleteOrder(id, userDetails);
 
         return "redirect:/orders/allNew";
     }

@@ -18,7 +18,7 @@ public interface OrderService {
 
     long lastOrderId();
 
-    void deleteOrder(Long id);
+    void deleteOrder(Long id, UserDetails userDetails);
 
     OrderDTO getOrderById(Long orderId);
 

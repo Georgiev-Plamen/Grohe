@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -82,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void deleteOrder(Long id) {
+    public void deleteOrder(Long id, UserDetails userDetails) {
         Order order = orderRepository.getOrdersById(id);
         List <OrderItem> orderItems = order.getItems();
 
@@ -91,6 +92,8 @@ public class OrderServiceImpl implements OrderService {
         deleteOrder.setOrderName(order.getOrderName());
         deleteOrder.setDate(order.getDate());
         deleteOrderRepository.save(deleteOrder);
+        deleteOrder.setUser(userRepository.findByUsername(userDetails.getUsername()).get());
+        deleteOrder.setDateOfDelete(LocalDateTime.now());
 
         List<DeleteOrderItem> deleteOrderItems = new ArrayList<>();
 
@@ -100,6 +103,8 @@ public class OrderServiceImpl implements OrderService {
             modelMapper.map(orderItem, deleteOrderItem);
             deleteOrderItem.setDeleteOrder(deleteOrder);
             deleteOrderItems.add(deleteOrderItem);
+            deleteOrderItem.setDateOfDelete(LocalDateTime.now());
+            deleteOrderItem.setUser(userRepository.findByUsername(userDetails.getUsername()).get());
 
             deleteOrderItem.setDeleteOrder(deleteOrder);
             deleteOrderItemRepository.save(deleteOrderItem);
