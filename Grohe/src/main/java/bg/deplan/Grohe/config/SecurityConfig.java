@@ -24,13 +24,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/", "/users/login", "/users/register", "/users/login-error", "/error-page",
-                                "/orders/preOrder", "/orders/preOrderTest", "/static/**").permitAll()
+                                          "/orders/preOrder", "/orders/preOrderTest", "/static/**").permitAll()
                         .requestMatchers("/users/all", "/users/editUser/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf
                         .csrfTokenRequestHandler(csrfTokenHandler) // Handle CSRF tokens
-                        .ignoringRequestMatchers("api/orders/**")        // Disable CSRF for API paths
+                        .ignoringRequestMatchers("api/orders/**")          // Disable CSRF for API paths
                         .ignoringRequestMatchers("api/preorder/**")        // Disable CSRF for API paths
                         .ignoringRequestMatchers("articles/api/**")        // Disable CSRF for API paths
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())

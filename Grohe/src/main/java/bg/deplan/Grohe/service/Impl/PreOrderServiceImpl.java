@@ -109,9 +109,9 @@ public class PreOrderServiceImpl implements PreOrderService {
 
         String artNum = preOrderDTO.artNum();
         if (preOrderDTO.artNum().isEmpty()) {
-            optionalArticle = articleRepository.findByArtNum(preOrderItem.getArticle().getArtNum());
+            optionalArticle = articleRepository.findByAccurateArtNum(preOrderItem.getArticle().getArtNum());
         } else {
-            optionalArticle = articleRepository.findByArtNum(preOrderDTO.artNum());
+            optionalArticle = articleRepository.findByAccurateArtNum(preOrderDTO.artNum());
         }
 
         if (optionalArticle.isEmpty()) {
@@ -119,7 +119,7 @@ public class PreOrderServiceImpl implements PreOrderService {
             article.setArtNum(preOrderDTO.artNum());
             article.setBrand(preOrderDTO.brand());
             articleRepository.save(article);
-            optionalArticle = articleRepository.findByArtNum(preOrderDTO.artNum());
+            optionalArticle = articleRepository.findByAccurateArtNum(preOrderDTO.artNum());
         }
 
         if (preOrderDTO.artNum() != null && !preOrderItem.getArticle().getArtNum().equals(optionalArticle.get().getArtNum())) {
