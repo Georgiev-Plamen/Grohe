@@ -21,70 +21,108 @@
             document.getElementById("currentDate").value = today;
         });
 
-        // Function to sync contenteditable divs with hidden inputs
-        async function submitAllUpdates() {
-        const rows = document.querySelectorAll('tbody tr');
-        const updates = [];
+        // Function to check if at least one checkbox is unchecked
+        function checkCheckboxes() {
+            const checkboxes = document.querySelectorAll('input[name="isHold"]');
+            let atLeastOneUnchecked = false;
 
-        rows.forEach(row => {
-        // Ignore rows with a DELETE form
-        const deleteForm = row.querySelector('form');
-        if (deleteForm) {
-        const methodInput = deleteForm.querySelector('input[name="_method"]');
-            if (methodInput && methodInput.value.toLowerCase() === "delete") {
-                 return; // Skip this row
+            // Check if at least one checkbox is unchecked
+            checkboxes.forEach(checkbox => {
+                if (!checkbox.checked) { // Check if the checkbox is UNCHECKED
+                    atLeastOneUnchecked = true;
+                    console.log(atLeastOneUnchecked)
+                }
+            });
+
+            // Enable or disable the "Make Order" button
+            const makeOrderButton = document.querySelector('.eBtn');
+            if (makeOrderButton) {
+                makeOrderButton.disabled = !atLeastOneUnchecked;
+                console.log(makeOrderButton)
+            }
+            console.log(atLeastOneUnchecked)
+        }
+
+        // Attach the checkbox check function to checkbox changes
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', checkCheckboxes);
+            });
+
+            // Initial check when the page loads
+            checkCheckboxes();
+        });
+
+        // Function to sync contenteditable divs with hidden inputs
+        function updateHiddenInput(element) {
+            if (element.tagName === 'DIV') {
+                // Handle contenteditable div
+                const hiddenInput = element.nextElementSibling;
+                if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                    hiddenInput.value = element.innerText.trim();
+                }
+            } else if (element.tagName === 'INPUT' && element.type === 'checkbox') {
+                // Handle checkbox
+                const hiddenInput = element.nextElementSibling;
+                if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                    hiddenInput.value = element.checked ? 'true' : 'false';
+                }
             }
         }
 
-        const update = {};
+        // Function to submit all updates
+        async function submitAllUpdates() {
+            const rows = document.querySelectorAll('tbody tr');
+            const updates = [];
 
-        // Collect all inputs (excluding _csrf)
-        const inputs = row.querySelectorAll('input');
-        inputs.forEach(input => {
-        if (input.name !== "_csrf") {
-        update[input.name] = input.value.trim();
-        }
-        });
+            rows.forEach(row => {
+                const update = {};
 
-        // Collect contenteditable divs
-        const editableDivs = row.querySelectorAll('[contenteditable="true"]');
-        editableDivs.forEach(div => {
-        const hiddenInput = div.nextElementSibling;
-        if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-        update[hiddenInput.name] = div.textContent.trim();
-        }
-        });
+                // Collect all inputs (excluding _csrf)
+                const inputs = row.querySelectorAll('input');
+                inputs.forEach(input => {
+                    if (input.name !== "_csrf") {
+                        update[input.name] = input.value.trim();
+                    }
+                });
 
-        function formatDate(dateString) {
-        const date = new Date(dateString);
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = String(date.getFullYear()).slice(-2);
-        return `${day}.${month}.${year}`; // Returns in dd.MM.yy format
-        }
+                // Collect contenteditable divs
+                const editableDivs = row.querySelectorAll('[contenteditable="true"]');
+                editableDivs.forEach(div => {
+                    const hiddenInput = div.nextElementSibling;
+                    if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                        update[hiddenInput.name] = div.textContent.trim();
+                    }
+                });
 
-        updates.push(update);
-        });
+                // Collect checkbox value (isHold)
+                const checkbox = row.querySelector('input[type="checkbox"][name="isHold"]');
+                if (checkbox) {
+                    update[checkbox.name] = checkbox.checked ? 'true' : 'false';
+                }
 
-        // Submit the updates to the server
-        try {
-        const response = await fetch('api/preorder/receive/bulkUpdatePreOrder', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updates)
-        });
+                updates.push(update);
+            });
 
-        const result = await response.text();
-        alert(result);
-        } catch (error) {
-        console.error('Error sending PreOrder:', error);
-        alert('Failed to send PreOrder');
-        }
+            // Submit the updates to the server
+            try {
+                const response = await fetch('/api/preorder/receive/bulkUpdatePreOrder', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updates)
+                });
+
+                const result = await response.text();
+                alert(result);
+            } catch (error) {
+                console.error('Error sending PreOrder:', error);
+                alert('Failed to send PreOrder');
+            }
         }
     </script>
-
 </head>
 <body>
 
@@ -95,9 +133,8 @@
     <!-- Add Order Form -->
     <form th:method="post" th:action="@{/orders/preOrder}" th:object="${preOrderData}">
         <div class="add-container">
-
-            <input type="hidden" name="brand" th:value="Viega">
             <!-- Article Field -->
+            <input type="hidden" name="brand" th:value="Viega">
             <div class="preOrder-entity">
                 <label for="artNum">Article:</label>
                 <input type="text" id="artNum" th:field="*{artNum}" required>
@@ -141,52 +178,51 @@
             <th>Date</th>
             <th>Order Reason</th>
             <th>Comment</th>
-            <th class="action-title">Actions</th>
+            <th class="action-title">✋</th>
+            <th class="action-title">&#128465</th>
+            <!--            <th class="action-title">🗑</th>-->
         </tr>
         </thead>
         <tbody>
-        <tr th:each="article : ${allArticle}">
-            <!-- Form for each article -->
-            <form th:method="POST" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}" th:object="${article}">
-                <!--                <td th:text="*{id}"></td>-->
+        <tr th:each="preOrder : ${allPreOrderItems}" th:object="${preOrder}">
+            <!-- Form for each preOrder -->
+            <form th:method="POST" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}">
                 <input type="hidden" name="brand" th:value="Viega">
-                <input type="hidden" name="id" id="id" th:value="*{id}">
+                <input type="hidden" name="id" th:value="${preOrder.id()}">
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"
-                         th:value="*{artNum}"></div>
-                    <input type="hidden" th:field="*{artNum}">
-                </td>
-
-                <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantityForOrder}"
-                         th:value="*{quantityForOrder}"></div>
-                    <input type="hidden" th:field="*{quantityForOrder}">
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"></div>
+                    <input type="hidden" name="artNum" th:value="*{artNum}">
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderBy}"
-                         th:value="*{orderBy}"></div>
-                    <input type="hidden" th:field="*{orderBy}"/>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantityForOrder}"></div>
+                    <input type="hidden" name="quantityForOrder" th:value="*{quantityForOrder}">
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"
-                         th:value="*{date}"></div>
-                    <input type="hidden" th:field="*{date}"/>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderBy}"></div>
+                    <input type="hidden" name="orderBy" th:value="*{orderBy}">
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderReason}"
-                         th:value="*{orderReason}"></div>
-                    <input type="hidden" th:field="*{orderReason}"/>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"></div>
+                    <input type="hidden" name="date" th:value="*{date}">
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}"
-                         th:value="*{comment}"></div>
-                    <input type="hidden" th:field="*{comment}"/>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderReason}"></div>
+                    <input type="hidden" name="orderReason" th:value="*{orderReason}">
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}"></div>
+                    <input type="hidden" name="comment" th:value="*{comment}">
+                </td>
+                <td>
+                    <input type="checkbox" name="isHold" id="hold" oninput="updateHiddenInput(this)"
+                           th:checked="*{isHold}">
                 </td>
             </form>
             <td class="action">
-                <form th:action="@{/orders/delete/{id}(id=${article.id()})}" th:method="DELETE">
+                <form th:action="@{/orders/delete/{id}(id=*{id})}" th:method="POST">
+                    <input type="hidden" name="brand" th:value="Viega">
                     <input type="hidden" name="_method" value="delete">
-                    <button class="delete-btn" type="submit">Delete</button>
+                    <button class="delete-btn" type="submit">x</button>
                 </form>
             </td>
         </tr>
@@ -194,20 +230,24 @@
     </table>
 
     <!-- Single Update Button -->
-    <button type="button" class="btn btn-primary" onclick="submitAllUpdates()">Update All</button>
+    <button type="button" class="btn btn-primary fix" onclick="submitAllUpdates()">Update All</button>
 
-    <form th:method="POST"
-          th:action="@{/orders/importFromExcel}"
-          enctype="multipart/form-data">
-        <label class="file">
-            <input type="file" name="file" id="file" aria-label="File browser example" accept=".xlsx" required>
-            <span class="file-custom"></span>
-            <button type="submit">Import</button>
+    <!-- Import Form -->
+    <form th:method="POST" th:action="@{/orders/importFromExcel}" enctype="multipart/form-data">
+        <div class="preOrderFile">
+            <label class="file">
+                <input type="file" name="file" id="file" aria-label="File browser example" accept=".xlsx" required>
+                <input type="hidden" id="brand" name="brand" th:value="Viega">
+                <span class="file-custom"></span>
+                <button type="submit">Import</button>
+            </label>
+
+            <!-- Make Order Button -->
             <button type="button" class="eBtn" data-toggle="modal" data-target="#exampleModal">Make Order</button>
-        </label>
+        </div>
     </form>
 
-    <!--     popup screen -->
+    <!-- Popup screen -->
     <div class="myForm">
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
@@ -221,19 +261,20 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <form th:method="POST" th:action="@{/orders/makeOrderViega}">
+                            <!-- Make Order Form -->
+                            <form id="downloadForm" th:method="POST" th:action="@{/orders/makeOrder}">
                                 <label for="name" class="col-form-label">Име:</label>
-                                <input type="text" class="form-control" id="name" name="name" th:value="*{name}">
-                                <button type="submit" class="btn btn-primary">Завърши поръчката</button>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                                <button type="submit" class="btn btn-primary">Завърши</button>
                                 <input type="hidden" name="makeOrder" th:value="makeOrder">
                             </form>
+                            <a href="/orders/preOrder">Към заявки</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 </body>
 </html>

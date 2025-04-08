@@ -13,8 +13,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
 
-    <script>
 
+    <script>
         // Set today's date on page load
         window.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().split('T')[0];
@@ -216,11 +216,12 @@
                 <td>
                     <input type="checkbox" name="isHold" id="hold" oninput="updateHiddenInput(this)"
                            th:checked="*{isHold}">
-<!--                    <input type="hidden" name="isHold" th:value="*{isHold}">-->
                 </td>
+
             </form>
             <td class="action">
                 <form th:action="@{/orders/delete/{id}(id=*{id})}" th:method="POST">
+                    <input type="hidden" name="brand" th:value="Grohe">
                     <input type="hidden" name="_method" value="delete">
                     <button class="delete-btn" type="submit">x</button>
                 </form>

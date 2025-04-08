@@ -57,8 +57,7 @@ public class PreOrderController {
     public String preOrderViega(Model model) {
 
         model.addAttribute("preOrderData", preOrderDTO());
-        model.addAttribute("allArticle", preOrderService.getAllArticle("Viega"));
-        model.addAttribute("article", preOrderDTO());
+        model.addAttribute("allPreOrderItems", preOrderService.getAllArticle("Viega"));
 
         return "preOrderViega";
     }
@@ -76,28 +75,32 @@ public class PreOrderController {
         return "redirect:/orders/preOrder";
     }
 
-    @PostMapping("/updatePreOrder/{id}")
-    public String updateArticle(@PathVariable ("id") Long id, @ModelAttribute PreOrderDTO preOrderDTO ) {
-
-       preOrderService.updateItems(preOrderDTO, id);
-
-        boolean isViega = false;
-        if(preOrderService.findById(id).getArticle().getBrand().equals("Viega")) {
-            isViega = true;
-        }
-
-        if(isViega) {
-            return "redirect:/orders/preOrderViega";
-        }
-
-        return "redirect:/orders/preOrder";
-    }
+//    @PostMapping("/updatePreOrder/{id}")
+//    public String updateArticle(@PathVariable ("id") Long id, @ModelAttribute PreOrderDTO preOrderDTO ) {
+//
+//       preOrderService.updateItems(preOrderDTO, id);
+//
+//        boolean isViega = false;
+//        if(preOrderService.findById(id).getArticle().getBrand().equals("Viega")) {
+//            isViega = true;
+//        }
+//
+//        if(isViega) {
+//            return "redirect:/orders/preOrderViega";
+//        }
+//
+//        return "redirect:/orders/preOrder";
+//    }
 
     @DeleteMapping("/delete/{id}")
-    public String deletePreOrderArticle (@PathVariable ("id") Long id) {
+    public String deletePreOrderArticle (@PathVariable ("id") Long id,
+                                         @RequestParam("brand") String brand) {
 
         preOrderService.deletePreOrderArticle(id);
 
+        if(brand.equals("Viega")) {
+            return "redirect:/orders/preOrderViega";
+        }
         return "redirect:/orders/preOrder";
     }
 
