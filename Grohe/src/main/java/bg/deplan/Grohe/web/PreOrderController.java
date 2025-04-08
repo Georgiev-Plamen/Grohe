@@ -57,7 +57,7 @@ public class PreOrderController {
     public String preOrderViega(Model model) {
 
         model.addAttribute("preOrderData", preOrderDTO());
-        model.addAttribute("allPreOrderItems", preOrderService.getAllArticle("Viega"));
+        model.addAttribute("allPreOrderItems", preOrderService.getAllPreOrder("Viega"));
 
         return "preOrderViega";
     }
@@ -106,8 +106,8 @@ public class PreOrderController {
 
     @PostMapping("/makeOrder")
     public ResponseEntity<byte[]> makeOrder(@RequestParam("name") String name,
+                                            @RequestParam("brand") String brand,
                                             @AuthenticationPrincipal UserDetails userDetails) throws IOException {
-        String brand = "Grohe";
 
         // Create the order
         boolean isOrderCreated = preOrderService.createAndExportOrder(name, brand, userDetails);
@@ -142,14 +142,14 @@ public class PreOrderController {
 //        return ResponseEntity.ok().body("Successfully create order");
     }
 
-    @PostMapping("/makeOrderViega")
-    public String makeOrderViega (@RequestParam ("name") String name,
-                                  @AuthenticationPrincipal UserDetails userDetails) {
-        String brand = "Viega";
-        preOrderService.makeOrder(name,brand, userDetails);
-
-        return "redirect:/orders/preOrderViega";
-    }
+//    @PostMapping("/makeOrderViega")
+//    public String makeOrderViega (@RequestParam ("name") String name,
+//                                  @AuthenticationPrincipal UserDetails userDetails) {
+//        String brand = "Viega";
+//        preOrderService.makeOrder(name,brand, userDetails);
+//
+//        return "redirect:/orders/preOrderViega";
+//    }
 
     @GetMapping("/importFromExcel")
     public String showUploadForm() {
@@ -167,6 +167,10 @@ public class PreOrderController {
         } else {
             // Handle the case where the file is empty
             throw new IllegalArgumentException("File is empty");
+        }
+
+        if(brand.equals("Viega")) {
+            return "redirect:/orders/preOrderViega";
         }
 
         return "redirect:/orders/preOrder";

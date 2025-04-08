@@ -2,6 +2,7 @@ package bg.deplan.Grohe.service.Impl;
 
 import bg.deplan.Grohe.data.*;
 
+import bg.deplan.Grohe.model.AppUserDetails;
 import bg.deplan.Grohe.model.Article;
 import bg.deplan.Grohe.model.DTOs.ArticleDTO;
 import bg.deplan.Grohe.model.DTOs.PreOrderDTO;
@@ -254,7 +255,11 @@ public class PreOrderServiceImpl implements PreOrderService {
 
             preOrderItem.setArticle(optionalArticle.get());
             preOrderItem.setQuantityForOrder(preOrderExcelItems.quantityForOrder());
-            preOrderItem.setOrderBy("Вили");
+            if(preOrderExcelItems.brand().equals("Grohe")) {
+                preOrderItem.setOrderBy("Вили");
+            } else {
+                preOrderItem.setOrderBy(userDetails.getUsername());
+            }
             preOrderItem.setDate(preOrderExcelItems.date());
             preOrderItem.setOrderReason(checkComment(preOrderExcelItems.comment()));
             preOrderItem.setComment(preOrderExcelItems.comment());
