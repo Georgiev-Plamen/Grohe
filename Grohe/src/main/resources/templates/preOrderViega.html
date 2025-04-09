@@ -219,11 +219,30 @@
                 </td>
             </form>
             <td class="action">
-                <form th:action="@{/orders/delete/{id}(id=*{id})}" th:method="POST">
-                    <input type="hidden" name="brand" th:value="Viega">
-                    <input type="hidden" name="_method" value="delete">
-                    <button class="delete-btn" type="submit">x</button>
-                </form>
+                <button type="button" class="delete-btn" data-toggle="modal" data-target="#confirmation">
+                    x
+                </button>
+                <!-- Popup screen confirmation-->
+                <div class="modal" id="confirmation" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Искате ли да изтриете позицията ?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-footer">
+                                <form th:action="@{/orders/delete/{id}(id=*{id})}" th:method="POST">
+                                    <input type="hidden" name="brand" th:value="Viega">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button class="delete-btn" type="submit">Изтриване</button>
+                                </form>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отказ</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </td>
         </tr>
         </tbody>
@@ -276,6 +295,7 @@
             </div>
         </div>
     </div>
+
 </div>
 </body>
 </html>
