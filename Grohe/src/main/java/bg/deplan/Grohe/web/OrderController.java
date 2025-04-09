@@ -40,6 +40,15 @@ public class OrderController {
         return "ordersNew";
     }
 
+    @GetMapping("/allNewViega")
+    public String ordersNewViega(Model model){
+
+        model.addAttribute("allOrders", orderService.getAllOrders("Viega"));
+        model.addAttribute("order", orderDTO());
+
+        return "ordersNewViega";
+    }
+
     @PostMapping("/orderDetails")
     public String getOrderDetails(@RequestParam("orderId") Long orderId, Model model) {
         // Fetch order details based on the selected orderId

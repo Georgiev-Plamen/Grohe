@@ -312,6 +312,18 @@ svg {
 
 }
 
+.delete-master-btn {
+    background-color: #FF4B5B;
+    border-radius: 5px;
+    padding: 6px;
+    margin: 0x;
+    font-size: 17px;
+}
+
+.delete-master-btn:hover {
+    background-color: #910000;
+}
+
 .delete-btn:hover {
     background-color: #910000;
 }
@@ -435,5 +447,9 @@ svg {
 }
 
 .search-result-table-by-param {
+    margin-top: 1em;
+}
+
+.order-details-table {
     margin-top: 1em;
 }
