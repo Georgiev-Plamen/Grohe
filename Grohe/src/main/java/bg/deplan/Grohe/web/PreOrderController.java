@@ -75,23 +75,6 @@ public class PreOrderController {
         return "redirect:/orders/preOrder";
     }
 
-//    @PostMapping("/updatePreOrder/{id}")
-//    public String updateArticle(@PathVariable ("id") Long id, @ModelAttribute PreOrderDTO preOrderDTO ) {
-//
-//       preOrderService.updateItems(preOrderDTO, id);
-//
-//        boolean isViega = false;
-//        if(preOrderService.findById(id).getArticle().getBrand().equals("Viega")) {
-//            isViega = true;
-//        }
-//
-//        if(isViega) {
-//            return "redirect:/orders/preOrderViega";
-//        }
-//
-//        return "redirect:/orders/preOrder";
-//    }
-
     @DeleteMapping("/delete/{id}")
     public String deletePreOrderArticle (@PathVariable ("id") Long id,
                                          @RequestParam("brand") String brand) {
@@ -127,7 +110,7 @@ public class PreOrderController {
         }
 
         // Export the order to Excel
-        byte[] excelFile = excelExportService.exportOrderToExcel(lastOrderId);
+        byte[] excelFile = excelExportService.exportOrderToExcel(lastOrderId, orderService.lastOrderNumber());
 
         if (excelFile == null) {
             // Handle the case where the Excel file generation failed

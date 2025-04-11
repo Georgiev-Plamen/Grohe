@@ -216,6 +216,21 @@ public class OrderServiceImpl implements OrderService {
                  .toList();
     }
 
+    @Override
+    public String lastOrderNumber() {
+        Order order = orderRepository.getReferenceById(lastOrderId());
+        String orderName = order.getOrderName();
+
+        String orderNum = orderName.split(" ")[1];
+
+        try {
+            int num = Integer.parseInt(orderNum);
+            return String.valueOf(num);
+        } catch (NumberFormatException nfe) {
+            return "";
+        }
+    }
+
     private ArticleFindDTO mapToArticleFindDTO(OrderItem orderItem) {
         return new ArticleFindDTO(
                 orderItem.getArticle().getBrand(),

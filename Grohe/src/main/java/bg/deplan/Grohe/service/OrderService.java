@@ -31,4 +31,6 @@ public interface OrderService {
     List<ArticleFindDTO> findOnlyArticlesInOrder(String artNum);
 
     List<ArticleFindDTO> findByOrderBy(String orderBy);
+
+    String lastOrderNumber();
 }

@@ -5,6 +5,7 @@ import bg.deplan.Grohe.data.OrderRepository;
 import bg.deplan.Grohe.model.Order;
 import bg.deplan.Grohe.model.OrderItem;
 import bg.deplan.Grohe.service.ExcelExportService;
+import bg.deplan.Grohe.service.OrderService;
 import jakarta.transaction.Transactional;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -25,11 +26,15 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
-    public ExcelExportServiceImpl(OrderRepository orderRepository) {
+    @Autowired
+    public ExcelExportServiceImpl(OrderRepository orderRepository,
+                                  OrderItemRepository orderItemRepository) {
+        this.orderRepository = orderRepository;
+        this.orderItemRepository = orderItemRepository;
     }
 
     @Transactional
-    public byte[] exportOrderToExcel(long id) throws IOException {
+    public byte[] exportOrderToExcel(long id, String orderNum) throws IOException {
 
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Order Export");
@@ -64,7 +69,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
             order.setItems(orderItemRepository.findAllByOrderId(id));
 
             // Header: Order Information
-            rowIndex = createOrderHeader(sheet, order, rowIndex, cellStyle);
+            rowIndex = createOrderHeader(sheet, order, rowIndex, cellStyle, orderNum);
 
             // Sub-header: Article List
             rowIndex = createArticleTableHeader(sheet, rowIndex, workbook);
@@ -112,7 +117,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         }
     }
 
-    private int createOrderHeader(Sheet sheet, Order order, int rowIndex, CellStyle cellStyle) {
+    private int createOrderHeader(Sheet sheet, Order order, int rowIndex, CellStyle cellStyle, String orderNum) {
         rowIndex++;
 
         Row row = sheet.createRow(rowIndex++) ;
@@ -156,7 +161,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         cell.setCellStyle(cellStyle);
 
         cell = row.createCell(1);
-        cell.setCellValue("D//25");
+        cell.setCellValue("D/" + orderNum + "/25");
         cell.setCellStyle(cellStyle);
 
         row = sheet.createRow(rowIndex++);
@@ -174,17 +179,6 @@ public class ExcelExportServiceImpl implements ExcelExportService {
 
         return rowIndex;
     }
-
-//    private int createArticleTableHeader(Sheet sheet, int rowIndex) {
-//        Row row = sheet.createRow(rowIndex++);
-//        row.setHeightInPoints(43);
-//        row.createCell(0).setCellValue("");
-//        row.createCell(1).setCellValue("Product Number");
-//        row.createCell(2).setCellValue("Q-ty");
-//        row.createCell(3).setCellValue("Order reason");
-//
-//        return rowIndex;
-//    }
 
     private int createArticleTableHeader(Sheet sheet, int rowIndex, Workbook workbook) {
         Row row = sheet.createRow(rowIndex++);

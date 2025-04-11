@@ -37,10 +37,8 @@ public class OrderRestController {
 
     @GetMapping("/{id}/export")
     public ResponseEntity<byte[]> exportOrder(@PathVariable Long id) throws IOException {
-//        // Simulate fetching an orderDTO from the database
-//        Order order = orderRepository.getReferenceById(id); // Replace with real service call
-
-        byte[] excelFile = excelExportService.exportOrderToExcel(id);
+        String orderNum = orderService.lastOrderNumber();
+        byte[] excelFile = excelExportService.exportOrderToExcel(id, orderNum);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=order_" + id + ".xlsx")

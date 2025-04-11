@@ -77,7 +77,7 @@ public class PreOrderServiceImpl implements PreOrderService {
     public void addItem(ArticleDTO articleDTO, UserDetails userDetails) {
         PreOrderItem preOrderItem = new PreOrderItem();
 
-        Optional<Article> optionalArticle = articleRepository.findByArtNum(articleDTO.artNum());
+        Optional<Article> optionalArticle = articleRepository.findByAccurateArtNum(articleDTO.artNum());
 
         if (optionalArticle.isEmpty()) {
             Article article = new Article();
@@ -176,15 +176,6 @@ public class PreOrderServiceImpl implements PreOrderService {
                 .stream().map(PreOrderServiceImpl::toAllPreOrderItem)
                 .toList();
     }
-
-    @Override
-    @Transactional
-    public void makeOrder(String name, String brand, UserDetails userDetails) {
-            List<PreOrderItem> preOrderList = preOrderItemRepository.findAllByArticle_Brand(brand);
-            orderService.createOrder(preOrderList, name, brand, userDetails);
-            preOrderItemRepository.deleteAllByArticle_BrandAndIsHoldIsFalse(brand);
-    }
-
 
     @Override
     @Transactional
