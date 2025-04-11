@@ -36,8 +36,10 @@ public class OrderRestController {
     }
 
     @GetMapping("/{id}/export")
-    public ResponseEntity<byte[]> exportOrder(@PathVariable Long id) throws IOException {
-        String orderNum = orderService.lastOrderNumber();
+    public ResponseEntity<byte[]> exportOrder(@PathVariable Long id,
+                                              @RequestParam String brand) throws IOException {
+
+        String orderNum = orderService.lastOrderNumber(brand);
         byte[] excelFile = excelExportService.exportOrderToExcel(id, orderNum);
 
         return ResponseEntity.ok()

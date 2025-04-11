@@ -49,7 +49,7 @@ public class PreOrderController {
 
         model.addAttribute("preOrderData", preOrderDTO());
         model.addAttribute("allPreOrderItems", preOrderService.getAllPreOrder("Grohe"));
-        model.addAttribute("newOrderName", orderService.newOrderName());
+        model.addAttribute("newOrderName", orderService.newOrderName("Grohe"));
 
         return "preOrder";
     }
@@ -59,6 +59,7 @@ public class PreOrderController {
 
         model.addAttribute("preOrderData", preOrderDTO());
         model.addAttribute("allPreOrderItems", preOrderService.getAllPreOrder("Viega"));
+        model.addAttribute("newOrderName", orderService.newOrderName("Viega"));
 
         return "preOrderViega";
     }
@@ -102,7 +103,7 @@ public class PreOrderController {
         }
 
         // Get the last order ID
-        Long lastOrderId = orderService.lastOrderId();
+        Long lastOrderId = orderService.lastOrderId(brand);
         String orderName = orderRepository.getOrdersById(lastOrderId).getOrderName();
 
         if (lastOrderId == null) {
@@ -111,7 +112,7 @@ public class PreOrderController {
         }
 
         // Export the order to Excel
-        byte[] excelFile = excelExportService.exportOrderToExcel(lastOrderId, orderService.lastOrderNumber());
+        byte[] excelFile = excelExportService.exportOrderToExcel(lastOrderId, orderService.lastOrderNumber(brand));
 
         if (excelFile == null) {
             // Handle the case where the Excel file generation failed

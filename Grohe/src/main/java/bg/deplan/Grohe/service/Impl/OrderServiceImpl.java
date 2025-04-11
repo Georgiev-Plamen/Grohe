@@ -75,8 +75,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public long lastOrderId() {
-        Long id = orderRepository.findLastId();
+    public long lastOrderId(String brand) {
+        Long id = orderRepository.findLastId(brand);
 
         return id;
     }
@@ -217,8 +217,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public String lastOrderNumber() {
-        Order order = orderRepository.getReferenceById(lastOrderId());
+    public String lastOrderNumber(String brand) {
+        Order order = orderRepository.getReferenceById(lastOrderId(brand));
         String orderName = order.getOrderName();
 
         String orderNum = orderName.split(" ")[1];
@@ -232,8 +232,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public String newOrderName() {
-        Order order = orderRepository.getReferenceById(lastOrderId());
+    public String newOrderName(String brand) {
+        Order order = orderRepository.getReferenceById(lastOrderId(brand));
         String orderName = order.getOrderName();
 
         String orderNum = orderName.split(" ")[1];

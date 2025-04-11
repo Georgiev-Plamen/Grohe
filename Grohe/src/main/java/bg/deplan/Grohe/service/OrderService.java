@@ -16,7 +16,7 @@ public interface OrderService {
 
     void editOrder(OrderDTO orderDTO, Long id);
 
-    long lastOrderId();
+    long lastOrderId(String brand);
 
     void deleteOrder(Long id, UserDetails userDetails);
 
@@ -32,7 +32,7 @@ public interface OrderService {
 
     List<ArticleFindDTO> findByOrderBy(String orderBy);
 
-    String lastOrderNumber();
+    String lastOrderNumber(String brand);
 
-    String newOrderName();
+    String newOrderName(String brand);
 }
