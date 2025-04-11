@@ -231,6 +231,22 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    public String newOrderName() {
+        Order order = orderRepository.getReferenceById(lastOrderId());
+        String orderName = order.getOrderName();
+
+        String orderNum = orderName.split(" ")[1];
+
+        try {
+            int num = Integer.parseInt(orderNum) + 1;
+            String newOrderName = "Order " + String.valueOf(num);
+            return newOrderName;
+        } catch (NumberFormatException nfe) {
+            return "";
+        }
+    }
+
     private ArticleFindDTO mapToArticleFindDTO(OrderItem orderItem) {
         return new ArticleFindDTO(
                 orderItem.getArticle().getBrand(),

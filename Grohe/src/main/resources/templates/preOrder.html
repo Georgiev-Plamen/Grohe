@@ -283,7 +283,7 @@
                             <!-- Make Order Form -->
                             <form id="downloadForm" th:method="POST" th:action="@{/orders/makeOrder}">
                                 <label for="name" class="col-form-label">Име:</label>
-                                <input type="text" class="form-control" id="name" name="name" required>
+                                <input type="text" class="form-control" id="name" name="name" th:value="${newOrderName}" required>
                                 <button type="submit" class="btn btn-primary">Завърши</button>
                                 <input type="hidden" name="makeOrder" th:value="makeOrder">
                                 <input type="hidden" name="brand" th:value="Grohe">

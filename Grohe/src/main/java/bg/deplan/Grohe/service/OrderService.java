@@ -33,4 +33,6 @@ public interface OrderService {
     List<ArticleFindDTO> findByOrderBy(String orderBy);
 
     String lastOrderNumber();
+
+    String newOrderName();
 }

@@ -49,6 +49,7 @@ public class PreOrderController {
 
         model.addAttribute("preOrderData", preOrderDTO());
         model.addAttribute("allPreOrderItems", preOrderService.getAllPreOrder("Grohe"));
+        model.addAttribute("newOrderName", orderService.newOrderName());
 
         return "preOrder";
     }
@@ -124,15 +125,6 @@ public class PreOrderController {
                 .body(excelFile);
 //        return ResponseEntity.ok().body("Successfully create order");
     }
-
-//    @PostMapping("/makeOrderViega")
-//    public String makeOrderViega (@RequestParam ("name") String name,
-//                                  @AuthenticationPrincipal UserDetails userDetails) {
-//        String brand = "Viega";
-//        preOrderService.makeOrder(name,brand, userDetails);
-//
-//        return "redirect:/orders/preOrderViega";
-//    }
 
     @GetMapping("/importFromExcel")
     public String showUploadForm() {
