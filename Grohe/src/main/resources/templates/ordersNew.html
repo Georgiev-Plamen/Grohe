@@ -185,13 +185,14 @@
                        th:attr="onclick='showOrderDetails(' + ${order.id} + ')'">Затвори</a></th>
             </tr>
             <tr>
-                <th>Article Number</th>
-                <th>Quantity</th>
-                <th>Ordered By</th>
-                <th>Date of Order</th>
-                <th>Date of Delivery</th>
-                <th>Order Reason</th>
-                <th>Comments</th>
+                <th th:text="#{article_number}">Article Number</th>
+                <th th:text="#{orders_pcs}">Quantity</th>
+                <th th:text="#{article_name}">Name</th>
+                <th th:text="#{orders_ordered_by}">Ordered By</th>
+                <th th:text="#{orders_date}">Date of Order</th>
+                <th th:text="#{orders_confirmation}">Date of Delivery</th>
+                <th th:text="#{orders_reason}">Order Reason</th>
+                <th th:text="#{orders_comment}">Comment</th>
             </tr>
 
             </thead>
@@ -255,13 +256,14 @@
                        th:attr="onclick='showOrderDetails(' + ${order.id} + ')'">Затвори</a></th>
             </tr>
             <tr>
-                <th>Article Number</th>
-                <th>Quantity</th>
-                <th>Ordered By</th>
-                <th>Date of Order</th>
-                <th>Date of Delivery</th>
-                <th>Order Reason</th>
-                <th>Comment</th>
+                <th th:text="#{article_number}">Article Number</th>
+                <th th:text="#{orders_pcs}">Quantity</th>
+                <th th:text="#{article_name}">Name</th>
+                <th th:text="#{orders_ordered_by}">Ordered By</th>
+                <th th:text="#{orders_date}">Date of Order</th>
+                <th th:text="#{orders_confirmation}">Date of Delivery</th>
+                <th th:text="#{orders_reason}">Order Reason</th>
+                <th th:text="#{orders_comment}">Comment</th>
             </tr>
 
             </thead>
@@ -278,6 +280,10 @@
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantity}"></div>
                     <input type="hidden" name="quantity" th:value="*{quantity}">
+                </td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{getArticle().getName()}"></div>
+                    <input type="hidden" name="artName" th:value="*{getArticle().getName()}">
                 </td>
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderBy}"></div>

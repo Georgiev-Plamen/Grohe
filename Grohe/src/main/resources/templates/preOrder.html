@@ -136,32 +136,32 @@
             <!-- Article Field -->
             <input type="hidden" name="brand" th:value="Grohe">
             <div class="preOrder-entity">
-                <label for="artNum">Article:</label>
+                <label for="artNum" th:text="#{orders_article_number}">Article:</label>
                 <input type="text" id="artNum" th:field="*{artNum}" required>
             </div>
             <!-- Quantity Field -->
             <div class="preOrder-entity">
-                <label for="quantityForOrder">Quantity:</label>
+                <label for="quantityForOrder" th:text="#{orders_pcs}">Quantity:</label>
                 <input type="number" id="quantityForOrder" th:field="*{quantityForOrder}" required>
             </div>
             <!-- Order By Field -->
             <div class="preOrder-entity">
-                <label for="orderBy">Order by:</label>
+                <label for="orderBy" th:text="#{orders_ordered_by}">Order by:</label>
                 <input type="text" id="orderBy" th:field="*{orderBy}" required>
             </div>
             <!-- Date Field -->
             <div class="preOrder-entity">
-                <label for="currentDate">Date:</label>
+                <label for="currentDate" th:text="#{orders_date}">Date:</label>
                 <input type="date" id="currentDate" th:field="*{date}" required>
             </div>
             <!-- Order Reason Field -->
             <div class="preOrder-entity">
-                <label for="orderReason">Order reason:</label>
+                <label for="orderReason" th:text="#{orders_reason}">Order reason:</label>
                 <input type="text" id="orderReason" th:field="*{orderReason}">
             </div>
             <!-- Comments Field -->
             <div class="preOrder-entity">
-                <label for="comment">Comments:</label>
+                <label for="comment" th:text="#{orders_comment}">Comments:</label>
                 <input type="text" id="comment" th:field="*{comment}">
             </div>
             <button class="pre-order-add-btn" type="submit">Add</button>
@@ -172,12 +172,12 @@
     <table>
         <thead>
         <tr>
-            <th>Article</th>
-            <th>Quantity</th>
-            <th>Ordered By</th>
-            <th>Date</th>
-            <th>Order Reason</th>
-            <th>Comment</th>
+            <th th:text="#{orders_article_number}">Article</th>
+            <th th:text="#{orders_pcs}">Quantity</th>
+            <th th:text="#{orders_ordered_by}">Ordered By</th>
+            <th th:text="#{orders_date}">Date</th>
+            <th th:text="#{orders_reason}">Order Reason</th>
+            <th th:text="#{orders_comment}">Comment</th>
             <th class="action-title">✋</th>
             <th class="action-title">&#128465</th>
 <!--            <th class="action-title">🗑</th>-->

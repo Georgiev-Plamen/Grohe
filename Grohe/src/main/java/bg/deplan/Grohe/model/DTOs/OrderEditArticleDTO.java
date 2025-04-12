@@ -14,6 +14,7 @@ public record OrderEditArticleDTO(
         String artNum,
         String quantity,
         String orderBy,
+        String artName,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") // Match your frontend format
         LocalDate dateOfOrder,

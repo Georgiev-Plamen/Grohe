@@ -174,6 +174,10 @@ public class OrderServiceImpl implements OrderService {
                orderItem.setOrderBy(orderEditArticleDTO.orderBy());
            }
 
+           if(orderEditArticleDTO.artName() != null) {
+               orderItem.getArticle().setName(orderEditArticleDTO.artName());
+           }
+
            if(orderEditArticleDTO.dateOfOrder() != null) {
                orderItem.setDateOfOrder(orderEditArticleDTO.dateOfOrder());
            }
@@ -233,8 +237,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public String newOrderName(String brand) {
-        Order order = orderRepository.getReferenceById(lastOrderId(brand));
-        String orderName = order.getOrderName();
+
+//        Optional<Order> orderOptional = orderRepository.getReferenceById(lastOrderId(brand));
+        Optional<Order> orderOptional = orderRepository.findById(lastOrderId(brand));
+
+        if(orderOptional.isEmpty()) {
+            return "";
+        }
+
+        String orderName = orderOptional.get().getOrderName();
 
         String orderNum = orderName.split(" ")[1];
 
