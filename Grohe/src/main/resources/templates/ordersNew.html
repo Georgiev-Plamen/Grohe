@@ -171,6 +171,11 @@
             <input type="text" name="artNum" id="artNumOnly" th:value="*{artNum}">
             <button class="pre-order-add-btn" type="submit">Търси</button>
         </form>
+        <form th:method="POST" th:action="@{/orders/searchByComment/*{comment}}">
+            <label for="artNum">Търсене по коментар:</label>
+            <input type="text" name="comment" id="comment" th:value="*{comment}">
+            <button class="pre-order-add-btn" type="submit">Търси</button>
+        </form>
     </div>
     <!--    </div>-->
 

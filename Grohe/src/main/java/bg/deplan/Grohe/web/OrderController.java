@@ -86,6 +86,14 @@ public class OrderController {
         return "ordersNew";
     }
 
+    @PostMapping("/searchByComment/{comment}")
+    public String searchByComment(Model model, @RequestParam("comment") String comment) {
+        model.addAttribute("articlesByParam", orderService.findArticlesByComment(comment));
+        model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
+
+        return "ordersNew";
+    }
+
     @GetMapping("/orderNewSearch/{artNum}")
     public String orderSearchView(Model model, @RequestParam("artNum") String artNum) {
 

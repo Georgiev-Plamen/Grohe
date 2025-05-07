@@ -258,6 +258,13 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    public List<ArticleFindDTO> findArticlesByComment(String comment) {
+        return orderItemRepository.findOrderItemByComment(comment).stream()
+                .map(this::mapToArticleFindDTO)
+                .toList();
+    }
+
     private ArticleFindDTO mapToArticleFindDTO(OrderItem orderItem) {
         return new ArticleFindDTO(
                 orderItem.getArticle().getBrand(),

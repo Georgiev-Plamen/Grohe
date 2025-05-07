@@ -30,4 +30,7 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
     @Query("SELECT oi FROM OrderItem oi WHERE oi.order.id = :id")
     List<OrderItem> findOrderItemsByOrderID(@Param("id") Long id);
+
+    @Query("SELECT oi FROM OrderItem oi WHERE oi.comment LIKE %:comment%")
+    List<OrderItem> findOrderItemByComment(String comment);
 }

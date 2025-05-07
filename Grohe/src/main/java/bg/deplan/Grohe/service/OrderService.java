@@ -35,4 +35,6 @@ public interface OrderService {
     String lastOrderNumber(String brand);
 
     String newOrderName(String brand);
+
+    List<ArticleFindDTO> findArticlesByComment(String comment);
 }
