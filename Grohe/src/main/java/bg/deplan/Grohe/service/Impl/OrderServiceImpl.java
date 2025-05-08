@@ -64,6 +64,7 @@ public class OrderServiceImpl implements OrderService {
                 orderItem.setDateOfOrder(preOrderItem.getDate());
                 orderItem.setOrderReason(preOrderItem.getOrderReason());
                 orderItem.setComment(preOrderItem.getComment());
+                orderItem.setUser(userRepository.findByUsername(userDetails.getUsername()).get());
 
                 orderItem.setOrder(order);
                 orderItemRepository.save(orderItem);
