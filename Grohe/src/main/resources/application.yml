@@ -6,6 +6,8 @@ spring:
     username: root
     password: root
   servlet:
+    session:
+      timeout: 360m
     multipart:
       max-file-size: 1MB
       max-request-size: 5MB
