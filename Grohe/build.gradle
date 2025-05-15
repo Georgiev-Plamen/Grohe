@@ -1,6 +1,7 @@
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.0'
+	id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'bg.deplan'
@@ -60,4 +61,9 @@ bootRun {
 
 bootJar {
 	archiveFileName = "${project.name}-${project.version}.jar"
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.fork = true
+	options.forkOptions.jvmArgs += ['--enable-preview']
 }
