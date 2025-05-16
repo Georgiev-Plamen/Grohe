@@ -8,6 +8,9 @@ import bg.deplan.Grohe.service.ExcelExportService;
 import bg.deplan.Grohe.service.OrderService;
 import jakarta.transaction.Transactional;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellUtil;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,10 +55,11 @@ public class ExcelExportServiceImpl implements ExcelExportService {
             cellStyle.setAlignment(HorizontalAlignment.CENTER);
             cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
             cellStyle.setWrapText(true);
-            cellStyle.setBorderTop(BorderStyle.MEDIUM);
-            cellStyle.setBorderBottom(BorderStyle.MEDIUM);
-            cellStyle.setBorderLeft(BorderStyle.MEDIUM);
-            cellStyle.setBorderRight(BorderStyle.MEDIUM);
+
+//            cellStyle.setBorderTop(BorderStyle.MEDIUM);
+//            cellStyle.setBorderBottom(BorderStyle.MEDIUM);
+//            cellStyle.setBorderLeft(BorderStyle.MEDIUM);
+//            cellStyle.setBorderRight(BorderStyle.MEDIUM);
 
             //Column adjust
             sheet.setColumnWidth(0, 3820);
@@ -110,10 +114,46 @@ public class ExcelExportServiceImpl implements ExcelExportService {
             dataStyle.setBorderLeft(BorderStyle.THIN);
             dataStyle.setBorderRight(BorderStyle.THIN);
 
+            CellRangeAddress headerRange = new CellRangeAddress(1, 5, 0, 1);
+            CellRangeAddress articleRange = new CellRangeAddress(9, rowIndex-1, 0, 3);
+            CellRangeAddress articleHeaderRange = new CellRangeAddress(8,8,0,3);
+
+            setInnerBorder(headerRange, sheet);
+            setInnerBorder(articleRange, sheet);
+            setInnerBorder(articleHeaderRange,sheet);
+
+            setOutsideBorderToRange(headerRange, sheet);
+            setOutsideBorderToRange(articleRange, sheet);
+            setOutsideBorderToRange(articleHeaderRange, sheet);
+
             // Convert to byte array for download
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             workbook.write(outputStream);
             return outputStream.toByteArray();
+        }
+    }
+
+    private static void setOutsideBorderToRange(CellRangeAddress headerRange, Sheet sheet) {
+        RegionUtil.setBorderTop(BorderStyle.MEDIUM, headerRange, sheet);
+        RegionUtil.setBorderBottom(BorderStyle.MEDIUM, headerRange, sheet);
+        RegionUtil.setBorderLeft(BorderStyle.MEDIUM, headerRange, sheet);
+        RegionUtil.setBorderRight(BorderStyle.MEDIUM, headerRange, sheet);
+    }
+
+    private static void setInnerBorder(CellRangeAddress header, Sheet sheet) {
+        for (int row = header.getFirstRow(); row <= header.getLastRow(); row++) {
+            for (int col = header.getFirstColumn(); col <= header.getLastColumn(); col++) {
+                Cell cell = sheet.getRow(row).getCell(col);
+                if (cell == null) {
+                    cell = sheet.getRow(row).createCell(col);
+                }
+
+                // Set thin borders for all sides (will be overridden by outer borders)
+                CellUtil.setCellStyleProperty(cell, CellUtil.BORDER_TOP, BorderStyle.THIN);
+                CellUtil.setCellStyleProperty(cell, CellUtil.BORDER_BOTTOM, BorderStyle.THIN);
+                CellUtil.setCellStyleProperty(cell, CellUtil.BORDER_LEFT, BorderStyle.THIN);
+                CellUtil.setCellStyleProperty(cell, CellUtil.BORDER_RIGHT, BorderStyle.THIN);
+            }
         }
     }
 
@@ -192,10 +232,10 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         headerFont.setColor(IndexedColors.BLACK.getIndex());  // Set font color
         headerStyle.setFont(headerFont);  // Attach font
 
-        headerStyle.setBorderTop(BorderStyle.MEDIUM);
-        headerStyle.setBorderBottom(BorderStyle.MEDIUM);
-        headerStyle.setBorderLeft(BorderStyle.MEDIUM);
-        headerStyle.setBorderRight(BorderStyle.MEDIUM);
+//        headerStyle.setBorderTop(BorderStyle.MEDIUM);
+//        headerStyle.setBorderBottom(BorderStyle.MEDIUM);
+//        headerStyle.setBorderLeft(BorderStyle.MEDIUM);
+//        headerStyle.setBorderRight(BorderStyle.MEDIUM);
         headerStyle.setAlignment(HorizontalAlignment.CENTER);  // Center alignment
         headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);  // Center alignment
 
