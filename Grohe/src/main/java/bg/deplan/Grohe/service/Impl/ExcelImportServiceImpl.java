@@ -43,13 +43,17 @@ public class ExcelImportServiceImpl implements ExcelImportService {
                     // Read article number
                     Cell artNumCell = row.getCell(artNumRow);
                     String artNum;
+                    if(artNumCell == null){
+                        artNum = "";
+                    }
+
                     if (artNumCell.getCellType() == CellType.NUMERIC) {
                         artNum = String.valueOf((long) artNumCell.getNumericCellValue());
                     } else {
                         artNum = artNumCell.getStringCellValue();
                     }
 
-                    // Read quantity for order
+                    // Read quantityw for order
                     Cell quantityCell = row.getCell(quantityRow);
                     String quantityForOrder;
                     if (quantityCell.getCellType() == CellType.NUMERIC) {
