@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,6 +24,7 @@ public class ExcelImportServiceImpl implements ExcelImportService {
         String artNumName = "Код на производител";
         String quantityName = "Количество";
         String commentName = "Забележка";
+        String hardCodeDate = "HardDate";
         int targetRowIndex = 8;
 
         // Use the provided InputStream to read the Excel file
@@ -34,6 +37,7 @@ public class ExcelImportServiceImpl implements ExcelImportService {
             int artNumRow = findColumnIndex(sheet, targetRowIndex, artNumName);
             int quantityRow = findColumnIndex(sheet, targetRowIndex, quantityName);
             int commentRow = findColumnIndex(sheet, targetRowIndex, commentName);
+            int hardCodeDateRow = findColumnIndex(sheet, targetRowIndex, hardCodeDate);
 
             // Iterate over rows, starting from the 10th row (skip the header)
             for (int i = 9; i < lastRow; i++) {
@@ -53,7 +57,7 @@ public class ExcelImportServiceImpl implements ExcelImportService {
                         artNum = artNumCell.getStringCellValue();
                     }
 
-                    // Read quantityw for order
+                    // Read quantity for order
                     Cell quantityCell = row.getCell(quantityRow);
                     String quantityForOrder;
                     if (quantityCell.getCellType() == CellType.NUMERIC) {
@@ -64,13 +68,31 @@ public class ExcelImportServiceImpl implements ExcelImportService {
 
                     // Read comment
                     String comment = row.getCell(commentRow).getStringCellValue();
+                   LocalDate date = null;
 
+                   if(hardCodeDateRow > 0) {
+                       Cell hardCodeDateCell = row.getCell(hardCodeDateRow);
+                       try {
+                           if (hardCodeDateCell.getCellType() == CellType.NUMERIC) {
+                               if (DateUtil.isCellDateFormatted(hardCodeDateCell)) {
+                                   // The cell contains a date value
+                                   Date javaDate = hardCodeDateCell.getDateCellValue();
+                                   date = javaDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                               }
+                           }
+                       } catch (Exception e) {
+//                        throw new RuntimeException(e);
+                           date = LocalDate.now();
+                       }
+                   } else {
+                       date = LocalDate.now();
+                   }
                     // Create DTO and add it to the list
                     PreOrderExcelDTO preOrderExcelDTO = new PreOrderExcelDTO(
                             brand,
                             artNum,
                             quantityForOrder,
-                            LocalDate.now(), // Use current date
+                            date,
                             comment
                     );
 
