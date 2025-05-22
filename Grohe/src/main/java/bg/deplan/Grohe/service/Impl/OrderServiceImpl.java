@@ -248,7 +248,14 @@ public class OrderServiceImpl implements OrderService {
 
         String orderName = orderOptional.get().getOrderName();
 
-        String orderNum = orderName.split(" ")[1];
+        String orderNum;
+        try {
+            orderNum = orderName.split(" ")[1];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return "";
+        } catch (NullPointerException e) {
+            return "";
+        }
 
         try {
             int num = Integer.parseInt(orderNum) + 1;
