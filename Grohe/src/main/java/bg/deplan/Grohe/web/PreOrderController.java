@@ -111,10 +111,15 @@ public class PreOrderController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
 
+        byte [] excelFile;
         // Export the order to Excel
-        byte[] excelFile = excelExportService.exportOrderToExcel(lastOrderId, orderService.lastOrderNumber(brand));
+        if (brand.equals("Grohe")) {
+            excelFile = excelExportService.exportOrderToExcel(lastOrderId, orderService.lastOrderNumber(brand));
+        } else {
+            excelFile = excelExportService.exportOrderToExcelViega(lastOrderId, "Test");
+        }
 
-        if (excelFile == null) {
+        if (excelFile == null ) {
             // Handle the case where the Excel file generation failed
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -151,5 +156,7 @@ public class PreOrderController {
 
         return "redirect:/orders/preOrder";
     }
+
+
 
 }

@@ -37,6 +37,61 @@ public class ExcelExportServiceImpl implements ExcelExportService {
     }
 
     @Transactional
+    public byte[] exportOrderToExcelViega(long id, String orderNum) throws IOException {
+
+        try (Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Order Export");
+            sheet.setHorizontallyCenter(true);
+            sheet.setVerticallyCenter(true);
+            CellStyle cellStyle = workbook.createCellStyle();
+            Font workbookFont = workbook.createFont();
+            workbookFont.setFontHeightInPoints((short) 11);  // Font size 12
+            workbookFont.setFontName("Arial");
+            cellStyle.setFont(workbookFont);
+            sheet.setColumnWidth(0, 4608);
+            sheet.setColumnWidth(1, 10459);
+            sheet.setColumnWidth(2, 2633);
+
+            int rowIndex = 0;
+
+            Row row = sheet.createRow(rowIndex++);
+            Cell cell = row.createCell(0);
+            cell.setCellStyle(cellStyle);
+            cell.setCellValue("Art Numbert Viega");
+
+            cell = row.createCell(1);
+            cell.setCellStyle(cellStyle);
+            cell.setCellValue("Article Name");
+
+            cell = row.createCell(2);
+            cell.setCellStyle(cellStyle);
+            cell.setCellValue("Order qtt");
+
+            Order order = orderRepository.getReferenceById(id);
+            order.setItems(orderItemRepository.findAllByOrderId(id));
+
+            for (OrderItem article : order.getItems()) {
+                row = sheet.createRow(rowIndex++);
+                cell.setCellStyle(cellStyle);
+
+                cell = row.createCell(0);
+                cell.setCellStyle(cellStyle);
+                cell.setCellValue(article.getArticle().getArtNum());
+
+                cell = row.createCell(2);
+                cell.setCellStyle(cellStyle);
+                cell.setCellValue(article.getQuantity());
+
+            }
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        workbook.write(outputStream);
+        return  outputStream.toByteArray();
+        }
+    }
+
+    @Transactional
     public byte[] exportOrderToExcel(long id, String orderNum) throws IOException {
 
         try (Workbook workbook = new XSSFWorkbook()) {
@@ -56,11 +111,6 @@ public class ExcelExportServiceImpl implements ExcelExportService {
             cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
             cellStyle.setWrapText(true);
 
-//            cellStyle.setBorderTop(BorderStyle.MEDIUM);
-//            cellStyle.setBorderBottom(BorderStyle.MEDIUM);
-//            cellStyle.setBorderLeft(BorderStyle.MEDIUM);
-//            cellStyle.setBorderRight(BorderStyle.MEDIUM);
-
             //Column adjust
             sheet.setColumnWidth(0, 3820);
             sheet.setColumnWidth(1, 11776);
@@ -79,7 +129,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
             rowIndex = createArticleTableHeader(sheet, rowIndex, workbook);
             int counter = 1;
 
-            List <OrderItem> articles = order.getItems();
+//            List <OrderItem> articles = order.getItems();
 
             // Populate article data
             for (OrderItem article : order.getItems()) {

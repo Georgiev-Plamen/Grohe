@@ -249,7 +249,9 @@ public class PreOrderServiceImpl implements PreOrderService {
             if(preOrderExcelItems.brand().equals("Grohe")) {
                 preOrderItem.setOrderBy("Вили");
             } else {
-                preOrderItem.setOrderBy(userDetails.getUsername());
+                if (userDetails instanceof AppUserDetails appUserDetails) {
+                    preOrderItem.setOrderBy(appUserDetails.getFullName());
+                }
             }
             preOrderItem.setDate(preOrderExcelItems.date());
             preOrderItem.setOrderReason(checkComment(preOrderExcelItems.comment()));
