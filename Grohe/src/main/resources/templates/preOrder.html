@@ -220,10 +220,10 @@
 
             </form>
             <td class="action">
-                <button type="button" class="delete-btn" data-toggle="modal" data-target="#confirmation">
+                <button type="button" class="delete-btn" data-toggle="modal" th:attr="data-target='#confirmation-' + ${preOrder.id()}">
                     x
                 </button>
-                <div class="modal" id="confirmation" tabindex="-1" role="dialog">
+                <div class="modal" th:id="'confirmation-' + ${preOrder.id()}" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -233,6 +233,7 @@
                                 </button>
                             </div>
                             <div class="modal-footer">
+                                <!-- Delete form with correct ID -->
                                 <form th:action="@{/orders/delete/{id}(id=${preOrder.id()})}" th:method="POST">
                                     <input type="hidden" name="brand" th:value="Grohe">
                                     <input type="hidden" name="_method" value="delete">
