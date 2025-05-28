@@ -172,6 +172,7 @@
     <table>
         <thead>
         <tr>
+            <th>№</th>
             <th>Article</th>
             <th>Quantity</th>
             <th>Ordered By</th>
@@ -184,11 +185,12 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="preOrder : ${allPreOrderItems}" th:object="${preOrder}">
+        <tr th:each="preOrder, stat : ${allPreOrderItems}" th:object="${preOrder}">
             <!-- Form for each preOrder -->
             <form th:method="POST" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}">
                 <input type="hidden" name="brand" th:value="Viega">
                 <input type="hidden" name="id" th:value="${preOrder.id()}">
+                <td th:text="${stat.index + 1}">1</td>
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"></div>
                     <input type="hidden" name="artNum" th:value="*{artNum}">
@@ -219,11 +221,11 @@
                 </td>
             </form>
             <td class="action">
-                <button type="button" class="delete-btn" data-toggle="modal" data-target="#confirmation">
+                <button type="button" class="delete-btn" data-toggle="modal"
+                        th:attr="data-target='#confirmation-' + ${preOrder.id()}">
                     x
                 </button>
-                <!-- Popup screen confirmation-->
-                <div class="modal" id="confirmation" tabindex="-1" role="dialog">
+                <div class="modal" th:id="'confirmation-' + ${preOrder.id()}" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -233,7 +235,8 @@
                                 </button>
                             </div>
                             <div class="modal-footer">
-                                <form th:action="@{/orders/delete/{id}(id=*{id})}" th:method="POST">
+                                <!-- Delete form with correct ID -->
+                                <form th:action="@{/orders/delete/{id}(id=${preOrder.id()})}" th:method="POST">
                                     <input type="hidden" name="brand" th:value="Viega">
                                     <input type="hidden" name="_method" value="delete">
                                     <button class="delete-master-btn" type="submit">Изтриване</button>
@@ -283,7 +286,8 @@
                             <!-- Make Order Form -->
                             <form id="downloadForm" th:method="POST" th:action="@{/orders/makeOrder}">
                                 <label for="name" class="col-form-label">Име:</label>
-                                <input type="text" class="form-control" id="name" name="name" th:value="${newOrderName}" required>
+                                <input type="text" class="form-control" id="name" name="name" th:value="${newOrderName}"
+                                       required>
                                 <button type="submit" class="btn btn-primary">Завърши</button>
                                 <input type="hidden" name="makeOrder" th:value="makeOrder">
                                 <input type="hidden" name="brand" th:value="Viega">

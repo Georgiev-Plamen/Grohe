@@ -1,12 +1,12 @@
 Design :
 
-* Count edit article in pre order.
+* Counter article in pre order. -=== FIX ===-
 
 * Need dropdown menu with option to select language.
 
-* Need sort by Order date in orders search.
+* Need sort by Order date in orders search. - -=== FIX ===-
 
-* Need fix delete pre order article ( now delete the first article in preorder list ) !!!!
+* Need fix delete pre order article ( now delete the first article in preorder list ) !!!! -=== FIX ===-
 
 
 

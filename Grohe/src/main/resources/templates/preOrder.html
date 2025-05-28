@@ -172,6 +172,7 @@
     <table>
         <thead>
         <tr>
+            <th>№</th>
             <th th:text="#{orders_article_number}">Article</th>
             <th th:text="#{orders_pcs}">Quantity</th>
             <th th:text="#{orders_ordered_by}">Ordered By</th>
@@ -184,11 +185,12 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="preOrder : ${allPreOrderItems}" th:object="${preOrder}">
+        <tr th:each="preOrder, stat : ${allPreOrderItems}" th:object="${preOrder}">
             <!-- Form for each preOrder -->
             <form th:method="POST" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}">
                 <input type="hidden" name="brand" th:value="Grohe">
                 <input type="hidden" name="id" th:value="${preOrder.id()}">
+                <td th:text="${stat.index + 1}">1</td>
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"></div>
                     <input type="hidden" name="artNum" th:value="*{artNum}">
