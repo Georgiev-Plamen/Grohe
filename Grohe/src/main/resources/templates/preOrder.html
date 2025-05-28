@@ -233,7 +233,7 @@
                                 </button>
                             </div>
                             <div class="modal-footer">
-                                <form th:action="@{/orders/delete/{id}(id=*{id})}" th:method="POST">
+                                <form th:action="@{/orders/delete/{id}(id=${preOrder.id()})}" th:method="POST">
                                     <input type="hidden" name="brand" th:value="Grohe">
                                     <input type="hidden" name="_method" value="delete">
                                     <button class="delete-master-btn" type="submit">Изтриване</button>

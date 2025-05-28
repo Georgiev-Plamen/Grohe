@@ -1,10 +1,12 @@
 Design :
 
 * Count edit article in pre order.
-* Need promo finder.
-
 
 * Need dropdown menu with option to select language.
+
+* Need sort by Order date in orders search.
+
+* Need fix delete pre order article ( now delete the first article in preorder list ) !!!!
 
 
 
