@@ -1,8 +1,8 @@
 Design :
 
-* Counter article in pre order. -=== FIX ===-
-
 * Need dropdown menu with option to select language.
+
+* Counter article in pre order. -=== FIX ===-
 
 * Need sort by Order date in orders search. - -=== FIX ===-
 

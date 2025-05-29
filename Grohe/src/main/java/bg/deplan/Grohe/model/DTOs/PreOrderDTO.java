@@ -14,6 +14,7 @@ public record PreOrderDTO (
         String brand,
         String artNum,
         String quantityForOrder,
+        String name,
         String orderBy,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") // Match your frontend format
