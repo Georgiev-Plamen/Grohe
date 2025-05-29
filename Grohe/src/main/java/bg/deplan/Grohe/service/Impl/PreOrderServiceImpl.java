@@ -129,6 +129,9 @@ public class PreOrderServiceImpl implements PreOrderService {
         if (preOrderDTO.quantityForOrder() != null && !preOrderDTO.quantityForOrder().isEmpty()) {
             preOrderItem.setQuantityForOrder(preOrderDTO.quantityForOrder());
         }
+        if (preOrderDTO.name() != null && !preOrderDTO.name().isEmpty()) {
+            preOrderItem.getArticle().setName(preOrderDTO.name());
+        }
         if (preOrderDTO.orderBy() != null && !preOrderDTO.orderBy().isEmpty()) {
             preOrderItem.setOrderBy(preOrderDTO.orderBy());
         }
