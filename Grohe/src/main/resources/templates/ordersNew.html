@@ -262,8 +262,8 @@
             </tr>
             <tr>
                 <th th:text="#{article_number}">Article Number</th>
-                <th th:text="#{orders_pcs}">Quantity</th>
                 <th th:text="#{article_name}">Name</th>
+                <th th:text="#{orders_pcs}">Quantity</th>
                 <th th:text="#{orders_ordered_by}">Ordered By</th>
                 <th th:text="#{orders_date}">Date of Order</th>
                 <th th:text="#{orders_confirmation}">Date of Delivery</th>
@@ -283,12 +283,12 @@
                     <input type="hidden" name="artNum" th:value="${article.getArticle.artNum}">
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantity}"></div>
-                    <input type="hidden" name="quantity" th:value="*{quantity}">
-                </td>
-                <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{getArticle().getName()}"></div>
                     <input type="hidden" name="artName" th:value="*{getArticle().getName()}">
+                </td>
+                <td class="quantity">
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantity}"></div>
+                    <input type="hidden" name="quantity" th:value="*{quantity}">
                 </td>
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderBy}"></div>

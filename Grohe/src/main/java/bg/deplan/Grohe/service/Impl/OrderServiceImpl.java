@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -273,6 +272,15 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
+    @Override
+    public List<OrderTitleDTO> getOrderList(String brand) {
+        return orderRepository.findAll()
+                .stream()
+                .map(OrderServiceImpl::toAllOrdersTitle)
+                .filter(o -> o.brand().equals(brand))
+                .toList();
+    }
+
     private ArticleFindDTO mapToArticleFindDTO(OrderItem orderItem) {
         return new ArticleFindDTO(
                 orderItem.getArticle().getBrand(),
@@ -320,6 +328,15 @@ public class OrderServiceImpl implements OrderService {
                 order.getDate(),
                 order.getItems()
                 );
+    }
+
+    private static OrderTitleDTO toAllOrdersTitle(Order order) {
+        return new OrderTitleDTO(
+                order.getId(),
+                order.getBrand(),
+                order.getOrderName(),
+                order.getDate()
+        );
     }
 
 }

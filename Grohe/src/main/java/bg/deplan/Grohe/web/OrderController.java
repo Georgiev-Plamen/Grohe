@@ -35,6 +35,7 @@ public class OrderController {
     public String ordersNew(Model model){
 
         model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
+//        model.addAttribute("allOrders", orderService.getOrderList("Grohe"));
         model.addAttribute("order", orderDTO());
 
         return "ordersNew";
