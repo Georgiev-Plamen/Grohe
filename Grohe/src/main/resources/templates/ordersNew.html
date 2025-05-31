@@ -310,6 +310,19 @@
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}"></div>
                     <input type="hidden" name="comment" th:value="*{comment}">
                 </td>
+                <td>
+                    <button type="button" class="btn btn-info" data-toggle="modal"
+                            th:attr="data-target='#articleModal-' + *{getArticle()}">
+                        View Details
+                    </button>
+                </td>
+            </tr>
+
+            <!-- At the BOTTOM of your page, after all tables -->
+            <div th:each="preOrder : ${allPreOrderItems}">
+                <div th:if="${getArticle() != null}"
+                     th:replace="~{articlePopup :: articleDetails(*{getArticle())}"></div>
+            </div>
             </tr>
             </tbody>
         </table>
