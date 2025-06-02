@@ -1,6 +1,9 @@
-<!-- templates/articlePopup.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
 <div th:fragment="articleDetails(article)" class="modal fade" th:id="'articleModal-' + ${article.id}" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" th:text="${article.brand + ' - ' + article.name}"></h5>
@@ -9,17 +12,38 @@
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Article details here -->
-                <div class="detail-group">
-                    <label>Article Number:</label>
-                    <span th:text="${article.artNum}"></span>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="detail-group">
+                                <label>Article Number:</label>
+                                <span th:text="${article.artNum}"></span>
+                            </div>
+                            <div class="detail-group">
+                                <label>Description:</label>
+                                <p th:text="${article.description}"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="detail-group">
+                                <label>Barcode:</label>
+                                <span th:text="${article.barcode}"></span>
+                            </div>
+                            <div class="detail-group">
+                                <label>Product URL:</label>
+                                <a th:if="${article.artUrl}" th:href="${article.artUrl}" target="_blank" th:text="${article.artUrl}"></a>
+                                <span th:unless="${article.artUrl}">N/A</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="detail-group">
-                    <label>Article Number:</label>
-                    <span th:text="${article.description}"></span>
-                </div>
-                <!-- Add other article fields as needed -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
+</body>
+</html>

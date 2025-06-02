@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orders</title>
+    <!-- Add these for modal functionality -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/css/styles.css">
+
     <script>
         function showOrderDetails(orderId) {
 
@@ -311,18 +316,14 @@
                     <input type="hidden" name="comment" th:value="*{comment}">
                 </td>
                 <td>
-                    <button type="button" class="btn btn-info" data-toggle="modal"
-                            th:attr="data-target='#articleModal-' + *{getArticle()}">
+                    <button type="button" class="btn" data-toggle="modal"
+                            th:attr="data-target='#articleModal-' + ${article.getArticle().id}">
                         View Details
                     </button>
                 </td>
             </tr>
 
             <!-- At the BOTTOM of your page, after all tables -->
-            <div th:each="preOrder : ${allPreOrderItems}">
-                <div th:if="${getArticle() != null}"
-                     th:replace="~{articlePopup :: articleDetails(*{getArticle())}"></div>
-            </div>
             </tr>
             </tbody>
         </table>
@@ -374,6 +375,12 @@
             </tr>
             </tbody>
         </table>
+    </div>
+</div>
+<div th:each="order : ${allOrders}">
+    <div th:each="article : ${order.articleList}">
+        <div th:if="${article.getArticle() != null}"
+             th:replace="~{articlePopup :: articleDetails(${article.getArticle()})}"></div>
     </div>
 </div>
 </body>
