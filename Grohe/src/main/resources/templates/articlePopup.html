@@ -20,6 +20,15 @@
                                 <span th:text="${article.artNum}"></span>
                             </div>
                             <div class="detail-group">
+                                <label>Product Image:</label>
+                                <div th:if="${article.imageUrl}">
+                                    <a th:href="${article.imageUrl}" target="_blank">
+                                        <img th:src="${article.imageUrl}" alt="Product Image" style="width: 480px; height: 480px; object-fit: contain;">
+                                    </a>
+                                </div>
+                                <span th:unless="${article.imageUrl}">N/A</span>
+                            </div>
+                            <div class="detail-group">
                                 <label>Description:</label>
                                 <p th:text="${article.description}"></p>
                             </div>
@@ -33,6 +42,10 @@
                                 <label>Product URL:</label>
                                 <a th:if="${article.artUrl}" th:href="${article.artUrl}" target="_blank" th:text="${article.artUrl}"></a>
                                 <span th:unless="${article.artUrl}">N/A</span>
+                            </div>
+                            <div class="detail-group">
+                                <label>Quantity in pallet:</label>
+                                <span th:text="${article.quantityInPallet}"></span>
                             </div>
                         </div>
                     </div>

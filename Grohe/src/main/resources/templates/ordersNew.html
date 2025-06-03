@@ -274,6 +274,7 @@
                 <th th:text="#{orders_confirmation}">Date of Delivery</th>
                 <th th:text="#{orders_reason}">Order Reason</th>
                 <th th:text="#{orders_comment}">Comment</th>
+                <th th:text="#{orders_detail}">&#128269;</th>
             </tr>
 
             </thead>
@@ -318,7 +319,7 @@
                 <td>
                     <button type="button" class="btn" data-toggle="modal"
                             th:attr="data-target='#articleModal-' + ${article.getArticle().id}">
-                        View Details
+                        &#128269;
                     </button>
                 </td>
             </tr>

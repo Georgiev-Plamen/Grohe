@@ -31,6 +31,7 @@ public class ArticleServiceImpl implements ArticleService {
         mappedArticle.setName(addArticleDTO.name());
         mappedArticle.setDescription(addArticleDTO.description());
         mappedArticle.setImageUrl(addArticleDTO.imgUrl());
+        mappedArticle.setArtUrl(addArticleDTO.artUrl());
         mappedArticle.setBarcode(addArticleDTO.barcode());
         mappedArticle.setQuantityInPallet(addArticleDTO.quantityInPallet());
         mappedArticle.setQuantityInPacket(1);
@@ -107,6 +108,10 @@ public class ArticleServiceImpl implements ArticleService {
                     article.setImageUrl(articleDTO.imgUrl());
                 }
 
+                if(articleDTO.artUrl() != null) {
+                    article.setArtUrl(articleDTO.artUrl());
+                }
+
                 if(articleDTO.barcode() != null) {
                     article.setBarcode(articleDTO.barcode());
                 }
@@ -153,6 +158,7 @@ public class ArticleServiceImpl implements ArticleService {
                 article.getName(),
                 article.getDescription(),
                 article.getImageUrl(),
+                article.getArtUrl(),
                 article.getBarcode(),
                 article.getQuantityInPallet()
         );

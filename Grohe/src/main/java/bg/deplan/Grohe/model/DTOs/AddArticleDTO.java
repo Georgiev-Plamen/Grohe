@@ -8,6 +8,7 @@ public record AddArticleDTO (
         String name,
         String description,
         String imgUrl,
+        String artUrl,
         String barcode,
         Integer quantityInPallet
 ) {

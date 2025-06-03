@@ -197,8 +197,9 @@
             <th th:text="#{article_name}">Quantity</th>
             <th th:text="#{article_description}">Ordered by</th>
             <th th:text="#{article_img_url}">Order reason</th>
-            <th th:text="#{article_barcode}">Comment</th>
-            <th th:text="#{article_quantity_in_pallet}">Ordered by</th>
+            <th th:text="#{article_product_url}">Link</th>
+            <th th:text="#{article_barcode}">Barcode</th>
+            <th th:text="#{article_quantity_in_pallet}">Quantity in pallet</th>
             <!--            <th>Изтриване</th>-->
         </tr>
         </thead>
@@ -229,6 +230,11 @@
                 <div contenteditable="true" oninput="updateHiddenInput(this)"
                      th:text="${article.imgUrl()}"></div>
                 <input type="hidden" name="imgUrl" th:value="${article.imgUrl()}">
+            </td>
+            <td>
+                <div contenteditable="true" oninput="updateHiddenInput(this)"
+                     th:text="${article.artUrl()}"></div>
+                <input type="hidden" name="artUrl" th:value="${article.artUrl()}">
             </td>
             <td>
                 <div contenteditable="true" oninput="updateHiddenInput(this)"
