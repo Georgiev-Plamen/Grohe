@@ -30,13 +30,13 @@ public interface OrderService {
 
     List<ArticleFindDTO> findOnlyArticlesInOrder(String artNum);
 
-    List<ArticleFindDTO> findByOrderBy(String orderBy);
+    List<ArticleFindDTO> findByOrderBy(String orderBy, String brand);
 
     String lastOrderNumber(String brand);
 
     String newOrderName(String brand);
 
-    List<ArticleFindDTO> findArticlesByComment(String comment);
+    List<ArticleFindDTO> findArticlesByComment(String comment, String brand);
 
     List<OrderTitleDTO> getOrderList(String brand);
 }

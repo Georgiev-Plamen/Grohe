@@ -213,10 +213,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<ArticleFindDTO> findByOrderBy(String orderBy) {
+    public List<ArticleFindDTO> findByOrderBy(String orderBy, String brand) {
 
          return orderItemRepository.findOrderItemsByOrderBy(orderBy).stream()
                  .map(this::mapToArticleFindDTO)
+                 .filter(o -> o.brand().equals(brand))
                  .toList();
     }
 
@@ -266,9 +267,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<ArticleFindDTO> findArticlesByComment(String comment) {
+    public List<ArticleFindDTO> findArticlesByComment(String comment, String brand) {
         return orderItemRepository.findOrderItemByComment(comment).stream()
                 .map(this::mapToArticleFindDTO)
+                .filter(o -> o.brand().equals(brand))
                 .toList();
     }
 

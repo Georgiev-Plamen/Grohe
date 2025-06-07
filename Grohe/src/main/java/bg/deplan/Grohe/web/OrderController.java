@@ -81,7 +81,7 @@ public class OrderController {
     @PostMapping("/searchOrderBy/{orderBy}")
     public String searchOrderBy(Model model, @RequestParam("orderBy") String orderBy) {
 
-        model.addAttribute("articlesByParam", orderService.findByOrderBy(orderBy));
+        model.addAttribute("articlesByParam", orderService.findByOrderBy(orderBy, "Grohe"));
         model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
 
         return "ordersNew";
@@ -89,7 +89,7 @@ public class OrderController {
 
     @PostMapping("/searchByComment/{comment}")
     public String searchByComment(Model model, @RequestParam("comment") String comment) {
-        model.addAttribute("articlesByParam", orderService.findArticlesByComment(comment));
+        model.addAttribute("articlesByParam", orderService.findArticlesByComment(comment, "Grohe"));
         model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
 
         return "ordersNew";
