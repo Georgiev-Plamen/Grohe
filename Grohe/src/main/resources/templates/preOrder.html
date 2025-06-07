@@ -226,9 +226,15 @@
                     <input type="checkbox" name="isHold" id="hold" oninput="updateHiddenInput(this)"
                            th:checked="*{isHold}">
                 </td>
-
             </form>
+            <td>
+                <button th:if="${article != null}"
+                        th:data-target="'#articleModal-' + ${article}">
+                    &#128269;
+                </button>
+            </td>
             <td class="action">
+
                 <button type="button" class="delete-btn" data-toggle="modal" th:attr="data-target='#confirmation-' + ${preOrder.id()}">
                     x
                 </button>
@@ -305,6 +311,11 @@
             </div>
         </div>
     </div>
+</div>
+ <div th:each="article : ${articleList}">
+        <div th:if="${article != null}"
+             th:replace="~{articlePopup :: articleDetails(${article})}">
+        </div>
 </div>
 </body>
 </html>

@@ -38,6 +38,7 @@ dependencies {
 	implementation 'org.apache.xmlbeans:xmlbeans:5.1.1'
 	implementation 'org.apache.poi:poi-ooxml:5.2.3'
 	implementation 'org.apache.poi:poi:5.2.3'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
 
 	// Development and testing dependencies
 	developmentOnly 'org.springframework.boot:spring-boot-devtools:3.3.0' // Use the latest version

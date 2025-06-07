@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <!-- Using Bootstrap 4 consistently -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <script>
+
+    </script>
+
+    <!--    Update JS   -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const editedData = new Map();
+
+            // Function to update hidden inputs when contenteditable divs are edited
+            function updateHiddenInput(editableDiv) {
+                const hiddenInput = editableDiv.nextElementSibling;
+                if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                    hiddenInput.value = editableDiv.textContent.trim();
+                }
+            }
+
+            // Function to track changes in contenteditable divs
+            function trackEditableChanges(editableDiv) {
+                editableDiv.addEventListener('input', () => {
+                    const row = editableDiv.closest('tr');
+                    const rowId = row.querySelector('input[name="articleID"]').value;
+                    const orderId = row.querySelector('input[name="id"]').value; // Fetch orderId
+                    const rowsInOrder = Array.from(row.closest('tbody').querySelectorAll('tr')); // Get all rows in the same order
+                    const index = rowsInOrder.indexOf(row); // Get the index of the current row
+
+                    if (!editedData.has(rowId)) {
+                        editedData.set(rowId, {});
+                    }
+
+                    const hiddenInput = editableDiv.nextElementSibling;
+                    if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                        editedData.get(rowId)[hiddenInput.name] = editableDiv.textContent.trim();
+                    }
+
+                    // Include orderId and index in the edited data
+                    editedData.get(rowId).orderId = orderId;
+                    editedData.get(rowId).index = index; // Store the index
+
+                    console.log("Edited Data after contenteditable change:", editedData);
+                });
+            }
+
+            // Function to track changes in input fields
+            function trackInputChanges(input) {
+                input.addEventListener('change', () => {
+                    const row = input.closest('tr');
+                    const rowId = row.querySelector('input[name="articleID"]').value;
+                    const orderId = row.querySelector('input[name="id"]').value; // Fetch orderId
+                    const rowsInOrder = Array.from(row.closest('tbody').querySelectorAll('tr')); // Get all rows in the same order
+                    const index = rowsInOrder.indexOf(row); // Get the index of the current row
+
+                    if (!editedData.has(rowId)) {
+                        editedData.set(rowId, {});
+                    }
+
+                    editedData.get(rowId)[input.name] = input.value.trim();
+
+                    // Include orderId and index in the edited data
+                    editedData.get(rowId).orderId = orderId;
+                    editedData.get(rowId).index = index; // Store the index
+
+                    console.log("Edited Data after input change:", editedData);
+                });
+            }
+
+            // Attach event listeners to all contenteditable divs and input fields
+            document.querySelectorAll('[contenteditable="true"]').forEach(trackEditableChanges);
+            document.querySelectorAll('input').forEach(trackInputChanges);
+
+            // Function to submit all updates
+            async function submitAllUpdates() {
+                const updates = Array.from(editedData.entries()).map(([rowId, data]) => {
+                    return {
+                        articleID: rowId,
+                        orderId: data.orderId, // Include orderId
+                        index: data.index, // Include index
+                        ...data
+                    };
+                });
+
+                console.log("Updates to be submitted:", updates);
+
+                try {
+                    const response = await fetch('/api/orders/receive/bulkUpdateOrder', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updates)
+                    });
+
+                    const result = await response.text();
+                    alert(result);
+                    editedData.clear();
+                } catch (error) {
+                    console.error('Error sending updates:', error);
+                    alert('Failed to send updates');
+                }
+            }
+
+            // Use event delegation to handle clicks on any "Update All" button
+            document.addEventListener('click', (event) => {
+                if (event.target.classList.contains('fix')) {
+                    submitAllUpdates();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
+
+<!--OrdersNew - allOrders-->
+
+<div class="container">
+    <div class="add-container">
+        <!--        <div class="preOrder-entity">-->
+        <form th:method="POST" th:action="@{/orders/search/*{artNum}}" onsubmit="handleSearchResults()">
+            <label for="artNum">Заявки включващи артикул:</label>
+            <input type="text" name="artNum" id="artNum" th:value="*{artNum}">
+            <button class="pre-order-add-btn" type="submit">Търси</button>
+        </form>
+
+        <form th:method="POST" th:action="@{/orders/searchOrderBy/{orderBy}}">
+            <label for="orderBy">Заявени артикули от потребител:</label>
+            <input type="text" name="orderBy" id="orderBy" th:value="*{orderBy}">
+            <button class="pre-order-add-btn" type="submit">Търси</button>
+        </form>
+        <form th:method="POST" th:action="@{/orders/searchOnlyArticle/*{artNum}}">
+            <label for="artNum">Търсене на артикул:</label>
+            <input type="text" name="artNum" id="artNumOnly" th:value="*{artNum}">
+            <button class="pre-order-add-btn" type="submit">Търси</button>
+        </form>
+        <form th:method="POST" th:action="@{/orders/searchByComment/*{comment}}">
+            <label for="artNum">Търсене по коментар:</label>
+            <input type="text" name="comment" id="comment" th:value="*{comment}">
+            <button class="pre-order-add-btn" type="submit">Търси</button>
+        </form>
+    </div>
+
+    <!-- Hidden tables for order details -->
+    <table class="order-details-table"
+           th:style="${orderDetails != null and not #lists.isEmpty(orderDetails.articleList)} ? 'display: table' : 'display: none'">
+        <thead>
+        <th th:text="${orderDetails.orderName}"></th>
+        <th><a href="/orders/allNew">Затвори</a></th>
+        <tr>
+            <th th:text="#{article_number}">Article Number</th>
+            <th th:text="#{article_name}">Name</th>
+            <th th:text="#{orders_pcs}">Quantity</th>
+            <th th:text="#{orders_ordered_by}">Ordered By</th>
+            <th th:text="#{orders_date}">Date of Order</th>
+            <th th:text="#{orders_confirmation}">Date of Delivery</th>
+            <th th:text="#{orders_reason}">Order Reason</th>
+            <th th:text="#{orders_comment}">Comment</th>
+            <th th:text="#{orders_detail}">&#128269;</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr th:each="article : ${orderDetails.articleList()}" th:object="${article}">
+            <input type="hidden" name="brand" th:value="Grohe">
+            <input type="hidden" name="id" th:value="${order.id()}">
+            <input type="hidden" name="articleID" th:value="${article.getId()}">
+            <td>
+                <div contenteditable="true" oninput="updateHiddenInput(this)"
+                     th:text="${article.getArticle.artNum}"></div>
+                <input type="hidden" name="artNum" th:value="${article.getArticle.artNum}">
+            </td>
+            <td>
+                <div contenteditable="true" oninput="updateHiddenInput(this)"
+                     th:text="*{getArticle().getName()}"></div>
+                <input type="hidden" name="artName" th:value="*{getArticle().getName()}">
+            </td>
+            <td class="quantity">
+                <div contenteditable="true" oninput="updateHiddenInput(this)"
+                     th:text="*{quantity}"></div>
+                <input type="hidden" name="quantity" th:value="*{quantity}">
+            </td>
+            <td>
+                <div contenteditable="true" oninput="updateHiddenInput(this)"
+                     th:text="*{orderBy}"></div>
+                <input type="hidden" name="orderBy" th:value="*{orderBy}">
+            </td>
+            <td>
+                <div contenteditable="true" oninput="updateHiddenInput(this)"
+                     th:text="*{dateOfOrder}"></div>
+                <input type="hidden" name="dateOfOrder" th:value="*{dateOfOrder}">
+            </td>
+            <td>
+                <div contenteditable="true" oninput="updateHiddenInput(this)"
+                     th:text="*{dateOfDelivery}"></div>
+                <input type="hidden" name="dateOfDelivery" th:value="*{dateOfDelivery}">
+            </td>
+            <td>
+                <div contenteditable="true" oninput="updateHiddenInput(this)"
+                     th:text="*{orderReason}"></div>
+                <input type="hidden" name="orderReason" th:value="*{orderReason}">
+            </td>
+            <td>
+                <div contenteditable="true" oninput="updateHiddenInput(this)"
+                     th:text="*{comment}"></div>
+                <input type="hidden" name="comment" th:value="*{comment}">
+            </td>
+            <td>
+                <button type="button" class="btn" data-toggle="modal"
+                        th:attr="data-target='#articleModal-' + ${article.getArticle().id}">
+                    &#128269;
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-primary fix" onclick="submitAllUpdates()">Update All</button>
+
+    <div class="container">
+        <h1 th:text="#{orders_title}">Orders</h1>
+        <table>
+            <thead>
+            <tr>
+                <th th:text="#{orders_name}">Order name</th>
+                <th th:text="#{orders_date}">Order date</th>
+                <th></th>
+                <th class="action-title">🗑</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${allOrders}">
+                <td th:text="${order.name}"></td>
+                <td th:text="${order.date}"></td>
+                <td>
+                    <form id="orderForm-${order.id}" th:method="POST"
+                          th:action="@{/orders/orderDetails/{id}(id=${order.id})}" th:object="${order}">
+                        <button href="#" class="button-as-link"
+                           onclick="document.getElementById('orderForm-${order.id}').submit();">Отвори
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <form id="deleteForm-${order.id}" th:method="POST"
+                          th:action="@{/orders/deleteOrder/{id}(id=${order.id})}" th:object="${order}">
+                        <button class="delete-btn" href="#"
+                                onclick="document.getElementById('deleteForm-${order.id}').submit();">x
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div th:each="order : ${orderDetails}">
+    <div th:each="article : ${order.articleList}">
+        <div th:if="${article.getArticle() != null}"
+             th:replace="~{articlePopup :: articleDetails(${article.getArticle()})}"></div>
+    </div>
+</div>
+</body>
+</html>

@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<div th:fragment="articleDetails(article)" class="modal fade" th:id="'articleModal-' + ${article.id}" tabindex="-1" role="dialog">
+<div th:fragment="articleDetails(article)" class="modal fade" th:id="'articleModal-' + ${article.id}" tabindex="-1"
+     role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -20,17 +21,19 @@
                                 <span th:text="${article.artNum}"></span>
                             </div>
                             <div class="detail-group">
-                                <label>Product Image:</label>
-                                <div th:if="${article.imageUrl}">
-                                    <a th:href="${article.imageUrl}" target="_blank">
-                                        <img th:src="${article.imageUrl}" alt="Product Image" style="width: 480px; height: 480px; object-fit: contain;">
+                                <div th:if="${article.imageUrl}" style="max-width: 480px; width: 100%;">
+                                    <a th:href="${article.imageUrl}" target="_blank" style="display: block;">
+                                        <img th:src="${article.imageUrl}"
+                                             alt="Product Image"
+                                             style="width: 100%;
+                                height: auto;
+                                max-width: 480px;
+                                max-height: 480px;
+                                object-fit: contain;
+                                display: block;">
                                     </a>
                                 </div>
                                 <span th:unless="${article.imageUrl}">N/A</span>
-                            </div>
-                            <div class="detail-group">
-                                <label>Description:</label>
-                                <p th:text="${article.description}"></p>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -39,8 +42,13 @@
                                 <span th:text="${article.barcode}"></span>
                             </div>
                             <div class="detail-group">
+                                <label>Description:</label>
+                                <p th:text="${article.description}"></p>
+                            </div>
+                            <div class="detail-group">
                                 <label>Product URL:</label>
-                                <a th:if="${article.artUrl}" th:href="${article.artUrl}" target="_blank" th:text="${article.artUrl}"></a>
+                                <a th:if="${article.artUrl}" th:href="${article.artUrl}" target="_blank"
+                                   th:text="${article.artUrl}"></a>
                                 <span th:unless="${article.artUrl}">N/A</span>
                             </div>
                             <div class="detail-group">

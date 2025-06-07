@@ -49,6 +49,7 @@ public class PreOrderController {
 
         model.addAttribute("preOrderData", preOrderDTO());
         model.addAttribute("allPreOrderItems", preOrderService.getAllPreOrder("Grohe"));
+        model.addAttribute("articleList", preOrderService.getAllArticle("Grohe"));
         model.addAttribute("newOrderName", orderService.newOrderName("Grohe"));
 
         return "preOrder";

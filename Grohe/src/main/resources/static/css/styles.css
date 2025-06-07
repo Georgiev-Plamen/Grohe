@@ -463,3 +463,42 @@ svg {
     font-weight: bold;
     text-align: center;
 }
+
+.modal-lg {
+    max-width: 800px;
+}
+
+.modal-body dt {
+    font-weight: 600;
+    color: #555;
+    margin-top: 0.5rem;
+}
+
+.modal-body dd {
+    margin-left: 1rem;
+    color: #333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .modal-dialog {
+        margin: 0.5rem auto;
+    }
+}
+
+.button-as-link {
+    background: none !important;
+    border: none;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-family: inherit;
+    font-size: inherit;
+    color: #0066cc;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.button-as-link:hover {
+    color: #004499;
+    text-decoration: none;
+}

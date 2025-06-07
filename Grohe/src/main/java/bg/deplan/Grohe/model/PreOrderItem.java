@@ -28,7 +28,7 @@ public class PreOrderItem extends BaseEntity{
     }
 
     public Article getArticle() {
-        return article;
+        return this.article;
     }
 
     public void setArticle(Article article) {
