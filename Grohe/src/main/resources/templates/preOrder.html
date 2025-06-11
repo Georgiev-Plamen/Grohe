@@ -183,6 +183,7 @@
             <th th:text="#{orders_reason}">Order Reason</th>
             <th th:text="#{orders_comment}">Comment</th>
             <th class="action-title">✋</th>
+            <th class="action-title">D</th>
             <th class="action-title">&#128465</th>
 <!--            <th class="action-title">🗑</th>-->
         </tr>
@@ -228,8 +229,8 @@
                 </td>
             </form>
             <td>
-                <button th:if="${article != null}"
-                        th:data-target="'#articleModal-' + ${article}">
+                <button type="button" class="btn" data-toggle="modal"
+                        th:attr="data-target='#articleModal-' + ${preOrder.artNum}">
                     &#128269;
                 </button>
             </td>
@@ -312,10 +313,10 @@
         </div>
     </div>
 </div>
- <div th:each="article : ${articleList}">
-        <div th:if="${article != null}"
-             th:replace="~{articlePopup :: articleDetails(${article})}">
-        </div>
+<div th:each="article : ${articleList}">
+    <div th:if="${article != null}"
+         th:replace="~{articlePopup :: articleDetails(${article})}">
+    </div>
 </div>
 </body>
 </html>

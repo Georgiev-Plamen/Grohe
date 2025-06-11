@@ -14,7 +14,7 @@ public record ArticleDTO (
         String artUrl,
         String imageUrl,
         String orderBy,
-        int quantityInPallet,
+        Integer quantityInPallet,
         LocalDate date,
         String orderReason,
         String comment,
