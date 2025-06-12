@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="detail-group">
-                                <label>Article Number:</label>
+                                <label>Артикулен номер:</label>
                                 <span th:text="${article.artNum}"></span>
                             </div>
                             <div class="detail-group">
@@ -38,21 +38,25 @@
                         </div>
                         <div class="col-md-6">
                             <div class="detail-group">
-                                <label>Barcode:</label>
+                                <label>Баркод:</label>
                                 <span th:text="${article.barcode}"></span>
                             </div>
                             <div class="detail-group">
-                                <label>Description:</label>
+                                <label>Код Деплан:</label>
+                                <span th:text="${article.codeDeplan}"></span>
+                            </div>
+                            <div class="detail-group">
+                                <label>Описание:</label>
                                 <p th:text="${article.description}"></p>
                             </div>
                             <div class="detail-group">
-                                <label>Product URL:</label>
+                                <label>Страница на продукта:</label>
                                 <a th:if="${article.artUrl}" th:href="${article.artUrl}" target="_blank"
                                    th:text="${article.artUrl}"></a>
                                 <span th:unless="${article.artUrl}">N/A</span>
                             </div>
                             <div class="detail-group">
-                                <label>Quantity in pallet:</label>
+                                <label>Количество в палет:</label>
                                 <span th:text="${article.quantityInPallet}"></span>
                             </div>
                         </div>
