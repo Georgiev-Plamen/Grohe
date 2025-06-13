@@ -54,23 +54,16 @@ public class ArticleController {
         return allArticles(userDetails, VIEGA, model);
     }
 
-    @GetMapping("/articlesViega")
-    public String allViegaArticles(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        model.addAttribute("articleData", addArticleDTO());
-        model.addAttribute("allArticles", articleService.getAllArticle("Viega"));
-        return "articles";
-    }
-
     @PostMapping("/addArticle")
     public String addArticle(AddArticleDTO addArticleDTO) {
         articleService.addArticle(addArticleDTO);
-        return addArticleDTO.brand().equals("Viega") ? "redirect:/articles/articlesViega" : "redirect:/articles/articles";
+        return addArticleDTO.brand().equals(VIEGA) ? "redirect:/articles/articlesViega" : "redirect:/articles/articlesGrohe";
     }
 
     @PutMapping("/{artNum}")
     public String editArticle(@PathVariable("artNum") String artNum, AddArticleDTO addArticleDTO) {
         articleService.editArticle(addArticleDTO);
-        return addArticleDTO.brand().equals("Viega") ? "redirect:/articles/articlesViega" : "redirect:/articles/articles";
+        return addArticleDTO.brand().equals(VIEGA) ? "redirect:/articles/articlesViega" : "redirect:/articles/articlesGrohe";
     }
 
     @DeleteMapping("/delete/{id}")
@@ -78,7 +71,7 @@ public class ArticleController {
 
         articleService.deleteArticle(id);
 
-        return "redirect:/articles/articles";
+        return "redirect:/articles";
     }
 
 }

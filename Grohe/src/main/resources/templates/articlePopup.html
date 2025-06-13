@@ -1,5 +1,61 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Handle save button click
+        document.addEventListener('click', async function(event) {
+            if (!event.target.classList.contains('save-modal-changes')) return;
+
+            event.preventDefault();
+
+            const button = event.target;
+            const modal = button.closest('.modal');
+            const artNum = button.dataset.artnum;
+
+            // Collect all data from the modal
+            const data = {
+                id: artNum
+            };
+
+            // Get all editable fields
+            modal.querySelectorAll('[contenteditable="true"]').forEach(editableDiv => {
+                const fieldName = editableDiv.dataset.field;
+                data[fieldName] = editableDiv.textContent.trim();
+            });
+
+            // Get all hidden inputs
+            modal.querySelectorAll('input[type="hidden"]').forEach(input => {
+                data[input.name] = input.value;
+            });
+
+            console.log('Sending data:', data);
+
+            try {
+                button.disabled = true;
+                button.textContent = 'Saving...';
+
+                const response = await fetch('api/receive/bulkUpdateArticle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify([data]) // Send as array to match your endpoint
+                });
+
+                const result = await response.text();
+                alert('Saved successfully: ' + result);
+                $(modal).modal('hide');
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Save failed: ' + error.message);
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Save';
+            }
+        });
+    });
+</script>
 <body>
 
 <div th:fragment="articleDetails(article)" class="modal fade" th:id="'articleModal-' + ${article.artNum}" tabindex="-1"
@@ -21,6 +77,11 @@
                                 <span th:text="${article.artNum}"></span>
                             </div>
                             <div class="detail-group">
+                                <label>Image URL:</label>
+                                <div contenteditable="true" class="editable-field" data-field="imageUrl">
+                                    <span th:text="${article.imageUrl}"></span>
+                                </div>
+                                <input type="hidden" name="imageUrl" th:value="${article.imageUrl}"/>
                                 <div th:if="${article.imageUrl}" style="max-width: 480px; width: 100%;">
                                     <a th:href="${article.imageUrl}" target="_blank" style="display: block;">
                                         <img th:src="${article.imageUrl}"
@@ -39,25 +100,40 @@
                         <div class="col-md-6">
                             <div class="detail-group">
                                 <label>Баркод:</label>
-                                <span th:text="${article.barcode}"></span>
+                                <div contenteditable="true" class="editable-field" data-field="barcode">
+                                    <span th:text="${article.barcode}"></span>
+                                </div>
+                                <input type="hidden" name="barcode" th:value="${article.barcode}"/>
                             </div>
                             <div class="detail-group">
                                 <label>Код Деплан:</label>
-                                <span th:text="${article.codeDeplan}"></span>
+                                <div contenteditable="true" class="editable-field" data-field="codeDeplan">
+                                    <span th:text="${article.codeDeplan}"></span>
+                                </div>
+                                <input type="hidden" name="codeDeplan" th:value="${article.codeDeplan}"/>
                             </div>
                             <div class="detail-group">
                                 <label>Описание:</label>
-                                <p th:text="${article.description}"></p>
+                                <div contenteditable="true" class="editable-field" data-field="description">
+                                    <p th:text="${article.description}"></p>
+                                </div>
+                                <input type="hidden" name="description" th:value="${article.description}"/>
                             </div>
                             <div class="detail-group">
                                 <label>Страница на продукта:</label>
-                                <a th:if="${article.artUrl}" th:href="${article.artUrl}" target="_blank"
-                                   th:text="${article.artUrl}"></a>
-                                <span th:unless="${article.artUrl}">N/A</span>
+                                <div contenteditable="true" class="editable-field" data-field="artUrl">
+                                    <a th:if="${article.artUrl}" th:href="${article.artUrl}" target="_blank"
+                                       th:text="${article.artUrl}"></a>
+                                    <span th:unless="${article.artUrl}">N/A</span>
+                                </div>
+                                <input type="hidden" name="artUrl" th:value="${article.artUrl}"/>
                             </div>
                             <div class="detail-group">
                                 <label>Количество в палет:</label>
-                                <span th:text="${article.quantityInPallet}"></span>
+                                <div contenteditable="true" class="editable-field" data-field="quantityInPallet">
+                                    <span th:text="${article.quantityInPallet}"></span>
+                                </div>
+                                <input type="hidden" name="quantityInPallet" th:value="${article.quantityInPallet}"/>
                             </div>
                         </div>
                     </div>
@@ -65,10 +141,10 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="button" data-dismiss="modal">Close</button>
+                <button type="button" class="button save-modal-changes" onclick="submitAllUpdates()">Save</button>
             </div>
         </div>
     </div>
 </div>
-
 </body>
 </html>

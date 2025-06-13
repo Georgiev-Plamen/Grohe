@@ -1,0 +1,74 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<body>-->
+
+<!--<div th:fragment="articleDetails(article)" class="modal fade" th:id="'articleModal-' + ${article.artNum}" tabindex="-1"-->
+<!--     role="dialog">-->
+<!--    <div class="modal-dialog modal-lg" role="document">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h5 class="modal-title" th:text="${article.brand + ' - ' + article.name}"></h5>-->
+<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true">&times;</span>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <div class="container-fluid">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="detail-group">-->
+<!--                                <label>Артикулен номер:</label>-->
+<!--                                <span th:text="${article.artNum}"></span>-->
+<!--                            </div>-->
+<!--                            <div class="detail-group">-->
+<!--                                <div th:if="${article.imageUrl}" style="max-width: 480px; width: 100%;">-->
+<!--                                    <a th:href="${article.imageUrl}" target="_blank" style="display: block;">-->
+<!--                                        <img th:src="${article.imageUrl}"-->
+<!--                                             alt="Product Image"-->
+<!--                                             style="width: 100%;-->
+<!--                                height: auto;-->
+<!--                                max-width: 480px;-->
+<!--                                max-height: 480px;-->
+<!--                                object-fit: contain;-->
+<!--                                display: block;">-->
+<!--                                    </a>-->
+<!--                                </div>-->
+<!--                                <span th:unless="${article.imageUrl}">N/A</span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-md-6">-->
+<!--                            <div class="detail-group">-->
+<!--                                <label>Баркод:</label>-->
+<!--                                <span th:text="${article.barcode}"></span>-->
+<!--                            </div>-->
+<!--                            <div class="detail-group">-->
+<!--                                <label>Код Деплан:</label>-->
+<!--                                <span th:text="${article.codeDeplan}"></span>-->
+<!--                            </div>-->
+<!--                            <div class="detail-group">-->
+<!--                                <label>Описание:</label>-->
+<!--                                <p th:text="${article.description}"></p>-->
+<!--                            </div>-->
+<!--                            <div class="detail-group">-->
+<!--                                <label>Страница на продукта:</label>-->
+<!--                                <a th:if="${article.artUrl}" th:href="${article.artUrl}" target="_blank"-->
+<!--                                   th:text="${article.artUrl}"></a>-->
+<!--                                <span th:unless="${article.artUrl}">N/A</span>-->
+<!--                            </div>-->
+<!--                            <div class="detail-group">-->
+<!--                                <label>Количество в палет:</label>-->
+<!--                                <span th:text="${article.quantityInPallet}"></span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="modal-footer">-->
+<!--                <button type="button" class="button" data-dismiss="modal">Close</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->

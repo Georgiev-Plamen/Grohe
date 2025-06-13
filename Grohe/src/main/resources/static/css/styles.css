@@ -504,3 +504,29 @@ svg {
     color: #004499;
     text-decoration: none;
 }
+
+.editable-field {
+    padding: 5px;
+    border: 1px dashed #ccc;
+    margin: 2px 0;
+    min-height: 20px;
+    background-color: white;
+}
+
+.editable-field:focus {
+    border: 1px solid #007bff;
+    background-color: #f8f9fa;
+    outline: none;
+}
+
+.modal-footer .save-modal-changes {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+}
+
+.modal-footer .save-modal-changes:hover {
+    background-color: #218838;
+}
