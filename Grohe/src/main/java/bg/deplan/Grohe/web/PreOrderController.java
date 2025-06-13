@@ -119,7 +119,7 @@ public class PreOrderController {
 
         byte [] excelFile;
         // Export the order to Excel
-        if (brand.equals("Grohe")) {
+        if (brand.equals(GROHE)) {
             excelFile = excelExportService.exportOrderToExcel(lastOrderId, orderService.lastOrderNumber(brand));
         } else {
             excelFile = excelExportService.exportOrderToExcelViega(lastOrderId, "Test");

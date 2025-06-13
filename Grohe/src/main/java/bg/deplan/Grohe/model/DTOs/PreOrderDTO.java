@@ -17,7 +17,8 @@ public record PreOrderDTO (
         String name,
         String orderBy,
 
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy") // Match your frontend format
+//        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy") // Match your frontend format
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") // Match your frontend format
         LocalDate date,
 
         String orderReason,

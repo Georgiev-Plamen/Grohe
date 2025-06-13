@@ -56,7 +56,6 @@ public class OrderController {
 
     @PostMapping("/orderDetails")
     public String getOrderDetails(@RequestParam("orderId") Long orderId, Model model) {
-        // Fetch order details based on the selected orderId
         OrderDTO orderDTO = orderService.getOrderById(orderId);
         model.addAttribute("order", orderDTO);
         return "orderDetails"; // Thymeleaf fragment or template
@@ -65,11 +64,9 @@ public class OrderController {
     @PostMapping("/search/{artNum}")
     public String orderSearch(Model model, @RequestParam("artNum") String artNum){
 
-
         model.addAttribute("ordersWithArt", orderService.findOrdersContainsArt(artNum));
         model.addAttribute("allOrders", orderService.getAllOrders(GROHE));
         model.addAttribute("order", orderDTO());
-
 
         return "ordersNew";
     }
