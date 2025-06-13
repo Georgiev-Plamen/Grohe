@@ -33,7 +33,7 @@ public class ArticleController {
     public String allViegaArticles(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         model.addAttribute("articleData", addArticleDTO());
         model.addAttribute("allArticles", articleService.getAllArticle("Viega"));
-        return "articlesViega";
+        return "articles";
     }
 
     @PostMapping("/addArticle")

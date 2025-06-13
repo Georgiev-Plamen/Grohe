@@ -5,8 +5,10 @@ pluginManagement {
     }
     repositories {
         gradlePluginPortal()
-        maven { url 'https://repo.spring.io/milestone' } // Needed for Java 24 support
+        maven {
+            url = 'https://repo.spring.io/milestone' // Fixed: Use '=' for assignment
+        }
     }
 }
 
-rootProject.name = 'Grohe'
+rootProject.name = 'Grohe' // Correct (no change needed)

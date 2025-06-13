@@ -153,13 +153,16 @@
     </script>
 </head>
 <body>
-<div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
 
-<!--OrdersNew - allOrders-->
+<div th:if="${#strings.equalsIgnoreCase(brand, 'grohe')}"
+     th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}">
+</div>
+<div th:if="${#strings.equalsIgnoreCase(brand, 'viega')}"
+     th:replace="~{fragments/navbarViega::navbar(activeLink=${'home'})}">
+</div>
 
 <div class="container">
     <div class="add-container">
-        <!--        <div class="preOrder-entity">-->
         <form th:method="POST" th:action="@{/orders/search/*{artNum}}" onsubmit="handleSearchResults()">
             <label for="artNum">Заявки включващи артикул:</label>
             <input type="text" name="artNum" id="artNum" th:value="*{artNum}">
@@ -281,7 +284,9 @@
             </thead>
             <tbody>
             <tr th:each="article : ${order.articleList}" th:object="${article}">
-                <input type="hidden" name="brand" th:value="Grohe">
+<!--                <input type="hidden" name="brand" th:value="Grohe">-->
+                <input type="hidden" name="brand" th:value="${brand}">
+
                 <input type="hidden" name="id" th:value="${order.id()}">
                 <input type="hidden" name="articleID" th:value="${article.getId()}">
                 <td>
@@ -329,7 +334,7 @@
             </tr>
             </tbody>
         </table>
-        <button type="button" class="btn btn-primary fix" onclick="submitAllUpdates()">Update All</button>
+        <button type="button" class="button btn-primary fix" onclick="submitAllUpdates()">Update All</button>
     </div>
     <!--</div>-->
 

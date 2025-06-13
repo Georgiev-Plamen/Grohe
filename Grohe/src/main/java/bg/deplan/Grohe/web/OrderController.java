@@ -18,36 +18,52 @@ public class OrderController {
     @ModelAttribute("orderDto")
     public OrderDTO orderDTO() { return new OrderDTO(0L, "","", LocalDate.now(),null);}
 
+    private static final String GROHE = "Grohe";
+    private static final String VIEGA = "Viega";
+
     @Autowired
     private OrderService orderService;
 
     @GetMapping("/all")
     public String orders(Model model){
 
-        model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
+        model.addAttribute("allOrders", orderService.getAllOrders(GROHE));
         model.addAttribute("order", orderDTO());
 
         return "orders";
     }
 
     @GetMapping("/allNew")
-    public String ordersNew(Model model){
-
-        model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
-//        model.addAttribute("allOrders", orderService.getOrderList("Grohe"));
+    public String ordersNew(
+            @RequestParam(required = false, defaultValue = GROHE) String brand,
+            Model model
+    ) {
+        model.addAttribute("allOrders", orderService.getAllOrders(brand));
+        model.addAttribute("brand", brand);
         model.addAttribute("order", orderDTO());
-
         return "ordersNew";
     }
 
-    @GetMapping("/allNewViega")
-    public String ordersNewViega(Model model){
-
-        model.addAttribute("allOrders", orderService.getAllOrders("Viega"));
-        model.addAttribute("order", orderDTO());
-
-        return "ordersNewViega";
+    @GetMapping("/allNewGrohe")
+    public String ordersNewGrohe(Model model) {
+        return ordersNew(GROHE, model);
     }
+
+    @GetMapping("/allNewViega")
+    public String ordersNewViega(Model model) {
+        return ordersNew(VIEGA, model);
+    }
+
+//    @GetMapping("/allNewViega")
+//    public String ordersNewViega(Model model){
+//
+//        model.addAttribute("allOrders", orderService.getAllOrders(VIEGA));
+//        model.addAttribute("brand", VIEGA);
+//        model.addAttribute("order", orderDTO());
+//
+////        return "ordersNewViega";
+//        return "ordersNew";
+//    }
 
     @PostMapping("/orderDetails")
     public String getOrderDetails(@RequestParam("orderId") Long orderId, Model model) {
@@ -62,7 +78,7 @@ public class OrderController {
 
 
         model.addAttribute("ordersWithArt", orderService.findOrdersContainsArt(artNum));
-        model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
+        model.addAttribute("allOrders", orderService.getAllOrders(GROHE));
         model.addAttribute("order", orderDTO());
 
 
@@ -73,7 +89,7 @@ public class OrderController {
     public String searchOnlyArticle(Model model, @RequestParam("artNum") String artNum) {
 
         model.addAttribute("articlesByParam", orderService.findOnlyArticlesInOrder(artNum));
-        model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
+        model.addAttribute("allOrders", orderService.getAllOrders(GROHE));
 
         return "ordersNew";
     }
@@ -81,16 +97,16 @@ public class OrderController {
     @PostMapping("/searchOrderBy/{orderBy}")
     public String searchOrderBy(Model model, @RequestParam("orderBy") String orderBy) {
 
-        model.addAttribute("articlesByParam", orderService.findByOrderBy(orderBy, "Grohe"));
-        model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
+        model.addAttribute("articlesByParam", orderService.findByOrderBy(orderBy, GROHE));
+        model.addAttribute("allOrders", orderService.getAllOrders(GROHE));
 
         return "ordersNew";
     }
 
     @PostMapping("/searchByComment/{comment}")
     public String searchByComment(Model model, @RequestParam("comment") String comment) {
-        model.addAttribute("articlesByParam", orderService.findArticlesByComment(comment, "Grohe"));
-        model.addAttribute("allOrders", orderService.getAllOrders("Grohe"));
+        model.addAttribute("articlesByParam", orderService.findArticlesByComment(comment, GROHE));
+        model.addAttribute("allOrders", orderService.getAllOrders(GROHE));
 
         return "ordersNew";
     }
@@ -114,7 +130,7 @@ public class OrderController {
     @GetMapping("/allViega")
     public String ordersViega(Model model){
 
-        model.addAttribute("allOrders", orderService.getAllOrders("Viega"));
+        model.addAttribute("allOrders", orderService.getAllOrders(VIEGA));
 
         return "ordersViega";
     }

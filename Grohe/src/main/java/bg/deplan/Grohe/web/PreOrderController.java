@@ -48,6 +48,7 @@ public class PreOrderController {
     public String preOrder(Model model) {
 
         model.addAttribute("preOrderData", preOrderDTO());
+        model.addAttribute("brand", "Grohe");
         model.addAttribute("allPreOrderItems", preOrderService.getAllPreOrder("Grohe"));
         model.addAttribute("articleList", preOrderService.getAllArticle("Grohe"));
         model.addAttribute("newOrderName", orderService.newOrderName("Grohe"));
@@ -59,10 +60,11 @@ public class PreOrderController {
     public String preOrderViega(Model model) {
 
         model.addAttribute("preOrderData", preOrderDTO());
+        model.addAttribute("brand1", "Viega");
         model.addAttribute("allPreOrderItems", preOrderService.getAllPreOrder("Viega"));
         model.addAttribute("newOrderName", orderService.newOrderName("Viega"));
 
-        return "preOrderViega";
+        return "preOrder";
     }
 
     @PostMapping("/preOrder")

@@ -128,7 +128,8 @@
 </head>
 <body>
 
-<div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
+<div th:if="${brand == 'Grohe'}" th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
+<div th:if="${brand == 'Viega'}" th:replace="~{fragments/navbarViega::navbar(activeLink=${'home'})}"></div>
 
 <div class="container">
     <h1>PreOrder</h1>
@@ -136,7 +137,7 @@
     <form th:method="post" th:action="@{/orders/preOrder}" th:object="${preOrderData}">
         <div class="add-container">
             <!-- Article Field -->
-            <input type="hidden" name="brand" th:value="Grohe">
+            <input type="hidden" name="brand" th:value="${brand}">
             <div class="preOrder-entity">
                 <label for="artNum" th:text="#{orders_article_number}">Article:</label>
                 <input type="text" id="artNum" th:field="*{artNum}" required>
@@ -192,7 +193,7 @@
         <tr th:each="preOrder, stat : ${allPreOrderItems}" th:object="${preOrder}">
             <!-- Form for each preOrder -->
             <form th:method="POST" th:action="@{/orders/updatePreOrder/{id}(id=*{id})}">
-                <input type="hidden" name="brand" th:value="Grohe">
+                <input type="hidden" name="brand" th:value="${brand}">
                 <input type="hidden" name="id" th:value="${preOrder.id()}">
                 <td th:text="${stat.index + 1}">1</td>
                 <td>
@@ -250,7 +251,7 @@
                             <div class="modal-footer">
                                 <!-- Delete form with correct ID -->
                                 <form th:action="@{/orders/delete/{id}(id=${preOrder.id()})}" th:method="POST">
-                                    <input type="hidden" name="brand" th:value="Grohe">
+                                    <input type="hidden" name="brand" th:value="${brand}">
                                     <input type="hidden" name="_method" value="delete">
                                     <button class="delete-master-btn" type="submit">Изтриване</button>
                                 </form>
@@ -272,7 +273,7 @@
         <div class="preOrderFile">
             <label class="file">
                 <input type="file" name="file" id="file" aria-label="File browser example" accept=".xlsx" required>
-                <input type="hidden" id="brand" name="brand" th:value="Grohe">
+                <input type="hidden" id="brand" name="brand" th:value="${brand}">
                 <span class="file-custom"></span>
                 <button type="submit">Import</button>
             </label>
@@ -302,7 +303,7 @@
                                 <input type="text" class="form-control" id="name" name="name" th:value="${newOrderName}" required>
                                 <button type="submit" class="button btn-primary">Завърши</button>
                                 <input type="hidden" name="makeOrder" th:value="makeOrder">
-                                <input type="hidden" name="brand" th:value="Grohe">
+                                <input type="hidden" name="brand" th:value="${brand}">
                             </form>
                             <a href="/orders/preOrder">Към заявки</a>
                         </div>
