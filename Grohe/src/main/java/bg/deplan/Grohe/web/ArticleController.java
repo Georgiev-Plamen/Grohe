@@ -17,16 +17,41 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
+    private static final String GROHE = "Grohe";
+    private static final String VIEGA = "Viega";
+
     @ModelAttribute("articleData")
     public AddArticleDTO addArticleDTO() {
         return new AddArticleDTO(null,"", "", "","", "", "", "", "", 1);
     }
 
-    @GetMapping("/articles")
-    public String allArticles(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+    @GetMapping
+    public String allArticles(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam(required = false, defaultValue = GROHE) String brand,
+            Model model) {
+
+        // Add user-specific data if needed
+        if (userDetails != null) {
+            model.addAttribute("username", userDetails.getUsername());
+        }
+
         model.addAttribute("articleData", addArticleDTO());
-        model.addAttribute("allArticles", articleService.getAllArticle("Grohe"));
+        model.addAttribute("allArticles", articleService.getAllArticle(brand));
+        model.addAttribute("brand", brand);  // Explicit attribute for view
+
         return "articles";
+    }
+
+
+    @GetMapping("/grohe")
+    public String articlesGrohe(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        return allArticles(userDetails, GROHE, model);
+    }
+
+    @GetMapping("/viega")
+    public String articlesViega(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        return allArticles(userDetails, VIEGA, model);
     }
 
     @GetMapping("/articlesViega")

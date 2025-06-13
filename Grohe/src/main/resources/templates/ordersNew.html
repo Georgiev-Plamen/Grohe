@@ -154,11 +154,11 @@
 </head>
 <body>
 
-<div th:if="${#strings.equalsIgnoreCase(brand, 'grohe')}"
-     th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}">
+<div th:if="${(brand == 'Grohe')}">
+    <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
 </div>
-<div th:if="${#strings.equalsIgnoreCase(brand, 'viega')}"
-     th:replace="~{fragments/navbarViega::navbar(activeLink=${'home'})}">
+<div th:unless="${(brand == 'Grohe')}">
+    <div th:replace="~{fragments/navbarViega::navbar(activeLink=${'home'})}"></div>
 </div>
 
 <div class="container">

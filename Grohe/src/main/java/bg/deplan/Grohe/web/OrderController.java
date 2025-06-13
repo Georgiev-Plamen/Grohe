@@ -54,17 +54,6 @@ public class OrderController {
         return ordersNew(VIEGA, model);
     }
 
-//    @GetMapping("/allNewViega")
-//    public String ordersNewViega(Model model){
-//
-//        model.addAttribute("allOrders", orderService.getAllOrders(VIEGA));
-//        model.addAttribute("brand", VIEGA);
-//        model.addAttribute("order", orderDTO());
-//
-////        return "ordersNewViega";
-//        return "ordersNew";
-//    }
-
     @PostMapping("/orderDetails")
     public String getOrderDetails(@RequestParam("orderId") Long orderId, Model model) {
         // Fetch order details based on the selected orderId

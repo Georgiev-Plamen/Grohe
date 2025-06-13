@@ -128,8 +128,12 @@
 </head>
 <body>
 
-<div th:if="${brand == 'Grohe'}" th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
-<div th:if="${brand == 'Viega'}" th:replace="~{fragments/navbarViega::navbar(activeLink=${'home'})}"></div>
+<div th:if="${(brand == 'Grohe')}">
+    <div th:replace="~{fragments/navbar::navbar(activeLink=${'home'})}"></div>
+</div>
+<div th:unless="${(brand == 'Grohe')}">
+    <div th:replace="~{fragments/navbarViega::navbar(activeLink=${'home'})}"></div>
+</div>
 
 <div class="container">
     <h1>PreOrder</h1>
