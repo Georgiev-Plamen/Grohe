@@ -39,32 +39,35 @@ public class PreOrderController {
     @Autowired
     private ArticleService articleService;
 
+    private static final String GROHE = "Grohe";
+    private static final String VIEGA = "Viega";
+
     @ModelAttribute("preOrderData")
     public PreOrderDTO preOrderDTO() {
         return new PreOrderDTO(0l,"","","","","",LocalDate.now(), "","",false);
     }
 
     @GetMapping("/preOrder")
-    public String preOrder(Model model) {
+    public String preOrder(@RequestParam(required = false, defaultValue = GROHE) String brand,
+                           Model model) {
 
         model.addAttribute("preOrderData", preOrderDTO());
-        model.addAttribute("brand", "Grohe");
-        model.addAttribute("allPreOrderItems", preOrderService.getAllPreOrder("Grohe"));
-        model.addAttribute("articleList", preOrderService.getAllArticle("Grohe"));
-        model.addAttribute("newOrderName", orderService.newOrderName("Grohe"));
+        model.addAttribute("brand", brand);
+        model.addAttribute("allPreOrderItems", preOrderService.getAllPreOrder(brand));
+        model.addAttribute("articleList", preOrderService.getAllArticle(brand));
+        model.addAttribute("newOrderName", orderService.newOrderName(brand));
 
         return "preOrder";
     }
 
+    @GetMapping("/preOrderGrohe")
+    public String ordersNewGrohe(Model model) {
+        return preOrder(GROHE, model);
+    }
+
     @GetMapping("/preOrderViega")
     public String preOrderViega(Model model) {
-
-        model.addAttribute("preOrderData", preOrderDTO());
-        model.addAttribute("brand1", "Viega");
-        model.addAttribute("allPreOrderItems", preOrderService.getAllPreOrder("Viega"));
-        model.addAttribute("newOrderName", orderService.newOrderName("Viega"));
-
-        return "preOrder";
+        return preOrder(VIEGA, model);
     }
 
     @PostMapping("/preOrder")
@@ -73,11 +76,11 @@ public class PreOrderController {
 
         preOrderService.addItem(articleDTO, userDetails);
 
-        if(articleDTO.brand().equals("Viega")) {
+        if(articleDTO.brand().equals(VIEGA)) {
             return "redirect:/orders/preOrderViega";
         }
 
-        return "redirect:/orders/preOrder";
+        return "redirect:/orders/preOrderGrohe";
     }
 
     @DeleteMapping("/delete/{id}")
@@ -86,10 +89,10 @@ public class PreOrderController {
 
         preOrderService.deletePreOrderArticle(id);
 
-        if(brand.equals("Viega")) {
+        if(brand.equals(VIEGA)) {
             return "redirect:/orders/preOrderViega";
         }
-        return "redirect:/orders/preOrder";
+        return "redirect:/orders/preOrderGrohe";
     }
 
     @PostMapping("/makeOrder")
@@ -153,11 +156,11 @@ public class PreOrderController {
             throw new IllegalArgumentException("File is empty");
         }
 
-        if(brand.equals("Viega")) {
+        if(brand.equals(VIEGA)) {
             return "redirect:/orders/preOrderViega";
         }
 
-        return "redirect:/orders/preOrder";
+        return "redirect:/orders/preOrderGrohe";
     }
 
 
