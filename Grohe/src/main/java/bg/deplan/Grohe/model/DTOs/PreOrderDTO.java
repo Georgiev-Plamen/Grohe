@@ -13,6 +13,7 @@ public record PreOrderDTO (
         Long id,
         String brand,
         String artNum,
+        Long articleId,
         String quantityForOrder,
         String name,
         String orderBy,

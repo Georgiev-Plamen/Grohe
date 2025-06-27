@@ -1,65 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Handle save button click
-        document.addEventListener('click', async function(event) {
-            if (!event.target.classList.contains('save-modal-changes')) return;
-
-            event.preventDefault();
-
-            const button = event.target;
-            const modal = button.closest('.modal');
-            const artNum = button.dataset.artnum;
-
-            // Collect all data from the modal
-            const data = {
-                id: artNum
-            };
-
-            // Get all editable fields
-            modal.querySelectorAll('[contenteditable="true"]').forEach(editableDiv => {
-                const fieldName = editableDiv.dataset.field;
-                data[fieldName] = editableDiv.textContent.trim();
-            });
-
-            // Get all hidden inputs
-            modal.querySelectorAll('input[type="hidden"]').forEach(input => {
-                data[input.name] = input.value;
-            });
-
-            console.log('Sending data:', data);
-
-            try {
-                button.disabled = true;
-                button.textContent = 'Saving...';
-
-                const response = await fetch('api/receive/bulkUpdateArticle', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify([data]) // Send as array to match your endpoint
-                });
-
-                const result = await response.text();
-                alert('Saved successfully: ' + result);
-                $(modal).modal('hide');
-
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Save failed: ' + error.message);
-            } finally {
-                button.disabled = false;
-                button.textContent = 'Save';
-            }
-        });
-    });
-</script>
+<head>
+    <!-- Ensure these are loaded before your script if using jQuery/Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/js/submitAllModalUpdates.js" defer></script>
+</head>
 <body>
 
-<div th:fragment="articleDetails(article)" class="modal fade" th:id="'articleModal-' + ${article.artNum}" tabindex="-1"
-     role="dialog">
+<!-- Your modal template -->
+<!--<div th:fragment="articleDetails(article)" class="modal fade" th:id="'articleModal-' + ${article.artNum}" tabindex="-1"-->
+<div th:fragment="articleDetails(article)" class="modal fade"
+     th:id="'articleModal-' + ${article.id}" tabindex="-1" role="dialog">
+
+<input type="hidden" name="id" th:value="${article.id}"/>
+
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -77,6 +32,7 @@
                                 <span th:text="${article.artNum}"></span>
                             </div>
                             <div class="detail-group">
+                                <input type="hidden" name="id" th:value="${article.id}"/>
                                 <label>Image URL:</label>
                                 <div contenteditable="true" class="editable-field" data-field="imageUrl">
                                     <span th:text="${article.imageUrl}"></span>
@@ -141,7 +97,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="button" data-dismiss="modal">Close</button>
-                <button type="button" class="button save-modal-changes" onclick="submitAllUpdates()">Save</button>
+                <button type="button" class="button save-modal-changes">Save</button>
             </div>
         </div>
     </div>

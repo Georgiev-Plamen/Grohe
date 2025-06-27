@@ -74,6 +74,56 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public void bulkUpdateModalArticle(AddArticleDTO articleDTO) {
+
+            Long id = articleDTO.id();
+
+            Article article = articleRepository.findById(id).get();
+
+//                if (articleDTO.artNum().isEmpty()) {
+//                    return;
+//                }
+
+            if(articleDTO.artNum() != null) {
+                article.setArtNum(articleDTO.artNum());
+            }
+
+            if(articleDTO.codeDeplan() != null) {
+                article.setCodeDeplan(articleDTO.codeDeplan());
+            }
+
+            if(articleDTO.barcode() != null) {
+                article.setBarcode(articleDTO.barcode());
+            }
+
+            if(articleDTO.name() != null) {
+                article.setName(articleDTO.name());
+            }
+
+            if(articleDTO.description() != null) {
+                article.setDescription(articleDTO.description());
+            }
+
+            if(articleDTO.imgUrl() != null) {
+                article.setImageUrl(articleDTO.imgUrl());
+            }
+
+            if(articleDTO.artUrl() != null) {
+                article.setArtUrl(articleDTO.artUrl());
+            }
+
+            if(articleDTO.barcode() != null) {
+                article.setBarcode(articleDTO.barcode());
+            }
+
+            if(articleDTO.quantityInPallet() != null) {
+                article.setQuantityInPallet(articleDTO.quantityInPallet());
+            }
+
+            articleRepository.save(article);
+    }
+
+    @Override
     public void bulkUpdateArticle(List<AddArticleDTO> updates) {
         for (AddArticleDTO articleDTO : updates) {
                 Long id = articleDTO.id();

@@ -207,6 +207,7 @@ public class PreOrderServiceImpl implements PreOrderService {
                 preOrderItem.getId(),
                 preOrderItem.getArticle().getBrand(),
                 preOrderItem.getArticle().getArtNum(),
+                preOrderItem.getArticle().getId(),
                 preOrderItem.getQuantityForOrder(),
                 preOrderItem.getArticle().getName(),
                 preOrderItem.getOrderBy(),

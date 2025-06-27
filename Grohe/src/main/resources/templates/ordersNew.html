@@ -151,6 +151,8 @@
             });
         });
     </script>
+
+    <script src="/js/submitAllModalUpdates.js" defer></script>
 </head>
 <body>
 
@@ -324,7 +326,7 @@
                 </td>
                 <td>
                     <button type="button" class="btn" data-toggle="modal"
-                            th:attr="data-target='#articleModal-' + ${article.getArticle().artNum}">
+                            th:attr="data-target='#articleModal-' + ${article.getArticle().id}">
                         &#128269;
                     </button>
                 </td>

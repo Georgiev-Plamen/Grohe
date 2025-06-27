@@ -27,6 +27,8 @@ public interface ArticleService {
 
     void bulkUpdateArticle(List<AddArticleDTO> updates);
 
+    void bulkUpdateModalArticle(AddArticleDTO update);
+
     void deleteArticle(Long id);
 
     void createArticleByArtName(String artName, String brand);

@@ -33,6 +33,7 @@ public class SecurityConfig {
                         .ignoringRequestMatchers("api/orders/**")          // Disable CSRF for API paths
                         .ignoringRequestMatchers("api/preorder/**")        // Disable CSRF for API paths
                         .ignoringRequestMatchers("articles/api/**")        // Disable CSRF for API paths
+                        .ignoringRequestMatchers("orders/api/**")          // Disable CSRF for API paths
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
                 .formLogin(formLogin -> formLogin

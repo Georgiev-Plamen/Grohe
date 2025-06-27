@@ -31,4 +31,15 @@ public class ArticleRestController {
                     .body("Error processing updates: " + e.getMessage());
         }
     }
+
+    @PostMapping("/receive/bulkUpdateModalArticle")
+    public ResponseEntity<String> bulkUpdateModalArticle(@RequestBody AddArticleDTO updates) {
+        try {
+            articleService.bulkUpdateModalArticle(updates);
+            return ResponseEntity.ok().body("Update is successful");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error processing updates: " + e.getMessage());
+        }
+    }
 }
