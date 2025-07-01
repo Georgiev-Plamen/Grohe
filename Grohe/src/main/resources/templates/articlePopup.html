@@ -9,11 +9,10 @@
 <body>
 
 <!-- Your modal template -->
-<!--<div th:fragment="articleDetails(article)" class="modal fade" th:id="'articleModal-' + ${article.artNum}" tabindex="-1"-->
 <div th:fragment="articleDetails(article)" class="modal fade"
      th:id="'articleModal-' + ${article.id}" tabindex="-1" role="dialog">
 
-<input type="hidden" name="id" th:value="${article.id}"/>
+    <input type="hidden" name="id" th:value="${article.id}"/>
 
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -28,11 +27,17 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="detail-group">
+                                <label>Наименование:</label>
+                                <div contenteditable="true" class="editable-field" data-field="name">
+                                    <span th:text="${article.name}"></span>
+                                </div>
+                                <input type="hidden" name="name" th:value="${article.name}"/>
+                            </div>
+                            <div class="detail-group">
                                 <label>Артикулен номер:</label>
                                 <span th:text="${article.artNum}"></span>
                             </div>
                             <div class="detail-group">
-                                <input type="hidden" name="id" th:value="${article.id}"/>
                                 <label>Image URL:</label>
                                 <div contenteditable="true" class="editable-field" data-field="imageUrl">
                                     <span th:text="${article.imageUrl}"></span>

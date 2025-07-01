@@ -1,6 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     const editedData = new Map();
 
+        document.addEventListener('hidden.bs.modal', function (event) {
+            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.paddingRight = '';
+        });
+
     // Track changes in editable fields
     document.querySelectorAll('[contenteditable="true"]').forEach(editable => {
         editable.addEventListener('input', () => {
@@ -53,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     const result = await response.text();
+
                     console.log(`Success for ID ${id}:`, result);
                 } catch (error) {
                     console.error('Failed to update ID', id, error);
@@ -74,5 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error:', error);
             alert('Failed to save: ' + error.message);
         }
+
+        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+        document.body.classList.remove('modal-open');
+        document.body.style.paddingRight = '';
     }
 });
