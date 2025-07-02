@@ -152,13 +152,13 @@
                        th:for="imgUrl">Снимка:
                 </label>
 
-                <small class="text-danger" th:if="${#fields.hasErrors('imgUrl')}" th:errors="*{imgUrl}">Quantity
+                <small class="text-danger" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}">Quantity
                     Error</small>
 
                 <input class="preOrder-input"
                        type="text"
                        th:errorclass="is-invalid"
-                       th:field="*{imgUrl}" minlength="1" maxlength="50">
+                       th:field="*{imageUrl}" minlength="1" maxlength="50">
             </div>
 
             <!--Order reason-->
@@ -233,8 +233,8 @@
             </td>
             <td>
                 <div contenteditable="true" oninput="updateHiddenInput(this)"
-                     th:text="${article.imgUrl()}"></div>
-                <input type="hidden" name="imgUrl" th:value="${article.imgUrl()}">
+                     th:text="${article.imageUrl()}"></div>
+                <input type="hidden" name="imageUrl" th:value="${article.imageUrl()}">
             </td>
             <td>
                 <div contenteditable="true" oninput="updateHiddenInput(this)"

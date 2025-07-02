@@ -30,7 +30,7 @@ public class ArticleServiceImpl implements ArticleService {
         mappedArticle.setArtNum(addArticleDTO.artNum());
         mappedArticle.setName(addArticleDTO.name());
         mappedArticle.setDescription(addArticleDTO.description());
-        mappedArticle.setImageUrl(addArticleDTO.imgUrl());
+        mappedArticle.setImageUrl(addArticleDTO.imageUrl());
         mappedArticle.setArtUrl(addArticleDTO.artUrl());
         mappedArticle.setBarcode(addArticleDTO.barcode());
         mappedArticle.setQuantityInPallet(addArticleDTO.quantityInPallet());
@@ -61,7 +61,7 @@ public class ArticleServiceImpl implements ArticleService {
         article.setArtNum(addArticleDTO.artNum());
         article.setName(addArticleDTO.name());
         article.setDescription(addArticleDTO.description());
-        article.setImageUrl(addArticleDTO.imgUrl());
+        article.setImageUrl(addArticleDTO.imageUrl());
         article.setBarcode(addArticleDTO.barcode());
         article.setQuantityInPallet(addArticleDTO.quantityInPallet());
 
@@ -104,8 +104,8 @@ public class ArticleServiceImpl implements ArticleService {
                 article.setDescription(articleDTO.description());
             }
 
-            if(articleDTO.imgUrl() != null) {
-                article.setImageUrl(articleDTO.imgUrl());
+            if(articleDTO.imageUrl() != null) {
+                article.setImageUrl(articleDTO.imageUrl());
             }
 
             if(articleDTO.artUrl() != null) {
@@ -154,8 +154,8 @@ public class ArticleServiceImpl implements ArticleService {
                     article.setDescription(articleDTO.description());
                 }
 
-                if(articleDTO.imgUrl() != null) {
-                    article.setImageUrl(articleDTO.imgUrl());
+                if(articleDTO.imageUrl() != null) {
+                    article.setImageUrl(articleDTO.imageUrl());
                 }
 
                 if(articleDTO.artUrl() != null) {
