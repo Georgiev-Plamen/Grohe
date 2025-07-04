@@ -62,47 +62,53 @@ public class OrderController {
     }
 
     @PostMapping("/search/{artNum}")
-    public String orderSearch(Model model, @RequestParam("artNum") String artNum){
+    public String orderSearch(Model model, @RequestParam("artNum") String artNum,
+                              @RequestParam("brand") String brand) {
 
         model.addAttribute("ordersWithArt", orderService.findOrdersContainsArt(artNum));
-        model.addAttribute("allOrders", orderService.getAllOrders(GROHE));
+        model.addAttribute("allOrders", orderService.getAllOrders(brand));
         model.addAttribute("order", orderDTO());
 
-        return "ordersNew";
+        return ordersNew(brand, model);
     }
 
     @PostMapping("/searchOnlyArticle/{artNum}")
-    public String searchOnlyArticle(Model model, @RequestParam("artNum") String artNum) {
+    public String searchOnlyArticle(Model model, @RequestParam("artNum") String artNum,
+                                    @RequestParam("brand") String brand) {
 
         model.addAttribute("articlesByParam", orderService.findOnlyArticlesInOrder(artNum));
-        model.addAttribute("allOrders", orderService.getAllOrders(GROHE));
+        model.addAttribute("allOrders", orderService.getAllOrders(brand));
 
-        return "ordersNew";
+        return ordersNew(brand, model);
     }
 
     @PostMapping("/searchOrderBy/{orderBy}")
-    public String searchOrderBy(Model model, @RequestParam("orderBy") String orderBy) {
+    public String searchOrderBy(Model model, @RequestParam("orderBy") String orderBy,
+                                @RequestParam("brand") String brand) {
 
-        model.addAttribute("articlesByParam", orderService.findByOrderBy(orderBy, GROHE));
-        model.addAttribute("allOrders", orderService.getAllOrders(GROHE));
+        model.addAttribute("articlesByParam", orderService.findByOrderBy(orderBy, brand));
+        model.addAttribute("allOrders", orderService.getAllOrders(brand));
 
-        return "ordersNew";
+        return ordersNew(brand, model);
     }
 
     @PostMapping("/searchByComment/{comment}")
-    public String searchByComment(Model model, @RequestParam("comment") String comment) {
-        model.addAttribute("articlesByParam", orderService.findArticlesByComment(comment, GROHE));
-        model.addAttribute("allOrders", orderService.getAllOrders(GROHE));
+    public String searchByComment(Model model, @RequestParam("comment") String comment,
+        @RequestParam("brand") String brand) {
 
-        return "ordersNew";
+        model.addAttribute("articlesByParam", orderService.findArticlesByComment(comment, brand));
+        model.addAttribute("allOrders", orderService.getAllOrders(brand));
+
+        return ordersNew(brand, model);
     }
 
     @GetMapping("/orderNewSearch/{artNum}")
-    public String orderSearchView(Model model, @RequestParam("artNum") String artNum) {
+    public String orderSearchView(Model model, @RequestParam("artNum") String artNum,
+                                  @RequestParam("brand") String brand) {
 
         model.addAttribute("ordersWithArt", orderService.findOrdersContainsArt(artNum));
 
-        return "ordersNew";
+        return ordersNew(brand, model);
     }
 
     @PostMapping("/editOrder/{id}")

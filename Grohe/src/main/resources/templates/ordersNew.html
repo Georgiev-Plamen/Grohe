@@ -168,22 +168,26 @@
         <form th:method="POST" th:action="@{/orders/search/*{artNum}}" onsubmit="handleSearchResults()">
             <label for="artNum">Заявки включващи артикул:</label>
             <input type="text" name="artNum" id="artNum" th:value="*{artNum}">
+            <input type="hidden" name="brand" th:value="${brand}">
             <button class="pre-order-add-btn" type="submit">Търси</button>
         </form>
 
         <form th:method="POST" th:action="@{/orders/searchOrderBy/{orderBy}}">
             <label for="orderBy">Заявени артикули от потребител:</label>
             <input type="text" name="orderBy" id="orderBy" th:value="*{orderBy}">
+            <input type="hidden" name="brand" th:value="${brand}">
             <button class="pre-order-add-btn" type="submit">Търси</button>
         </form>
         <form th:method="POST" th:action="@{/orders/searchOnlyArticle/*{artNum}}">
             <label for="artNum">Търсене на артикул:</label>
             <input type="text" name="artNum" id="artNumOnly" th:value="*{artNum}">
+            <input type="hidden" name="brand" th:value="${brand}">
             <button class="pre-order-add-btn" type="submit">Търси</button>
         </form>
         <form th:method="POST" th:action="@{/orders/searchByComment/*{comment}}">
             <label for="artNum">Търсене по коментар:</label>
             <input type="text" name="comment" id="comment" th:value="*{comment}">
+            <input type="hidden" name="brand" th:value="${brand}">
             <button class="pre-order-add-btn" type="submit">Търси</button>
         </form>
     </div>
