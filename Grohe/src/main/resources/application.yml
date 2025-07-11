@@ -11,14 +11,6 @@ spring:
     multipart:
       max-file-size: 1MB
       max-request-size: 5MB
-  mvc:
-    hiddenmethod:
-      filter:
-        enabled: true
-#  sql:
-#    init:
-#      mode: always
-
   jpa:
     # Choose either MySQL 8 or MySQL 5 below
     # For MySQL 8
@@ -32,10 +24,11 @@ spring:
         format_sql: true
     defer-datasource-initialization: true
 
-#Cloudinary Properties
+
+  #Cloudinary Properties
 #cloudinary:
-  #api-key: 
-  #api-secret: 
+  #api-key:
+  #api-secret:
   #cloud-name:
 
 
