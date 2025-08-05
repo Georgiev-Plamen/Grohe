@@ -285,6 +285,7 @@ public class OrderServiceImpl implements OrderService {
 
     private ArticleFindDTO mapToArticleFindDTO(OrderItem orderItem) {
         return new ArticleFindDTO(
+                orderItem.articleId(),
                 orderItem.getArticle().getBrand(),
                 orderItem.getDateOfDelivery(),
                 orderItem.getDateOfOrder(),

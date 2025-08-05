@@ -3,6 +3,7 @@ package bg.deplan.Grohe.model.DTOs;
 import java.time.LocalDate;
 
 public record ArticleFindDTO(
+        Long id,
         String brand,
         LocalDate dateOfDelivery,
         LocalDate dateOfOrder,

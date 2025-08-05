@@ -212,11 +212,12 @@
                 <th th:text="#{orders_confirmation}">Date of Delivery</th>
                 <th th:text="#{orders_reason}">Order Reason</th>
                 <th th:text="#{orders_comment}">Comment</th>
+                <th th:text="#{orders_detail}">&#128269;</th>
             </tr>
 
             </thead>
             <tbody>
-            <tr th:each="article : ${order.articleList}">
+            <tr th:each="article : ${order.articleList}" th:object="${article}">
                 <td th:text="${article.getArticle.artNum}"></td>
                 <td th:text="${article.quantity}"></td>
                 <td th:text="${article.getArticle.name}"></td>
@@ -225,6 +226,12 @@
                 <td th:text="${article.dateOfDelivery}"></td>
                 <td th:text="${article.orderReason}"></td>
                 <td th:text="${article.comment}"></td>
+                <td>
+                    <button type="button" class="btn" data-toggle="modal"
+                            th:attr="data-target='#articleModal-' + ${article.getArticle().id}">
+                        &#128269;
+                    </button>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -247,12 +254,14 @@
                 <th>Дата на доставка</th>
                 <th>Order Reason</th>
                 <th>Коментар</th>
+                <th th:text="#{orders_detail}">&#128269;</th>
 
             </tr>
 
             </thead>
             <tbody>
-            <tr th:each="article : ${articlesByParam}">
+            <tr th:each="article : ${articlesByParam}" th:object="${article}">
+
                 <td th:text="${article.orderName}"></td>
                 <td th:text="${article.article}"></td>
                 <td th:text="${article.quantity}"></td>
@@ -261,6 +270,14 @@
                 <td th:text="${article.dateOfDelivery}"></td>
                 <td th:text="${article.orderReason}"></td>
                 <td th:text="${article.comment}"></td>
+
+                <td>
+                    <button type="button" class="btn" data-toggle="modal"
+                            th:attr="data-target='#articleModal-' + ${article.id}">
+                        &#128269;
+                    </button>
+                </td>
+
             </tr>
             </tbody>
         </table>
