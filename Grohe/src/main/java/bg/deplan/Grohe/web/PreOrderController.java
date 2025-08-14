@@ -56,6 +56,7 @@ public class PreOrderController {
         model.addAttribute("allPreOrderItems", preOrderService.getAllPreOrder(brand));
         model.addAttribute("articleList", preOrderService.getAllArticle(brand));
         model.addAttribute("newOrderName", orderService.newOrderName(brand));
+        model.addAttribute("lastThreeOrdersNames", orderService.lastThreeOrderName(brand));
 
         return "preOrder";
     }

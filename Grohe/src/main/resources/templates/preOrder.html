@@ -302,6 +302,11 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <div class="lastOrderList">
+                            <input type="hidden" name="brand" th:value="${brand}">
+                            <span th:text="${lastThreeOrdersNames}"></span>
+                        </div>
+
                         <div class="form-group">
                             <!-- Make Order Form -->
                             <form id="downloadForm" th:method="POST" th:action="@{/orders/makeOrder}">

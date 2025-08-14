@@ -8,6 +8,7 @@ import bg.deplan.Grohe.service.OrderService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -79,6 +80,19 @@ public class OrderServiceImpl implements OrderService {
         Long id = orderRepository.findLastId(brand);
 
         return id;
+    }
+
+    @Override
+    public String lastThreeOrderName(String brand) {
+        StringBuilder ordersNames = new StringBuilder();
+
+        List<Order> orders = orderRepository.findLastThreeOrdersByBrand(brand);
+
+        for(Order order : orders) {
+            ordersNames.append(order.getOrderName());
+            ordersNames.append(" ; \n");
+        }
+        return ordersNames.toString();
     }
 
     @Override

@@ -18,6 +18,8 @@ public interface OrderService {
 
     long lastOrderId(String brand);
 
+    String lastThreeOrderName(String brand);
+
     void deleteOrder(Long id, UserDetails userDetails);
 
     OrderDTO getOrderById(Long orderId);
