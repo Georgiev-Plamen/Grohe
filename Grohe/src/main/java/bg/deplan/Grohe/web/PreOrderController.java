@@ -84,7 +84,7 @@ public class PreOrderController {
         return "redirect:/orders/preOrderGrohe";
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deletePreOrderArticle (@PathVariable ("id") Long id,
                                          @RequestParam("brand") String brand) {
 

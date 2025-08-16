@@ -138,7 +138,7 @@
 </div>
 
 <div class="container">
-    <h1>PreOrder</h1>
+    <h1 th:text="#{preOrder_title}">PreOrder</h1>
     <!-- Add Order Form -->
     <form th:method="post" th:action="@{/orders/preOrder}" th:object="${preOrderData}">
         <div class="add-container">
@@ -173,7 +173,7 @@
                 <label for="comment" th:text="#{orders_comment}">Comments:</label>
                 <input type="text" id="comment" th:field="*{comment}">
             </div>
-            <button class="pre-order-add-btn" type="submit">Add</button>
+            <button th:text="#{preOrder_btn_add}" class="pre-order-add-btn" type="submit">Add</button>
         </div>
     </form>
 
@@ -272,7 +272,7 @@
     </table>
 
     <!-- Single Update Button -->
-    <button type="button" class="button fix" onclick="submitAllUpdates()">Update All</button>
+    <button th:text="#{preOrder_btn_Update}" type="button" class="button fix" onclick="submitAllUpdates()">Update All</button>
 
     <!-- Import Form -->
     <form th:method="POST" th:action="@{/orders/importFromExcel}" enctype="multipart/form-data">
@@ -281,11 +281,11 @@
                 <input type="file" name="file" id="file" aria-label="File browser example" accept=".xlsx" required>
                 <input type="hidden" id="brand" name="brand" th:value="${brand}">
                 <span class="file-custom"></span>
-                <button type="submit">Import</button>
+                <button th:text="#{preOrder_btn_Import}" type="submit">Import</button>
             </label>
 
             <!-- Make Order Button -->
-            <button type="button" class="eBtn" data-toggle="modal" data-target="#exampleModal">Make Order</button>
+            <button th:text="#{preOrder_btn_makeOrder}" type="button" class="eBtn" data-toggle="modal" data-target="#exampleModal">Make Order</button>
         </div>
     </form>
 
@@ -316,7 +316,7 @@
                                 <input type="hidden" name="makeOrder" th:value="makeOrder">
                                 <input type="hidden" name="brand" th:value="${brand}">
                             </form>
-                            <a href="/orders/preOrder">Към заявки</a>
+                            <a th:href="${brand == 'Grohe'} ? '/orders/preOrderGrohe' : '/orders/preOrderViega'">Към заявки</a>
                         </div>
                     </div>
                 </div>
