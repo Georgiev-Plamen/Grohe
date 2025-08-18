@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,6 +20,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         CsrfTokenRequestAttributeHandler csrfTokenHandler = new CsrfTokenRequestAttributeHandler();
         csrfTokenHandler.setCsrfRequestAttributeName("_csrf");
+
+        UserDetailsService userDetailsService = null;
 
         return http
                 .authorizeHttpRequests(authorize -> authorize
@@ -47,6 +50,13 @@ public class SecurityConfig {
                         .logoutUrl("/users/logout")
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID", "remember-me")
+                )
+                .rememberMe(rememberMe -> rememberMe
+                        .key("yourUniqueAndSecretKey") // Change this to a secure random value
+                        .tokenValiditySeconds(86400 * 30) // 30 days
+                        .rememberMeParameter("remember-me") // This is the name of the checkbox in the login form
+                        .userDetailsService(userDetailsService) // Inject your UserDetailsService
                 )
                 .build();
     }
