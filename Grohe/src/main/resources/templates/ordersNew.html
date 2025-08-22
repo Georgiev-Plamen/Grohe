@@ -143,8 +143,8 @@
         }
     }
 
-    // Make submitAllUpdates globally available
-    window.submitAllUpdates = submitAllUpdates;
+<!--    // Make submitAllUpdates globally available-->
+<!--    window.submitAllUpdates = submitAllUpdates;-->
 
     document.addEventListener('click', (event) => {
         if (event.target.classList.contains('fix')) {
@@ -325,13 +325,12 @@
             </thead>
             <tbody>
             <tr th:each="article : ${order.articleList}" th:object="${article}">
-<!--                <input type="hidden" name="brand" th:value="Grohe">-->
-                <input type="hidden" name="brand" th:value="${brand}">
 
+                <input type="hidden" name="brand" th:value="${brand}">
                 <input type="hidden" name="id" th:value="${order.id()}">
                 <input type="hidden" name="articleID" th:value="${article.getId()}">
                 <input type="hidden" name="position" th:value="${article.position}">
-<!--                <input type="hidden" name="articleID" th:value="${order.position()}">-->
+
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)"
                          th:text="${article.getArticle.artNum}"></div>
