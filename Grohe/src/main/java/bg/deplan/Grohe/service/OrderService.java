@@ -41,4 +41,6 @@ public interface OrderService {
     List<ArticleFindDTO> findArticlesByComment(String comment, String brand);
 
     List<OrderTitleDTO> getOrderList(String brand);
+
+//    int findArticleIndex(Long orderId,Long ArticleId);
 }

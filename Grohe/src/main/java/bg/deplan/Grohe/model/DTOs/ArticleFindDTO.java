@@ -12,6 +12,8 @@ public record ArticleFindDTO(
         String quantity,
         String comment,
         String article,
-        String orderName
+        String orderName,
+        Long orderId,
+        int position
 ) {
 }

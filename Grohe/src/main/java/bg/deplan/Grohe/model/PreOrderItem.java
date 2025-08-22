@@ -17,6 +17,8 @@ public class PreOrderItem extends BaseEntity{
     private String comment;
     private LocalDate date;
     private boolean isHold;
+    private int position;
+
     @ManyToOne
     private User user;
 
@@ -89,5 +91,13 @@ public class PreOrderItem extends BaseEntity{
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

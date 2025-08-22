@@ -21,7 +21,7 @@ public interface PreOrderService {
 
     PreOrderItem findById(Long id);
 
-    void deletePreOrderArticle(Long id);
+    void deletePreOrderArticle(Long id, String brand);
 
     List<PreOrderExcelDTO> readPreOrderFromExcel(InputStream inputStream, String brand, UserDetails userDetails) throws IOException;
 

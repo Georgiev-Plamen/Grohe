@@ -49,106 +49,109 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const editedData = new Map();
+    const editedData = new Map();
 
-            // Function to update hidden inputs when contenteditable divs are edited
-            function updateHiddenInput(editableDiv) {
-                const hiddenInput = editableDiv.nextElementSibling;
-                if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-                    hiddenInput.value = editableDiv.textContent.trim();
-                }
+    function updateHiddenInput(editableDiv) {
+        const hiddenInput = editableDiv.nextElementSibling;
+        if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+            hiddenInput.value = editableDiv.textContent.trim();
+        }
+    }
+
+    function trackEditableChanges(editableDiv) {
+        editableDiv.addEventListener('input', () => {
+            const row = editableDiv.closest('tr');
+            const rowId = row.querySelector('input[name="articleID"]').value;
+            const orderId = row.querySelector('input[name="id"]').value;
+
+            // Get position from the hidden input (if it exists)
+            const positionInput = row.querySelector('input[name="position"]');
+            const position = positionInput ? positionInput.value : null;
+
+            if (!editedData.has(rowId)) {
+                editedData.set(rowId, {});
             }
 
-            // Function to track changes in contenteditable divs
-            function trackEditableChanges(editableDiv) {
-                editableDiv.addEventListener('input', () => {
-                    const row = editableDiv.closest('tr');
-                    const rowId = row.querySelector('input[name="articleID"]').value;
-                    const orderId = row.querySelector('input[name="id"]').value; // Fetch orderId
-                    const rowsInOrder = Array.from(row.closest('tbody').querySelectorAll('tr')); // Get all rows in the same order
-                    const index = rowsInOrder.indexOf(row); // Get the index of the current row
-
-                    if (!editedData.has(rowId)) {
-                        editedData.set(rowId, {});
-                    }
-
-                    const hiddenInput = editableDiv.nextElementSibling;
-                    if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-                        editedData.get(rowId)[hiddenInput.name] = editableDiv.textContent.trim();
-                    }
-
-                    // Include orderId and index in the edited data
-                    editedData.get(rowId).orderId = orderId;
-                    editedData.get(rowId).index = index; // Store the index
-
-                    console.log("Edited Data after contenteditable change:", editedData);
-                });
+            const hiddenInput = editableDiv.nextElementSibling;
+            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                editedData.get(rowId)[hiddenInput.name] = editableDiv.textContent.trim();
             }
 
-            // Function to track changes in input fields
-            function trackInputChanges(input) {
-                input.addEventListener('change', () => {
-                    const row = input.closest('tr');
-                    const rowId = row.querySelector('input[name="articleID"]').value;
-                    const orderId = row.querySelector('input[name="id"]').value; // Fetch orderId
-                    const rowsInOrder = Array.from(row.closest('tbody').querySelectorAll('tr')); // Get all rows in the same order
-                    const index = rowsInOrder.indexOf(row); // Get the index of the current row
+            // Include orderId and position in the edited data
+            editedData.get(rowId).orderId = orderId;
+            editedData.get(rowId).position = position; // Use position instead of index
 
-                    if (!editedData.has(rowId)) {
-                        editedData.set(rowId, {});
-                    }
+            console.log("Edited Data after contenteditable change:", editedData);
+        });
+    }
 
-                    editedData.get(rowId)[input.name] = input.value.trim();
+    function trackInputChanges(input) {
+        input.addEventListener('change', () => {
+            const row = input.closest('tr');
+            const rowId = row.querySelector('input[name="articleID"]').value;
+            const orderId = row.querySelector('input[name="id"]').value;
 
-                    // Include orderId and index in the edited data
-                    editedData.get(rowId).orderId = orderId;
-                    editedData.get(rowId).index = index; // Store the index
+            // Get position from the hidden input (if it exists)
+            const positionInput = row.querySelector('input[name="position"]');
+            const position = positionInput ? positionInput.value : null;
 
-                    console.log("Edited Data after input change:", editedData);
-                });
+            if (!editedData.has(rowId)) {
+                editedData.set(rowId, {});
             }
 
-            // Attach event listeners to all contenteditable divs and input fields
-            document.querySelectorAll('[contenteditable="true"]').forEach(trackEditableChanges);
-            document.querySelectorAll('input').forEach(trackInputChanges);
+            editedData.get(rowId)[input.name] = input.value.trim();
 
-            // Function to submit all updates
-            async function submitAllUpdates() {
-                const updates = Array.from(editedData.entries()).map(([rowId, data]) => {
-                    return {
-                        articleID: rowId,
-                        orderId: data.orderId, // Include orderId
-                        index: data.index, // Include index
-                        ...data
-                    };
-                });
+            // Include orderId and position in the edited data
+            editedData.get(rowId).orderId = orderId;
+            editedData.get(rowId).position = position; // Use position instead of index
 
-                console.log("Updates to be submitted:", updates);
+            console.log("Edited Data after input change:", editedData);
+        });
+    }
 
-                try {
-                    const response = await fetch('/api/orders/receive/bulkUpdateOrder', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(updates)
-                    });
+    // Attach event listeners
+    document.querySelectorAll('[contenteditable="true"]').forEach(trackEditableChanges);
+    document.querySelectorAll('input').forEach(trackInputChanges);
 
-                    const result = await response.text();
-                    alert(result);
-                    editedData.clear();
-                } catch (error) {
-                    console.error('Error sending updates:', error);
-                    alert('Failed to send updates');
-                }
-            }
+    async function submitAllUpdates() {
+        const updates = Array.from(editedData.entries()).map(([rowId, data]) => {
+            return {
+                articleID: rowId,
+                orderId: data.orderId,
+                position: data.position, // Send position instead of index
+                ...data
+            };
+        });
 
-            // Use event delegation to handle clicks on any "Update All" button
-            document.addEventListener('click', (event) => {
-                if (event.target.classList.contains('fix')) {
-                    submitAllUpdates();
-                }
+        console.log("Updates to be submitted:", updates);
+
+        try {
+            const response = await fetch('/api/orders/receive/bulkUpdateOrder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updates)
             });
+
+            const result = await response.text();
+            alert(result);
+            editedData.clear();
+        } catch (error) {
+            console.error('Error sending updates:', error);
+            alert('Failed to send updates');
+        }
+    }
+
+    // Make submitAllUpdates globally available
+    window.submitAllUpdates = submitAllUpdates;
+
+    document.addEventListener('click', (event) => {
+        if (event.target.classList.contains('fix')) {
+            submitAllUpdates();
+        }
+    });
+
         });
     </script>
 
@@ -262,12 +265,27 @@
             <tbody>
             <tr th:each="article : ${articlesByParam}" th:object="${article}">
 
+                <input type="hidden" name="articleID" th:value="${article.id}">
+                <input type="hidden" name="position" th:value="${article.position}">
+
                 <td th:text="${article.orderName}"></td>
-                <td th:text="${article.article}"></td>
+                <input type="hidden" name="id" th:value="${article.orderId}">
+
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)"
+                         th:text="${article.article}"></div>
+                    <input type="hidden" name="article" th:value="${article.article}">
+                </td>
+
                 <td th:text="${article.quantity}"></td>
                 <td th:text="${article.orderBy}"></td>
                 <td th:text="${article.dateOfOrder}"></td>
-                <td th:text="${article.dateOfDelivery}"></td>
+
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{dateOfDelivery}"></div>
+                    <input type="hidden" name="dateOfDelivery" th:value="*{dateOfDelivery}">
+                </td>
+
                 <td th:text="${article.orderReason}"></td>
                 <td th:text="${article.comment}"></td>
 
@@ -312,6 +330,8 @@
 
                 <input type="hidden" name="id" th:value="${order.id()}">
                 <input type="hidden" name="articleID" th:value="${article.getId()}">
+                <input type="hidden" name="position" th:value="${article.position}">
+<!--                <input type="hidden" name="articleID" th:value="${order.position()}">-->
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)"
                          th:text="${article.getArticle.artNum}"></div>

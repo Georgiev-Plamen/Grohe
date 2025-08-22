@@ -67,6 +67,8 @@ public class PreOrderServiceImpl implements PreOrderService {
     public void addItem(ArticleDTO articleDTO, UserDetails userDetails) {
         PreOrderItem preOrderItem = new PreOrderItem();
 
+        int index = findLastIndex(articleDTO.brand());
+
         Optional<Article> optionalArticle = articleRepository.findByAccurateArtNum(articleDTO.artNum());
 
         if (optionalArticle.isEmpty()) {
@@ -77,6 +79,8 @@ public class PreOrderServiceImpl implements PreOrderService {
             optionalArticle = articleRepository.findByArtNum(articleDTO.artNum());
         }
 
+
+        preOrderItem.setPosition(index);
         preOrderItem.setArticle(optionalArticle.get());
         preOrderItem.setQuantityForOrder(articleDTO.quantityForOrder());
         preOrderItem.setOrderBy(articleDTO.orderBy());
@@ -87,6 +91,14 @@ public class PreOrderServiceImpl implements PreOrderService {
         preOrderItem.setUser(userRepository.findByUsername(userDetails.getUsername()).get());
 
         preOrderItemRepository.save(preOrderItem);
+    }
+
+    private int findLastIndex (String brand) {
+        List<PreOrderItem> items = preOrderItemRepository.findAllByArticle_Brand(brand);
+
+        long count = items.stream().count();
+
+        return (int)count + 1;
     }
 
     @Override
@@ -151,8 +163,20 @@ public class PreOrderServiceImpl implements PreOrderService {
 
     @Override
     @Transactional
-    public void deletePreOrderArticle(Long id) {
+    public void deletePreOrderArticle(Long id,String brand) {
         preOrderItemRepository.deleteByArticleId(id);
+        positionSort(brand);
+    }
+
+    private void positionSort(String brand) {
+        List<PreOrderItem> preOrderItems = preOrderItemRepository.findAllByArticle_Brand(brand);
+
+        int i = 1;
+
+        for(PreOrderItem preOrderItem : preOrderItems) {
+            preOrderItem.setPosition(i);
+            i++;
+        }
     }
 
     @Override
@@ -214,7 +238,8 @@ public class PreOrderServiceImpl implements PreOrderService {
                 preOrderItem.getDate(),
                 preOrderItem.getOrderReason(),
                 preOrderItem.getComment(),
-                preOrderItem.isHold()
+                preOrderItem.isHold(),
+                preOrderItem.getPosition()
         );
     }
 

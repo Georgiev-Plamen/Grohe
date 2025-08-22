@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -59,6 +60,7 @@ public class OrderServiceImpl implements OrderService {
 
                 OrderItem orderItem = new OrderItem();
                 orderItem.setArticle(preOrderItem.getArticle());
+                orderItem.setPosition(preOrderItem.getPosition());
                 orderItem.setQuantity(preOrderItem.getQuantityForOrder());
                 orderItem.setOrderBy(preOrderItem.getOrderBy());
                 orderItem.setDateOfOrder(preOrderItem.getDate());
@@ -166,7 +168,11 @@ public class OrderServiceImpl implements OrderService {
                 order.setOrderName(orderEditArticleDTO.orderName());
             }
 
-            OrderItem orderItem = order.getItems().get(orderEditArticleDTO.index());
+//            Integer index = orderEditArticleDTO.index();
+
+            OrderItem orderItem = order.getItems().get(orderEditArticleDTO.position()-1);
+//            OrderItem orderItem = order.getItems().get(findArticleIndex(orderEditArticleDTO.orderId(), orderEditArticleDTO.articleID(), index));
+//           OrderItem orderItem = orderItemRepository.findOrderItemByIdAndOrder(orderEditArticleDTO.articleID(), orderEditArticleDTO.orderId());
 
             if(orderEditArticleDTO.artNum() != null) {
                 Optional<Article> optionalArticle = articleService.findByArtNum(orderEditArticleDTO.artNum());
@@ -297,6 +303,23 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
+    private int findArticleIndex(Long orderId, Long articleId, Integer index) {
+        Order order = orderRepository.getOrdersById(orderId);
+
+       if (index == null) {
+           index = 0;
+       }
+
+        for(OrderItem orderItem : order.getItems()) {
+            if(orderItem.articleId() == articleId) {
+                break;
+            }
+            index++;
+        }
+
+        return index;
+    }
+
     private ArticleFindDTO mapToArticleFindDTO(OrderItem orderItem) {
         return new ArticleFindDTO(
                 orderItem.articleId(),
@@ -308,7 +331,9 @@ public class OrderServiceImpl implements OrderService {
                 orderItem.getQuantity(),
                 orderItem.getComment(),
                 articleService.findById(orderItem.articleId()).get().getArtNum(),
-                orderItem.getOrder().getOrderName()
+                orderItem.getOrder().getOrderName(),
+                orderItem.getOrder().getId(),
+                orderItem.getPosition()
 //                getOrderName(orderItem.getOrder().getId())
         );
     }

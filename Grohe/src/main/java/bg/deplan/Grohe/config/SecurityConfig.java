@@ -54,7 +54,7 @@ public class SecurityConfig {
                 )
                 .rememberMe(rememberMe -> rememberMe
                         .key("yourUniqueAndSecretKey") // Change this to a secure random value
-                        .tokenValiditySeconds(86400 * 30) // 30 days
+                        .tokenValiditySeconds(86400 * 365) // 30 days
                         .rememberMeParameter("remember-me") // This is the name of the checkbox in the login form
                         .userDetailsService(userDetailsService) // Inject your UserDetailsService
                 )

@@ -44,7 +44,7 @@ public class PreOrderController {
 
     @ModelAttribute("preOrderData")
     public PreOrderDTO preOrderDTO() {
-        return new PreOrderDTO(0l,"","",0l,"","","",LocalDate.now(), "","",false);
+        return new PreOrderDTO(0l,"","",0l,"","","",LocalDate.now(), "","",false, 0);
     }
 
     @GetMapping("/preOrder")
@@ -88,7 +88,7 @@ public class PreOrderController {
     public String deletePreOrderArticle (@PathVariable ("id") Long id,
                                          @RequestParam("brand") String brand) {
 
-        preOrderService.deletePreOrderArticle(id);
+        preOrderService.deletePreOrderArticle(id, brand);
 
         if(brand.equals(VIEGA)) {
             return "redirect:/orders/preOrderViega";

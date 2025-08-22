@@ -24,6 +24,7 @@ public record PreOrderDTO (
 
         String orderReason,
         String comment,
-        boolean isHold
+        boolean isHold,
+        int position
 ){
 }

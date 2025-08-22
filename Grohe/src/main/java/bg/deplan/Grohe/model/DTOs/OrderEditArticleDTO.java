@@ -9,7 +9,7 @@ public record OrderEditArticleDTO(
         Long orderId,
         Long articleID,
         String orderName,
-        int index,
+        Integer index,
         String brand,
         String artNum,
         String quantity,
@@ -23,6 +23,7 @@ public record OrderEditArticleDTO(
         LocalDate dateOfDelivery,
 
         String orderReason,
-        String comment
+        String comment,
+        int position
 ) {
 }

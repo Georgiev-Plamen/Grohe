@@ -37,6 +37,9 @@ public class OrderItem extends BaseEntity{
     @ManyToOne
     private User user;
 
+    @Column(name = "position")
+    private int position;
+
     public OrderItem() {}
 
     public Order getOrder() {
@@ -113,5 +116,13 @@ public class OrderItem extends BaseEntity{
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }
