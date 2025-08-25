@@ -254,9 +254,13 @@ public class PreOrderServiceImpl implements PreOrderService {
 
     public void listToPreOrderItem(List<PreOrderExcelDTO> preOrderExcelDTOList, UserDetails userDetails) {
 
+        int i = findLastPosition(preOrderExcelDTOList.getFirst().brand());
+
         for (PreOrderExcelDTO preOrderExcelItems : preOrderExcelDTOList) {
             Optional<Article> optionalArticle = articleRepository.findByAccurateArtNum(preOrderExcelItems.artNum().trim());
             PreOrderItem preOrderItem = new PreOrderItem();
+
+
 
             if (optionalArticle.isEmpty()) {
                 Article article = new Article();
@@ -279,9 +283,20 @@ public class PreOrderServiceImpl implements PreOrderService {
             preOrderItem.setOrderReason(checkComment(preOrderExcelItems.comment()));
             preOrderItem.setComment(preOrderExcelItems.comment());
             preOrderItem.setUser(userRepository.findByUsername(userDetails.getUsername()).get());
+            preOrderItem.setPosition(i);
 
             preOrderItemRepository.save(preOrderItem);
+            i++;
         }
+    }
+
+    private int findLastPosition(String brand) {
+        List<PreOrderItem> preOrderItemList = preOrderItemRepository.findAllByArticle_Brand(brand);
+
+        return preOrderItemList.stream()
+                .mapToInt(PreOrderItem::getPosition)
+                .max()
+                .orElse(0) + 1;
     }
 
     private String checkComment(String comment) {
