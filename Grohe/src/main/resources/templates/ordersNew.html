@@ -277,17 +277,39 @@
                     <input type="hidden" name="article" th:value="${article.article}">
                 </td>
 
-                <td th:text="${article.quantity}"></td>
-                <td th:text="${article.orderBy}"></td>
-                <td th:text="${article.dateOfOrder}"></td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)"
+                         th:text="${article.quantity}"></div>
+                    <input type="hidden" name="quantity" th:value="${article.quantity}">
+                </td>
+
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)"
+                         th:text="${article.orderBy}"></div>
+                    <input type="hidden" name="orderBy" th:value="${article.orderBy}">
+                </td>
+
+
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)"
+                         th:text="${article.dateOfOrder}"></div>
+                    <input type="hidden" name="dateOfOrder" th:value="${article.dateOfOrder}">
+                </td>
 
                 <td>
                     <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{dateOfDelivery}"></div>
                     <input type="hidden" name="dateOfDelivery" th:value="*{dateOfDelivery}">
                 </td>
 
-                <td th:text="${article.orderReason}"></td>
-                <td th:text="${article.comment}"></td>
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.orderReason}"></div>
+                    <input type="hidden" name="orderReason" th:value="${article.orderReason}">
+                </td>
+
+                <td>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="${article.comment}"></div>
+                    <input type="hidden" name="comment" th:value="${article.comment}">
+                </td>
 
                 <td>
                     <button type="button" class="btn" data-toggle="modal"
