@@ -42,5 +42,7 @@ public interface OrderService {
 
     List<OrderTitleDTO> getOrderList(String brand);
 
+    void service();
+
 //    int findArticleIndex(Long orderId,Long ArticleId);
 }

@@ -303,6 +303,21 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
+    @Override
+    public void service() {
+        List<Order> orders = orderRepository.findAll();
+        for(Order order : orders) {
+            List<OrderItem> orderItems = order.getItems();
+            int position = 1 ;
+
+            for (OrderItem orderItem : orderItems) {
+                orderItem.setPosition(position);
+                orderItemRepository.save(orderItem);
+                position++;
+            }
+        }
+    }
+
     private int findArticleIndex(Long orderId, Long articleId, Integer index) {
         Order order = orderRepository.getOrdersById(orderId);
 

@@ -135,4 +135,12 @@ public class OrderController {
 
         return "redirect:/orders/allNew";
     }
+
+    @GetMapping("/service")
+    public String service(@AuthenticationPrincipal UserDetails userDetails) {
+
+        orderService.service();
+
+        return "redirect:/orders/allNew";
+    }
 }
