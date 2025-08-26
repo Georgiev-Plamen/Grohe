@@ -41,6 +41,8 @@ public class DeleteOrderItem extends BaseEntity{
     @ManyToOne
     private User user;
 
+    private int position;
+
     public DeleteOrderItem() {}
 
     public DeleteOrder getDeleteOrder() {
@@ -125,5 +127,13 @@ public class DeleteOrderItem extends BaseEntity{
 
     public void setDateOfDelete(LocalDateTime dateOfDelete) {
         this.dateOfDelete = dateOfDelete;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

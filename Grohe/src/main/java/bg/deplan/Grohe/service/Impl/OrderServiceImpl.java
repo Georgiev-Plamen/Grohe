@@ -120,6 +120,7 @@ public class OrderServiceImpl implements OrderService {
             deleteOrderItem.setDeleteOrder(deleteOrder);
             deleteOrderItems.add(deleteOrderItem);
             deleteOrderItem.setDateOfDelete(LocalDateTime.now());
+            deleteOrderItem.setPosition(orderItem.getPosition());
             deleteOrderItem.setUser(userRepository.findByUsername(userDetails.getUsername()).get());
 
             deleteOrderItem.setDeleteOrder(deleteOrder);
