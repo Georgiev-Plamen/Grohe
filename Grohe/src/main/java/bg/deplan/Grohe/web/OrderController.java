@@ -18,6 +18,9 @@ public class OrderController {
     @ModelAttribute("orderDto")
     public OrderDTO orderDTO() { return new OrderDTO(0L, "","", LocalDate.now(),null);}
 
+    @ModelAttribute("orderInfo")
+    public OrderDTO orderInfo() { return new OrderDTO(0L, "","", LocalDate.now(),null);}
+
     private static final String GROHE = "Grohe";
     private static final String VIEGA = "Viega";
 
@@ -38,11 +41,23 @@ public class OrderController {
             @RequestParam(required = false, defaultValue = GROHE) String brand,
             Model model
     ) {
+        model.addAttribute("ordersList", orderService.getOrderList(brand));
         model.addAttribute("allOrders", orderService.getAllOrders(brand));
         model.addAttribute("brand", brand);
         model.addAttribute("order", orderDTO());
-        return "ordersNew";
+        return "ordersNewList";
     }
+
+//    @GetMapping("/allNew")
+//    public String ordersNew(
+//            @RequestParam(required = false, defaultValue = GROHE) String brand,
+//            Model model
+//    ) {
+//        model.addAttribute("allOrders", orderService.getAllOrders(brand));
+//        model.addAttribute("brand", brand);
+//        model.addAttribute("order", orderDTO());
+//        return "ordersNew";
+//    }
 
     @GetMapping("/allNewGrohe")
     public String ordersNewGrohe(Model model) {
@@ -59,6 +74,15 @@ public class OrderController {
         OrderDTO orderDTO = orderService.getOrderById(orderId);
         model.addAttribute("order", orderDTO);
         return "orderDetails"; // Thymeleaf fragment or template
+    }
+
+    @PostMapping("/orderInfo/{id}")
+    public String orderInfo(Model model, @PathVariable("id") Long id,
+                            @RequestParam("brand") String brand){
+
+        model.addAttribute("orderInfo", orderService.getOrderById(id));
+
+        return ordersNew(brand, model);
     }
 
     @PostMapping("/search/{artNum}")

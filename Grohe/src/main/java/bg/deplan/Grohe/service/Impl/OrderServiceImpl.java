@@ -8,6 +8,7 @@ import bg.deplan.Grohe.service.OrderService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -353,6 +354,7 @@ public class OrderServiceImpl implements OrderService {
 //                getOrderName(orderItem.getOrder().getId())
         );
     }
+
 
     @Override
     public List<OrderDTO> getAllOrders(String brand) {

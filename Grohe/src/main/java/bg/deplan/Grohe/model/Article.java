@@ -1,6 +1,7 @@
 package bg.deplan.Grohe.model;
 
 import jakarta.persistence.*;
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 
 @Entity
 @Table (name = "articles")
