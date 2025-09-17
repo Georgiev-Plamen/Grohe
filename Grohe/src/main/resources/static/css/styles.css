@@ -455,6 +455,7 @@ svg {
 
 .search-result-table-by-param {
     margin-top: 1em;
+    width: 100%
 }
 
 .order-details-table {
@@ -577,4 +578,19 @@ svg {
 /* Focus state for accessibility */
 .form-check-remember .form-check-input:focus {
     box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+}
+
+.open-button {
+    background: none!important;
+      border: none;
+      padding: 0!important;
+      /*optional*/
+      font-family: arial, sans-serif;
+      /*input has OS specific font-family*/
+      color: #007BFF;
+      cursor: pointer;
+}
+
+.open-button:hover {
+    text-decoration: underline;
 }

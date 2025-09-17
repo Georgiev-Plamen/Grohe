@@ -245,7 +245,12 @@
                th:style="${articlesByParam != null and !articlesByParam.empty} ? 'display: table;' : 'display: none;'">
             <thead>
             <tr>
-                <th><a href="/orders/allNew" class="update-order">Затвори</a></th>
+                <th>
+                    <input type="hidden" name="brand" th:value="${order.brand}">
+                    <a th:method="GET"
+                       th:href="@{${brand == 'Grohe' ? '/orders/allNewGrohe' : '/orders/allNewViega'}}"
+                       class="update-order">Затвори</a>
+                </th>
             </tr>
             <tr>
                 <th>Заявка</th>
@@ -321,12 +326,17 @@
     </div>
 
     <!-- Hidden tables for order details -->
-    <div th:each="order : ${orderInfo}">
-        <table th:attr="id='orderDetails-' + ${order.id}" class="order-details-table" style="display: true;">
+    <div th:each="order : ${orderInfo}" class="search-result-table-by-param" th:style="${orderInfo.articleList != null and !orderInfo.articleList.empty} ? 'display: table;' : 'display: none;'">
+        <table th:attr="id='orderDetails-' + ${order.id}" class="search-result-table-by-param">
             <thead>
             <tr>
                 <th th:text="${order.orderName()}"></th>
-                <th><a href="/orders/allNewGrohe" class="update-order">Затвори</a></th>
+                <th>
+                    <input type="hidden" name="brand" th:value="${order.brand}">
+                    <a th:method="GET"
+                       th:href="@{${order.brand == 'Grohe' ? '/orders/allNewGrohe' : '/orders/allNewViega'}}"
+                    class="update-order">Затвори</a>
+                </th>
             </tr>
             <tr>
                 <th th:text="#{article_number}">Article Number</th>
@@ -434,7 +444,7 @@
                 <div class="action-column">
                     <form th:method="POST" th:action="@{/orders/orderInfo/{id}(id=${order.id})}" th:object="${order}">
                         <input type="hidden" name="brand" th:value="${brand}">
-                        <button href="#" type="submit">Отвори</button>
+                        <button href="#" type="submit" class="open-button" onsubmit="handleSearchResults()">Отвори</button>
                     </form>
                 </div>
             </td>
@@ -464,7 +474,6 @@
 </div>
 </div>
 <div th:each="order : ${orderInfo}" media="none">
-<!--<div th:each="order : ${ordersWithArt}">-->
     <div th:each="article : ${order.articleList}">
         <div th:if="${article.getArticle() != null}"
              th:replace="~{articlePopup :: articleDetails(${article.getArticle()})}"></div>

@@ -48,17 +48,6 @@ public class OrderController {
         return "ordersNewList";
     }
 
-//    @GetMapping("/allNew")
-//    public String ordersNew(
-//            @RequestParam(required = false, defaultValue = GROHE) String brand,
-//            Model model
-//    ) {
-//        model.addAttribute("allOrders", orderService.getAllOrders(brand));
-//        model.addAttribute("brand", brand);
-//        model.addAttribute("order", orderDTO());
-//        return "ordersNew";
-//    }
-
     @GetMapping("/allNewGrohe")
     public String ordersNewGrohe(Model model) {
         return ordersNew(GROHE, model);

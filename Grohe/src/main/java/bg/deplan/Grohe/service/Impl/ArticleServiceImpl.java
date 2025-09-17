@@ -190,7 +190,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Optional<Article> findByArtNum(String s) {
-        return articleRepository.findByArtNum(s);
+        return articleRepository.findByAccurateArtNum(s);
     }
 
     @Override
