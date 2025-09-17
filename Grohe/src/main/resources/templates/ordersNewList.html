@@ -473,11 +473,26 @@
     </table>
 </div>
 </div>
-<div th:each="order : ${orderInfo}" media="none">
+
+<div th:each="order : ${orderInfo}">
     <div th:each="article : ${order.articleList}">
         <div th:if="${article.getArticle() != null}"
              th:replace="~{articlePopup :: articleDetails(${article.getArticle()})}"></div>
     </div>
 </div>
+
+<div th:each="order : ${ordersWithArt}">
+    <div th:each="article : ${order.articleList}">
+        <div th:if="${article.getArticle() != null}"
+             th:replace="~{articlePopup :: articleDetails(${article.getArticle()})}"></div>
+    </div>
+</div>
+
+<div th:each="article : ${orderItemsByParam}">
+    <div th:if="${article.getArticle() != null}"
+         th:replace="~{articlePopup :: articleDetails(${article.getArticle()})}">
+    </div>
+</div>
+
 </body>
 </html>

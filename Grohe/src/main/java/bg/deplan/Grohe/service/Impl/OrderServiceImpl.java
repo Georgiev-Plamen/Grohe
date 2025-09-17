@@ -297,6 +297,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<OrderItem> findArticlesByCommentItems(List<ArticleFindDTO> articleDTOS) {
+        List<OrderItem> orderItemList = orderItemRepository.findOrderItemsByIDs(articleDTOS.stream().map(o -> o.id()).toList());
+        return orderItemList;
+    }
+
+    @Override
     public List<OrderTitleDTO> getOrderList(String brand) {
         return orderRepository.findAll()
                 .stream()

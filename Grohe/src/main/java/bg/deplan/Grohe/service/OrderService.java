@@ -3,6 +3,7 @@ package bg.deplan.Grohe.service;
 
 import bg.deplan.Grohe.model.DTOs.*;
 import bg.deplan.Grohe.model.Order;
+import bg.deplan.Grohe.model.OrderItem;
 import bg.deplan.Grohe.model.PreOrderItem;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -39,6 +40,8 @@ public interface OrderService {
     String newOrderName(String brand);
 
     List<ArticleFindDTO> findArticlesByComment(String comment, String brand);
+
+    List<OrderItem> findArticlesByCommentItems(List<ArticleFindDTO> articleDTOS);
 
     List<OrderTitleDTO> getOrderList(String brand);
 

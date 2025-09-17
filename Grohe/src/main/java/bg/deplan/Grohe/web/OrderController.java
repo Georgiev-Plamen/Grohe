@@ -79,7 +79,6 @@ public class OrderController {
                               @RequestParam("brand") String brand) {
 
         model.addAttribute("ordersWithArt", orderService.findOrdersContainsArt(artNum));
-        model.addAttribute("allOrders", orderService.getAllOrders(brand));
         model.addAttribute("order", orderDTO());
 
         return ordersNew(brand, model);
@@ -90,7 +89,7 @@ public class OrderController {
                                     @RequestParam("brand") String brand) {
 
         model.addAttribute("articlesByParam", orderService.findOnlyArticlesInOrder(artNum));
-        model.addAttribute("allOrders", orderService.getAllOrders(brand));
+        model.addAttribute("orderItemsByParam", orderService.findArticlesByCommentItems(orderService.findOnlyArticlesInOrder(artNum)));
 
         return ordersNew(brand, model);
     }
@@ -100,7 +99,8 @@ public class OrderController {
                                 @RequestParam("brand") String brand) {
 
         model.addAttribute("articlesByParam", orderService.findByOrderBy(orderBy, brand));
-        model.addAttribute("allOrders", orderService.getAllOrders(brand));
+        model.addAttribute("orderItemsByParam", orderService.findArticlesByCommentItems(orderService.findByOrderBy(orderBy, brand)));
+
 
         return ordersNew(brand, model);
     }
@@ -110,7 +110,8 @@ public class OrderController {
         @RequestParam("brand") String brand) {
 
         model.addAttribute("articlesByParam", orderService.findArticlesByComment(comment, brand));
-        model.addAttribute("allOrders", orderService.getAllOrders(brand));
+        model.addAttribute("orderItemsByParam", orderService.findArticlesByCommentItems(orderService.findArticlesByComment(comment, brand)));
+//        model.addAttribute("allOrders", orderService.getAllOrders(brand));
 
         return ordersNew(brand, model);
     }
