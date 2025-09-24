@@ -154,7 +154,6 @@
 
         });
     </script>
-
     <script src="/js/submitAllModalUpdates.js" defer></script>
 </head>
 <body>
@@ -493,6 +492,21 @@
          th:replace="~{articlePopup :: articleDetails(${article.getArticle()})}">
     </div>
 </div>
+
+<footer id="bottom">
+    Deplan © 2025
+</footer>
+
+<button class="scroll-to-bottom" title="Scroll to bottom"></button>
+
+<script>
+    document.querySelector('.scroll-to-bottom').addEventListener('click', function() {
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'smooth'
+        });
+    });
+</script>
 
 </body>
 </html>
