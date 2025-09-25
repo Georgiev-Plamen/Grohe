@@ -170,9 +170,8 @@ public class OrderServiceImpl implements OrderService {
                 order.setOrderName(orderEditArticleDTO.orderName());
             }
 
-//            Integer index = orderEditArticleDTO.index();
-
-            OrderItem orderItem = order.getItems().get(orderEditArticleDTO.position());
+            Integer position = orderEditArticleDTO.position();
+            OrderItem orderItem = order.getItems().get(position);
 //            OrderItem orderItem = order.getItems().get(findArticleIndex(orderEditArticleDTO.orderId(), orderEditArticleDTO.articleID(), index));
 //           OrderItem orderItem = orderItemRepository.findOrderItemByIdAndOrder(orderEditArticleDTO.articleID(), orderEditArticleDTO.orderId());
 
