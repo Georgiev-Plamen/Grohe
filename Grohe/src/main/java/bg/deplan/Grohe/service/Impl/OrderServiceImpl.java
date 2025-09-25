@@ -172,7 +172,7 @@ public class OrderServiceImpl implements OrderService {
 
 //            Integer index = orderEditArticleDTO.index();
 
-            OrderItem orderItem = order.getItems().get(orderEditArticleDTO.position()-1);
+            OrderItem orderItem = order.getItems().get(orderEditArticleDTO.position());
 //            OrderItem orderItem = order.getItems().get(findArticleIndex(orderEditArticleDTO.orderId(), orderEditArticleDTO.articleID(), index));
 //           OrderItem orderItem = orderItemRepository.findOrderItemByIdAndOrder(orderEditArticleDTO.articleID(), orderEditArticleDTO.orderId());
 
@@ -316,7 +316,7 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = orderRepository.findAll();
         for(Order order : orders) {
             List<OrderItem> orderItems = order.getItems();
-            int position = 1 ;
+            int position = 0 ;
 
             for (OrderItem orderItem : orderItems) {
                 orderItem.setPosition(position);

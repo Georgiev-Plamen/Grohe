@@ -96,9 +96,9 @@ public class PreOrderServiceImpl implements PreOrderService {
     private int findLastIndex (String brand) {
         List<PreOrderItem> items = preOrderItemRepository.findAllByArticle_Brand(brand);
 
-        long count = items.stream().count();
+        long count = items.stream().filter(i -> !i.isHold()).count();
 
-        return (int)count + 1;
+        return (int)count;
     }
 
     @Override
@@ -151,6 +151,7 @@ public class PreOrderServiceImpl implements PreOrderService {
             preOrderItem.setHold(true);
         } else {
             preOrderItem.setHold(false);
+            positionSort(preOrderDTO.brand());
         }
 
         preOrderItemRepository.save(preOrderItem);
@@ -171,11 +172,13 @@ public class PreOrderServiceImpl implements PreOrderService {
     private void positionSort(String brand) {
         List<PreOrderItem> preOrderItems = preOrderItemRepository.findAllByArticle_Brand(brand);
 
-        int i = 1;
+        int i = 0;
 
         for(PreOrderItem preOrderItem : preOrderItems) {
-            preOrderItem.setPosition(i);
-            i++;
+            if(!preOrderItem.isHold()){
+                preOrderItem.setPosition(i);
+                i++;
+            }
         }
     }
 
@@ -254,13 +257,11 @@ public class PreOrderServiceImpl implements PreOrderService {
 
     public void listToPreOrderItem(List<PreOrderExcelDTO> preOrderExcelDTOList, UserDetails userDetails) {
 
-        int i = findLastPosition(preOrderExcelDTOList.getFirst().brand());
+        int i = findLastIndex(preOrderExcelDTOList.getFirst().brand());
 
         for (PreOrderExcelDTO preOrderExcelItems : preOrderExcelDTOList) {
             Optional<Article> optionalArticle = articleRepository.findByAccurateArtNum(preOrderExcelItems.artNum().trim());
             PreOrderItem preOrderItem = new PreOrderItem();
-
-
 
             if (optionalArticle.isEmpty()) {
                 Article article = new Article();
@@ -296,7 +297,7 @@ public class PreOrderServiceImpl implements PreOrderService {
         return preOrderItemList.stream()
                 .mapToInt(PreOrderItem::getPosition)
                 .max()
-                .orElse(0) + 1;
+                .orElse(0);
     }
 
     private String checkComment(String comment) {
