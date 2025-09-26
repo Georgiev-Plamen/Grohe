@@ -28,4 +28,8 @@ public interface PreOrderService {
     List<PreOrderDTO> getAllPreOrder(String brand);
 
     boolean createAndExportOrder(String name, String brand, UserDetails userDetails) throws IOException;
+
+    void moveUpPreOrderItemPosition(int position, String brand);
+
+    void moveDownPreOrderItemPosition(int position, String brand);
 }

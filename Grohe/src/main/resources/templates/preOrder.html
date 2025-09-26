@@ -191,6 +191,7 @@
             <th th:text="#{orders_comment}">Comment</th>
             <th class="action-title">✋</th>
             <th class="action-title">D</th>
+            <th class="action-title">&#x21F3</th>
             <th class="action-title">&#128465</th>
 <!--            <th class="action-title">🗑</th>-->
         </tr>
@@ -240,6 +241,19 @@
                         th:attr="data-target='#articleModal-' + ${preOrder.articleId}">
                     &#128269;
                 </button>
+            </td>
+            <td>
+                <form th:method="POST" th:action="@{/orders/moveUp/{position}(position=*{position})}">
+                    <input type="hidden" name="position" th:value="*{position}">
+                    <input type="hidden" name="brand" th:value="${brand}">
+                    <button type="submit" class="move-btn">Up</button>
+                </form>
+
+                <form th:method="POST" th:action="@{/orders/moveDown/{position}(position=*{position})}">
+                    <input type="hidden" name="position" th:value="*{position}">
+                    <input type="hidden" name="brand" th:value="${brand}">
+                    <button type="submit" class="move-btn">Down</button>
+                </form>
             </td>
             <td class="action">
                 <button type="button" class="delete-btn" data-toggle="modal" th:attr="data-target='#confirmation-' + ${preOrder.id()}">
@@ -329,5 +343,6 @@
          th:replace="~{articlePopup :: articleDetails(${article})}">
     </div>
 </div>
+<script src="/js/scrollLock.js" defer></script>
 </body>
 </html>

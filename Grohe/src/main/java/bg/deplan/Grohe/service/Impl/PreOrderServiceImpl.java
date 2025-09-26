@@ -94,7 +94,7 @@ public class PreOrderServiceImpl implements PreOrderService {
     }
 
     private int findLastIndex (String brand) {
-        List<PreOrderItem> items = preOrderItemRepository.findAllByArticle_Brand(brand);
+        List<PreOrderItem> items = preOrderItemRepository.findAllByArticle_BrandOrderByPositionAsc(brand);
 
         long count = items.stream().filter(i -> !i.isHold()).count();
 
@@ -170,7 +170,7 @@ public class PreOrderServiceImpl implements PreOrderService {
     }
 
     private void positionSort(String brand) {
-        List<PreOrderItem> preOrderItems = preOrderItemRepository.findAllByArticle_Brand(brand);
+        List<PreOrderItem> preOrderItems = preOrderItemRepository.findAllByArticle_BrandOrderByPositionAsc(brand);
 
         int i = 0;
 
@@ -192,7 +192,7 @@ public class PreOrderServiceImpl implements PreOrderService {
     }
 
     public List<PreOrderDTO> getAllPreOrder(String brand) {
-        return preOrderItemRepository.findAllByArticle_Brand(brand)
+        return preOrderItemRepository.findAllByArticle_BrandOrderByPositionAsc(brand)
                 .stream().map(PreOrderServiceImpl::toAllPreOrderItem)
                 .toList();
     }
@@ -201,12 +201,45 @@ public class PreOrderServiceImpl implements PreOrderService {
     @Transactional
     public boolean createAndExportOrder(String name, String brand, UserDetails userDetails) throws IOException {
 
-        List<PreOrderItem> PreOrderItem = preOrderItemRepository.findAllByArticle_Brand(brand);
+        List<PreOrderItem> PreOrderItem = preOrderItemRepository.findAllByArticle_BrandOrderByPositionAsc(brand);
         orderService.createOrder(PreOrderItem, name, brand, userDetails);
         preOrderItemRepository.deleteAllByArticle_BrandAndIsHoldIsFalse(brand);
 //        excelExportService.exportOrderToExcel(orderService.lastOrderId());
 
         return true;
+    }
+
+    @Override
+    public void moveUpPreOrderItemPosition(int position, String brand) {
+        PreOrderItem preOrderItem = preOrderItemRepository.findPreOrderItemByPosition(position);
+
+        if(position > 0 ) {
+            PreOrderItem previousPreOrderItem = preOrderItemRepository.findPreOrderItemByPosition(position-1);
+            if(previousPreOrderItem.isHold()) {
+                return;
+            }
+            previousPreOrderItem.setPosition(position);
+            preOrderItem.setPosition(position-1);
+            preOrderItemRepository.save(preOrderItem);
+            preOrderItemRepository.save(previousPreOrderItem);
+        }
+    }
+
+    @Override
+    public void moveDownPreOrderItemPosition(int position, String brand) {
+        PreOrderItem preOrderItem = preOrderItemRepository.findPreOrderItemByPosition(position);
+        long preOrderItemCount = preOrderItemRepository.count() - 1;
+
+        if(position < preOrderItemCount) {
+            PreOrderItem nextPreOrderItem = preOrderItemRepository.findPreOrderItemByPosition(position+1);
+            if(nextPreOrderItem.isHold() && nextPreOrderItem.getPosition() != preOrderItemCount) {
+                return;
+            }
+            nextPreOrderItem.setPosition(position);
+            preOrderItem.setPosition(position+1);
+            preOrderItemRepository.save(preOrderItem);
+            preOrderItemRepository.save(nextPreOrderItem);
+        }
     }
 
     private static ArticleDTO toAllItem(PreOrderItem preOrderItem) {
@@ -292,7 +325,7 @@ public class PreOrderServiceImpl implements PreOrderService {
     }
 
     private int findLastPosition(String brand) {
-        List<PreOrderItem> preOrderItemList = preOrderItemRepository.findAllByArticle_Brand(brand);
+        List<PreOrderItem> preOrderItemList = preOrderItemRepository.findAllByArticle_BrandOrderByPositionAsc(brand);
 
         return preOrderItemList.stream()
                 .mapToInt(PreOrderItem::getPosition)

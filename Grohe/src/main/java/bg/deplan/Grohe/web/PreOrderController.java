@@ -96,6 +96,30 @@ public class PreOrderController {
         return "redirect:/orders/preOrderGrohe";
     }
 
+    @PostMapping("/moveUp/{position}")
+    public String moveUpPreOrderItem (@PathVariable ("position") int position,
+                                      @RequestParam("brand") String brand) {
+
+        preOrderService.moveUpPreOrderItemPosition(position, brand);
+
+        if(brand.equals(VIEGA)) {
+            return "redirect:/orders/preOrderViega";
+        }
+        return "redirect:/orders/preOrderGrohe";
+    }
+
+    @PostMapping("/moveDown/{position}")
+    public String moveDownPreOrderItem (@PathVariable ("position") int position,
+                                      @RequestParam("brand") String brand) {
+
+        preOrderService.moveDownPreOrderItemPosition(position, brand);
+
+        if(brand.equals(VIEGA)) {
+            return "redirect:/orders/preOrderViega";
+        }
+        return "redirect:/orders/preOrderGrohe";
+    }
+
     @PostMapping("/makeOrder")
     public ResponseEntity<byte[]> makeOrder(@RequestParam("name") String name,
                                             @RequestParam("brand") String brand,

@@ -12,12 +12,15 @@ import java.util.List;
 @Repository
 public interface PreOrderItemRepository extends JpaRepository <PreOrderItem, Long> {
 
-    List<PreOrderItem> findAllByArticle_Brand(String brand);
+//    List<PreOrderItem> findAllByArticle_Brand(String brand);
+    List<PreOrderItem> findAllByArticle_BrandOrderByPositionAsc(String brand);
 
     void deleteAllByArticle_BrandAndIsHoldIsFalse(String brand);
 
     @Modifying
     @Query("DELETE FROM PreOrderItem p WHERE p.id = :id")
     void deleteByArticleId(@Param("id") Long id);
+
+    PreOrderItem findPreOrderItemByPosition(int position);
 
 }
