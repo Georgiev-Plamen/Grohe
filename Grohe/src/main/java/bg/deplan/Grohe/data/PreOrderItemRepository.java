@@ -21,6 +21,6 @@ public interface PreOrderItemRepository extends JpaRepository <PreOrderItem, Lon
     @Query("DELETE FROM PreOrderItem p WHERE p.id = :id")
     void deleteByArticleId(@Param("id") Long id);
 
-    PreOrderItem findPreOrderItemByPosition(int position);
+    PreOrderItem findPreOrderItemByPositionAndArticle_Brand(int position, String Brand);
 
 }
