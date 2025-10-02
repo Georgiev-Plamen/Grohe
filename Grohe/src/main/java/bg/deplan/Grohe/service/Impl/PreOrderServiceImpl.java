@@ -226,10 +226,10 @@ public class PreOrderServiceImpl implements PreOrderService {
 
     @Override
     public void moveUpPreOrderItemPosition(int position, String brand) {
-        PreOrderItem preOrderItem = preOrderItemRepository.findPreOrderItemByPositionAndArticle_Brand(position, brand);
+        PreOrderItem preOrderItem = preOrderItemRepository.findPreOrderItemByPositionAndArticle_BrandAndIsHoldIsFalse(position, brand);
 
         if(position > 0 ) {
-            PreOrderItem previousPreOrderItem = preOrderItemRepository.findPreOrderItemByPositionAndArticle_Brand(position-1, brand);
+            PreOrderItem previousPreOrderItem = preOrderItemRepository.findPreOrderItemByPositionAndArticle_BrandAndIsHoldIsFalse(position-1, brand);
             if(previousPreOrderItem.isHold()) {
                 return;
             }
@@ -242,11 +242,11 @@ public class PreOrderServiceImpl implements PreOrderService {
 
     @Override
     public void moveDownPreOrderItemPosition(int position, String brand) {
-        PreOrderItem preOrderItem = preOrderItemRepository.findPreOrderItemByPositionAndArticle_Brand(position, brand);
+        PreOrderItem preOrderItem = preOrderItemRepository.findPreOrderItemByPositionAndArticle_BrandAndIsHoldIsFalse(position, brand);
         long preOrderItemCount = preOrderItemRepository.count() - 1;
 
         if(position < preOrderItemCount) {
-            PreOrderItem nextPreOrderItem = preOrderItemRepository.findPreOrderItemByPositionAndArticle_Brand(position+1, brand);
+            PreOrderItem nextPreOrderItem = preOrderItemRepository.findPreOrderItemByPositionAndArticle_BrandAndIsHoldIsFalse(position+1, brand);
             if(nextPreOrderItem == null || nextPreOrderItem.isHold() && nextPreOrderItem.getPosition() != preOrderItemCount) {
                 return;
             }
