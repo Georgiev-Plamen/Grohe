@@ -23,4 +23,6 @@ public interface PreOrderItemRepository extends JpaRepository <PreOrderItem, Lon
 
     PreOrderItem findPreOrderItemByPositionAndArticle_Brand(int position, String Brand);
 
+    List<PreOrderItem> findAllByArticle_BrandAndIsHoldIsTrueOrderByPositionAsc(String brand);
+
 }

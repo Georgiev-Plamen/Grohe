@@ -149,6 +149,7 @@ public class PreOrderServiceImpl implements PreOrderService {
 
         if(preOrderDTO.isHold()){
             preOrderItem.setHold(true);
+//            holdPreOrderItemsSort(preOrderDTO.brand());
         } else {
             preOrderItem.setHold(false);
             positionSort(preOrderDTO.brand());
@@ -167,6 +168,20 @@ public class PreOrderServiceImpl implements PreOrderService {
     public void deletePreOrderArticle(Long id,String brand) {
         preOrderItemRepository.deleteByArticleId(id);
         positionSort(brand);
+    }
+
+    private void holdPreOrderItemsSort (String brand) {
+        List<PreOrderItem> preOrderItemList = preOrderItemRepository.findAllByArticle_BrandAndIsHoldIsTrueOrderByPositionAsc(brand);
+
+        int i = preOrderItemList.stream()
+                .sorted((a, b) -> Integer.compare(a.getPosition(), b.getPosition()))
+                .findFirst()
+                .get().getPosition();
+
+        for(PreOrderItem preOrderItem : preOrderItemList) {
+            preOrderItem.setPosition(i);
+            i--;
+        }
     }
 
     private void positionSort(String brand) {
@@ -232,7 +247,7 @@ public class PreOrderServiceImpl implements PreOrderService {
 
         if(position < preOrderItemCount) {
             PreOrderItem nextPreOrderItem = preOrderItemRepository.findPreOrderItemByPositionAndArticle_Brand(position+1, brand);
-            if(nextPreOrderItem.isHold() && nextPreOrderItem.getPosition() != preOrderItemCount) {
+            if(nextPreOrderItem == null || nextPreOrderItem.isHold() && nextPreOrderItem.getPosition() != preOrderItemCount) {
                 return;
             }
             nextPreOrderItem.setPosition(position);
