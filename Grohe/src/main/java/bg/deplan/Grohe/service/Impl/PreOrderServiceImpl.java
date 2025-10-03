@@ -232,11 +232,12 @@ public class PreOrderServiceImpl implements PreOrderService {
             PreOrderItem previousPreOrderItem = preOrderItemRepository.findPreOrderItemByPositionAndArticle_BrandAndIsHoldIsFalse(position-1, brand);
             if(previousPreOrderItem.isHold()) {
                 return;
+            } else {
+                previousPreOrderItem.setPosition(position);
+                preOrderItem.setPosition(position-1);
+                preOrderItemRepository.save(preOrderItem);
+                preOrderItemRepository.save(previousPreOrderItem);
             }
-            previousPreOrderItem.setPosition(position);
-            preOrderItem.setPosition(position-1);
-            preOrderItemRepository.save(preOrderItem);
-            preOrderItemRepository.save(previousPreOrderItem);
         }
     }
 
@@ -247,13 +248,14 @@ public class PreOrderServiceImpl implements PreOrderService {
 
         if(position < preOrderItemCount) {
             PreOrderItem nextPreOrderItem = preOrderItemRepository.findPreOrderItemByPositionAndArticle_BrandAndIsHoldIsFalse(position+1, brand);
-            if(nextPreOrderItem == null || nextPreOrderItem.isHold() && nextPreOrderItem.getPosition() != preOrderItemCount) {
+            if(nextPreOrderItem == null || nextPreOrderItem.isHold() || nextPreOrderItem.getPosition() == preOrderItemCount-1) {
                 return;
+            } else {
+                nextPreOrderItem.setPosition(position);
+                preOrderItem.setPosition(position+1);
+                preOrderItemRepository.save(preOrderItem);
+                preOrderItemRepository.save(nextPreOrderItem);
             }
-            nextPreOrderItem.setPosition(position);
-            preOrderItem.setPosition(position+1);
-            preOrderItemRepository.save(preOrderItem);
-            preOrderItemRepository.save(nextPreOrderItem);
         }
     }
 
