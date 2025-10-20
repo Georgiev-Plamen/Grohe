@@ -166,6 +166,7 @@
 </div>
 
 <div class="container">
+    <!-- container for Search fields -->
     <div class="add-container">
         <form th:method="POST" th:action="@{/orders/search/*{artNum}}" onsubmit="handleSearchResults()">
             <label for="artNum">Заявки включващи артикул:</label>
@@ -193,7 +194,6 @@
             <button class="pre-order-add-btn" type="submit">Търси</button>
         </form>
     </div>
-    <!--    </div>-->
 
     <!-- tables for Search details -->
     <div th:each="order : ${ordersWithArt}" class="search-result-table-by-param">

@@ -248,7 +248,7 @@ public class PreOrderServiceImpl implements PreOrderService {
 
         if(position < preOrderItemCount) {
             PreOrderItem nextPreOrderItem = preOrderItemRepository.findPreOrderItemByPositionAndArticle_BrandAndIsHoldIsFalse(position+1, brand);
-            if(nextPreOrderItem == null || nextPreOrderItem.isHold() || nextPreOrderItem.getPosition() == preOrderItemCount-1) {
+            if(preOrderItem.isHold() ||nextPreOrderItem == null || nextPreOrderItem.isHold() || nextPreOrderItem.getPosition() == preOrderItemCount-1) {
                 return;
             } else {
                 nextPreOrderItem.setPosition(position);
@@ -372,8 +372,12 @@ public class PreOrderServiceImpl implements PreOrderService {
                 return "Promo offer";
             }
 
-            if (currentWord.contains("Samples")) {
+            if (currentWord.contains("samples")) {
                 return "Samples " + translateComment;
+            }
+
+            if (currentWord.contains("bff")) {
+                return "Project BFF " + translateComment;
             }
 
             if (currentWord.contains("мостр")) {
