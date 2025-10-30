@@ -18,11 +18,23 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
+    - name: Validate Gradle files
+      id: check-gradle
+      run: |
+        if [ -f "./gradlew" ]; then
+          echo "GRADLE_CMD=./gradlew" >> $GITHUB_OUTPUT
+          chmod +x ./gradlew
+          echo "Using Gradle Wrapper"
+        elif [ -f "build.gradle" ] || [ -f "build.gradle.kts" ]; then
+          echo "GRADLE_CMD=gradle" >> $GITHUB_OUTPUT
+          echo "Using system Gradle"
+        else
+          echo "No Gradle build files found"
+          exit 1
+        fi
 
     - name: Build with Gradle
-      run: ./gradlew clean build -x test
+      run: ${{ steps.check-gradle.outputs.GRADLE_CMD }} clean build -x test
 
     - name: Find JAR file
       id: find-jar
@@ -31,6 +43,8 @@ jobs:
         JAR_PATH=$(find . -name "*.jar" -path "*/build/libs/*" ! -name "*-plain.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" | head -1)
         if [ -z "$JAR_PATH" ]; then
           echo "No JAR file found"
+          echo "Available JAR files:"
+          find . -name "*.jar" -path "*/build/libs/*" || echo "No JAR files found"
           exit 1
         fi
         echo "JAR_PATH=$JAR_PATH" >> $GITHUB_OUTPUT
