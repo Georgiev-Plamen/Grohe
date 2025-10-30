@@ -18,46 +18,40 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
-    - name: Find and setup Gradle Wrapper
-      id: find-gradle
+    - name: Override invalid Java home in Gradle
       run: |
-        # Search for gradlew in any subdirectory
-        GRADLEW_PATH=$(find . -name "gradlew" -type f | head -1)
-        if [ -z "$GRADLEW_PATH" ]; then
-          echo "No gradlew file found in the repository"
+        # Remove any invalid Java home settings from gradle.properties
+        if [ -f "gradle.properties" ]; then
+          sed -i '/org.gradle.java.home/d' gradle.properties
+          sed -i '/java.home/d' gradle.properties
+        fi
+
+    - name: Build with Gradle using system JDK
+      run: |
+        if [ -f "gradlew" ]; then
+          chmod +x gradlew
+          # Use system JDK instead of configured Java home
+          ./gradlew clean build -x test -Dorg.gradle.java.home=$JAVA_HOME
+        else
+          echo "gradlew not found"
           exit 1
         fi
-        
-        GRADLE_DIR=$(dirname "$GRADLEW_PATH")
-        echo "GRADLEW_PATH=$GRADLEW_PATH" >> $GITHUB_OUTPUT
-        echo "GRADLE_DIR=$GRADLE_DIR" >> $GITHUB_OUTPUT
-        echo "Found gradlew at: $GRADLEW_PATH"
-        
-        # Make it executable
-        chmod +x "$GRADLEW_PATH"
-
-    - name: Build with Gradle
-      run: |
-        cd "${{ steps.find-gradle.outputs.GRADLE_DIR }}"
-        ./gradlew clean build -x test
 
     - name: Find JAR file
       id: find-jar
       run: |
-        # Search for JAR files
         JAR_PATH=$(find . -name "Grohe-0.0.2.jar" | head -1)
         if [ -z "$JAR_PATH" ]; then
           JAR_PATH=$(find . -name "Grohe*.jar" | head -1)
         fi
         if [ -z "$JAR_PATH" ]; then
-          JAR_PATH=$(find . -name "*.jar" -path "*/build/libs/*" | head -1)
+          JAR_PATH=$(find . -name "*.jar" -path "*/build/libs/*" ! -name "*-plain.jar" | head -1)
         fi
         if [ -z "$JAR_PATH" ]; then
           echo "No JAR file found. Available JAR files:"
           find . -name "*.jar" || echo "No JAR files found"
           exit 1
         fi
-        
         echo "JAR_PATH=$JAR_PATH" >> $GITHUB_OUTPUT
         echo "JAR_NAME=$(basename $JAR_PATH)" >> $GITHUB_OUTPUT
         echo "Found JAR: $JAR_PATH"
