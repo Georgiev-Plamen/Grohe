@@ -1,4 +1,4 @@
-name: Build and Release JAR with Gradle
+name: Build and Release JAR
 
 on:
   push:
@@ -18,33 +18,57 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
-    - name: Validate Gradle files
-      id: check-gradle
+    - name: Detect build system
+      id: detect-build
       run: |
-        if [ -f "./gradlew" ]; then
-          echo "GRADLE_CMD=./gradlew" >> $GITHUB_OUTPUT
-          chmod +x ./gradlew
-          echo "Using Gradle Wrapper"
+        if [ -f "pom.xml" ]; then
+          echo "BUILD_SYSTEM=maven" >> $GITHUB_OUTPUT
+          echo "BUILD_CMD=mvn clean package -DskipTests" >> $GITHUB_OUTPUT
+          echo "JAR_PATH=target/*.jar" >> $GITHUB_OUTPUT
+          echo "Found Maven project"
         elif [ -f "build.gradle" ] || [ -f "build.gradle.kts" ]; then
-          echo "GRADLE_CMD=gradle" >> $GITHUB_OUTPUT
-          echo "Using system Gradle"
+          echo "BUILD_SYSTEM=gradle" >> $GITHUB_OUTPUT
+          if [ -f "./gradlew" ]; then
+            chmod +x ./gradlew
+            echo "BUILD_CMD=./gradlew clean build -x test" >> $GITHUB_OUTPUT
+          else
+            echo "BUILD_CMD=gradle clean build -x test" >> $GITHUB_OUTPUT
+          fi
+          echo "JAR_PATH=build/libs/*.jar" >> $GITHUB_OUTPUT
+          echo "Found Gradle project"
         else
-          echo "No Gradle build files found"
-          exit 1
+          echo "No build system detected. Creating manual build..."
+          echo "BUILD_SYSTEM=manual" >> $GITHUB_OUTPUT
         fi
 
-    - name: Build with Gradle
-      run: ${{ steps.check-gradle.outputs.GRADLE_CMD }} clean build -x test
+    - name: Build project
+      if: steps.detect-build.outputs.BUILD_SYSTEM != 'manual'
+      run: ${{ steps.detect-build.outputs.BUILD_CMD }}
+
+    - name: Manual build (if no build system)
+      if: steps.detect-build.outputs.BUILD_SYSTEM == 'manual'
+      run: |
+        echo "Manual build - compiling Java files directly"
+        mkdir -p target/classes
+        find . -name "*.java" > sources.txt
+        javac -d target/classes @sources.txt
+        jar cf target/manual-app.jar -C target/classes .
 
     - name: Find JAR file
       id: find-jar
       run: |
-        # Look for the main JAR file (excluding plain, sources, javadoc)
-        JAR_PATH=$(find . -name "*.jar" -path "*/build/libs/*" ! -name "*-plain.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" | head -1)
+        if [ "${{ steps.detect-build.outputs.BUILD_SYSTEM }}" = "maven" ]; then
+          JAR_PATH=$(find . -name "*.jar" -path "*/target/*" ! -name "*-sources.jar" ! -name "*-javadoc.jar" | head -1)
+        elif [ "${{ steps.detect-build.outputs.BUILD_SYSTEM }}" = "gradle" ]; then
+          JAR_PATH=$(find . -name "*.jar" -path "*/build/libs/*" ! -name "*-plain.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" | head -1)
+        else
+          JAR_PATH=$(find . -name "*.jar" -path "*/target/*" | head -1)
+        fi
+        
         if [ -z "$JAR_PATH" ]; then
           echo "No JAR file found"
-          echo "Available JAR files:"
-          find . -name "*.jar" -path "*/build/libs/*" || echo "No JAR files found"
+          echo "Searching for any JAR files..."
+          find . -name "*.jar" || echo "No JAR files found at all"
           exit 1
         fi
         echo "JAR_PATH=$JAR_PATH" >> $GITHUB_OUTPUT
