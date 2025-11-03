@@ -18,6 +18,9 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
+
     - name: Upgrade Gradle Wrapper
       run: |
         ./gradlew wrapper --gradle-version=8.10 --distribution-type=bin
@@ -25,11 +28,16 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew clean build
 
-    - name: Upload JAR artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: application-jar
-        path: build/libs/*.jar
+    - name: Find JAR file
+      id: find-jar
+      run: |
+        JAR_FILE=$(find build/libs -name "*.jar" ! -name "*plain*" ! -name "*sources*" ! -name "*javadoc*" | head -1)
+        if [ -z "$JAR_FILE" ]; then
+          JAR_FILE=$(find build/libs -name "*.jar" | head -1)
+        fi
+        echo "JAR_PATH=$JAR_FILE" >> $GITHUB_OUTPUT
+        echo "JAR_NAME=$(basename $JAR_FILE)" >> $GITHUB_OUTPUT
+        echo "Found JAR: $JAR_FILE"
 
     - name: Upload JAR artifact
       uses: actions/upload-artifact@v4
