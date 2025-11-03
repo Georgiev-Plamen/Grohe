@@ -18,14 +18,9 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
-    - name: Install Gradle
-      run: sudo apt-get update && sudo apt-get install -y gradle
-
-    - name: Generate Gradle Wrapper
-      run: gradle wrapper
-
-    - name: Make Gradle wrapper executable
-      run: chmod +x ./gradlew
+    - name: Upgrade Gradle Wrapper
+      run: |
+        ./gradlew wrapper --gradle-version=8.10 --distribution-type=bin
 
     - name: Build with Gradle
       run: ./gradlew clean build
