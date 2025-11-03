@@ -1,5 +1,6 @@
 plugins {
 	id 'java'
+	id 'application'
 	id 'org.springframework.boot' version '3.3.0'
 	id 'io.spring.dependency-management' version '1.1.4'
 }
@@ -52,12 +53,22 @@ dependencies {
 	testRuntimeOnly 'org.hsqldb:hsqldb'
 }
 
+application {
+	mainClass = 'com.deplan.Main'
+}
+
 tasks.named('test') {
-	useTestNG() // Use TestNG for testing
+	useTestNG()
 }
 
 bootRun {
-	mainClass = 'com.example.GroheApplication' // Replace with the correct fully qualified class name
+	mainClass = 'com.example.GroheApplication'
+}
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'com.deplan.Main'
+	}
 }
 
 bootJar {
