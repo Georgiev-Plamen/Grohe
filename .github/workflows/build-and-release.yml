@@ -18,28 +18,67 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
 
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
-
-    - name: Upgrade Gradle Wrapper
+    - name: Check for Gradle files
+      id: check-files
       run: |
-        ./gradlew wrapper --gradle-version=8.10 --distribution-type=bin
+        if [ -f "build.gradle" ] || [ -f "build.gradle.kts" ]; then
+          echo "has-gradle-build=true" >> $GITHUB_OUTPUT
+          echo "✅ Found Gradle build file"
+        else
+          echo "has-gradle-build=false" >> $GITHUB_OUTPUT
+          echo "❌ No Gradle build file found"
+        fi
+        
+        if [ -f "gradlew" ]; then
+          echo "has-wrapper=true" >> $GITHUB_OUTPUT
+          echo "✅ Found Gradle wrapper"
+        else
+          echo "has-wrapper=false" >> $GITHUB_OUTPUT
+          echo "❌ No Gradle wrapper found, will generate one"
+        fi
+
+    - name: Install Gradle
+      if: steps.check-files.outputs.has-gradle-build == 'true'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gradle
+
+    - name: Generate Gradle Wrapper
+      if: steps.check-files.outputs.has-gradle-build == 'true' && steps.check-files.outputs.has-wrapper == 'false'
+      run: |
+        gradle wrapper --gradle-version=8.10
+
+    - name: Make gradlew executable
+      if: steps.check-files.outputs.has-wrapper == 'true' || (steps.check-files.outputs.has-gradle-build == 'true' && steps.check-files.outputs.has-wrapper == 'false')
+      run: |
+        chmod +x ./gradlew
 
     - name: Build with Gradle
-      run: ./gradlew clean build
+      if: steps.check-files.outputs.has-gradle-build == 'true'
+      run: |
+        ./gradlew clean build
 
     - name: Find JAR file
+      if: steps.check-files.outputs.has-gradle-build == 'true'
       id: find-jar
       run: |
+        # Look for the main JAR (excluding -plain, -sources, -javadoc)
         JAR_FILE=$(find build/libs -name "*.jar" ! -name "*plain*" ! -name "*sources*" ! -name "*javadoc*" | head -1)
         if [ -z "$JAR_FILE" ]; then
+          # Fallback to any JAR
           JAR_FILE=$(find build/libs -name "*.jar" | head -1)
         fi
-        echo "JAR_PATH=$JAR_FILE" >> $GITHUB_OUTPUT
-        echo "JAR_NAME=$(basename $JAR_FILE)" >> $GITHUB_OUTPUT
-        echo "Found JAR: $JAR_FILE"
+        if [ -n "$JAR_FILE" ]; then
+          echo "JAR_PATH=$JAR_FILE" >> $GITHUB_OUTPUT
+          echo "JAR_NAME=$(basename $JAR_FILE)" >> $GITHUB_OUTPUT
+          echo "Found JAR: $JAR_FILE"
+        else
+          echo "No JAR file found in build/libs/"
+          find build/libs/ -type f || echo "build/libs directory not found"
+        fi
 
     - name: Upload JAR artifact
+      if: steps.find-jar.outputs.JAR_PATH
       uses: actions/upload-artifact@v4
       with:
         name: app-jar
@@ -47,8 +86,8 @@ jobs:
         retention-days: 1
 
     - name: Create GitHub Release
+      if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && steps.find-jar.outputs.JAR_PATH
       uses: softprops/action-gh-release@v1
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
       with:
         files: ${{ steps.find-jar.outputs.JAR_PATH }}
         tag_name: v${{ github.run_number }}
