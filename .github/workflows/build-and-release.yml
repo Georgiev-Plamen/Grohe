@@ -18,14 +18,9 @@ jobs:
         java-version: '21'
 
     - name: Build with Gradle
-      run: |
-        if [ -f "gradlew" ]; then
-          chmod +x gradlew
-          ./gradlew clean build -x test
-        else
-          gradle clean build -x test
-        fi
-
+      run: 
+          ./gradlew clean build
+          
     - name: Find JAR file
       id: find-jar
       run: |
