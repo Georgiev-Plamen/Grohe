@@ -23,15 +23,13 @@ jobs:
 
     - name: Create Gradle project structure
       run: |
-        # Create basic directory structure if it doesn't exist
         mkdir -p src/main/java
         mkdir -p src/test/java
 
     - name: Create build.gradle if missing
       run: |
         if [ ! -f "build.gradle" ] && [ ! -f "build.gradle.kts" ]; then
-          echo "Creating basic Gradle build file..."
-          cat > build.gradle << 'EOF'
+          cat > build.gradle << 'ENDOFFILE'
 plugins {
     id 'java'
     id 'application'
@@ -50,31 +48,8 @@ repositories {
 }
 
 dependencies {
-    // Spring Boot starters
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-
-    // Additional dependencies
-    implementation 'mysql:mysql-connector-java:8.0.33'
-    implementation 'org.webjars:jquery:3.3.1'
-    implementation 'org.webjars:bootstrap:5.3.3'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-    implementation 'org.modelmapper:modelmapper:3.2.0'
-    implementation 'org.springframework.security:spring-security-crypto'
-    implementation 'org.apache.xmlbeans:xmlbeans:5.1.1'
-    implementation 'org.apache.poi:poi-ooxml:5.2.3'
-    implementation 'org.apache.poi:poi:5.2.3'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
-
-    // Development and testing dependencies
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.testng:testng:7.1.0'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'com.maciejwalkowiak.spring:wiremock-spring-boot:2.1.2'
 }
 
 application {
@@ -86,16 +61,15 @@ jar {
         attributes 'Main-Class': 'com.example.Main'
     }
 }
-EOF
+ENDOFFILE
           echo "✅ Created build.gradle"
         fi
 
     - name: Create sample Main class if missing
       run: |
         if [ ! -f "src/main/java/com/example/Main.java" ]; then
-          echo "Creating sample Main class..."
           mkdir -p src/main/java/com/example
-          cat > src/main/java/com/example/Main.java << 'EOF'
+          cat > src/main/java/com/example/Main.java << 'ENDOFFILE'
 package com.example;
 
 public class Main {
@@ -104,7 +78,7 @@ public class Main {
         System.out.println("Built successfully at: " + new java.util.Date());
     }
 }
-EOF
+ENDOFFILE
           echo "✅ Created sample Main.java"
         fi
 
