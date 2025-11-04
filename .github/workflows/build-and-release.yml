@@ -27,7 +27,7 @@ jobs:
       - name: Create minimal project
         run: |
           mkdir -p src/main/java/com/example
-          cat > build.gradle << 'EOL'
+          cat > build.gradle <<EOL
 plugins {
     id 'java'
 }
@@ -43,7 +43,7 @@ jar {
 }
 EOL
 
-          cat > src/main/java/com/example/Main.java << 'EOL'
+          cat > src/main/java/com/example/Main.java <<EOL
 package com.example;
 public class Main {
     public static void main(String[] args) {
@@ -63,7 +63,6 @@ EOL
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/heads/')
         with:
           files: build/libs/*.jar
           tag_name: v${{ github.run_number }}
