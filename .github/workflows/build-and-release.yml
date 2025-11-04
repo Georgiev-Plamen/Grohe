@@ -3,7 +3,6 @@ name: Build and Release JAR
 on:
   push:
     branches: [ main, master ]
-  workflow_dispatch:
 
 jobs:
   build:
@@ -13,7 +12,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup Java and Gradle
+    - name: Setup Java
       uses: actions/setup-java@v4
       with:
         java-version: '17'
@@ -22,39 +21,16 @@ jobs:
     - name: Install Gradle
       run: sudo apt-get update && sudo apt-get install -y gradle
 
-    - name: Check for existing Gradle project
-      id: check_gradle
-      run: |
-        if [ -f "build.gradle" ] || [ -f "build.gradle.kts" ]; then
-          echo "project_exists=true" >> $GITHUB_OUTPUT
-          echo "✅ Existing Gradle project found"
-        else
-          echo "project_exists=false" >> $GITHUB_OUTPUT
-          echo "❌ No Gradle project found, will create basic one"
-        fi
-
-    - name: Create basic Gradle project if missing
-      if: steps.check_gradle.outputs.project_exists == 'false'
+    - name: Create minimal project
       run: |
         mkdir -p src/main/java/com/example
-        
-        # Create simple build.gradle
-        cat > build.gradle << 'EOF'
+        cat > build.gradle << 'EOL'
 plugins {
     id 'java'
-    id 'application'
-}
-
-java {
-    sourceCompatibility = '17'
 }
 
 repositories {
     mavenCentral()
-}
-
-application {
-    mainClass = 'com.example.Main'
 }
 
 jar {
@@ -62,46 +38,28 @@ jar {
         attributes 'Main-Class': 'com.example.Main'
     }
 }
-EOF
+EOL
 
-        # Create simple Main class
-        cat > src/main/java/com/example/Main.java << 'EOF'
+        cat > src/main/java/com/example/Main.java << 'EOL'
 package com.example;
-
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello from GitHub Actions!");
-        System.out.println("Application built successfully!");
+        System.out.println("Hello World!");
     }
 }
-EOF
-        echo "✅ Created basic Gradle project"
+EOL
 
     - name: Build with Gradle
       run: gradle clean build
 
-    - name: List built files
-      run: |
-        echo "=== Built JAR files ==="
-        find . -name "*.jar" -type f
-        echo "=== Build directory ==="
-        ls -la build/libs/ || echo "No build/libs directory"
-
-    - name: Upload JAR artifact
+    - name: Upload JAR
       uses: actions/upload-artifact@v4
       with:
-        name: application-jar
+        name: app-jar
         path: build/libs/*.jar
-        retention-days: 30
 
-    - name: Create GitHub Release
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         files: build/libs/*.jar
-        tag_name: release-${{ github.run_number }}
-        name: Release ${{ github.run_number }}
-        body: |
-          Automated release from GitHub Actions
-          Build Number: ${{ github.run_number }}
-          Commit: ${{ github.sha }}
+        tag_name: v${{ github.run_number }}
