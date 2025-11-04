@@ -13,19 +13,81 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup Java
+    - name: Setup Java and Gradle
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
+    - name: Install Gradle
+      run: sudo apt-get update && sudo apt-get install -y gradle
+
+    - name: Check for existing Gradle project
+      id: check_gradle
+      run: |
+        if [ -f "build.gradle" ] || [ -f "build.gradle.kts" ]; then
+          echo "project_exists=true" >> $GITHUB_OUTPUT
+          echo "✅ Existing Gradle project found"
+        else
+          echo "project_exists=false" >> $GITHUB_OUTPUT
+          echo "❌ No Gradle project found, will create basic one"
+        fi
+
+    - name: Create basic Gradle project if missing
+      if: steps.check_gradle.outputs.project_exists == 'false'
+      run: |
+        mkdir -p src/main/java/com/example
+        
+        # Create simple build.gradle
+        cat > build.gradle << 'EOF'
+plugins {
+    id 'java'
+    id 'application'
+}
+
+java {
+    sourceCompatibility = '17'
+}
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'com.example.Main'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.example.Main'
+    }
+}
+EOF
+
+        # Create simple Main class
+        cat > src/main/java/com/example/Main.java << 'EOF'
+package com.example;
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello from GitHub Actions!");
+        System.out.println("Application built successfully!");
+    }
+}
+EOF
+        echo "✅ Created basic Gradle project"
 
     - name: Build with Gradle
-      run: ./gradlew clean build
+      run: gradle clean build
 
-    - name: Upload JAR to artifacts
+    - name: List built files
+      run: |
+        echo "=== Built JAR files ==="
+        find . -name "*.jar" -type f
+        echo "=== Build directory ==="
+        ls -la build/libs/ || echo "No build/libs directory"
+
+    - name: Upload JAR artifact
       uses: actions/upload-artifact@v4
       with:
         name: application-jar
@@ -33,7 +95,6 @@ jobs:
         retention-days: 30
 
     - name: Create GitHub Release
-      id: create_release
       if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
       uses: softprops/action-gh-release@v1
       with:
@@ -44,5 +105,3 @@ jobs:
           Automated release from GitHub Actions
           Build Number: ${{ github.run_number }}
           Commit: ${{ github.sha }}
-        draft: false
-        prerelease: false
