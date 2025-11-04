@@ -8,5 +8,5 @@ Design :
 
 * Need fix delete pre order article ( now delete the first article in preorder list ) !!!! -=== FIX ===-
 
-
+* Create workflow for creating .jar
 
