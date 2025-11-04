@@ -1,8 +1,9 @@
-name: Build and Release JAR with Gradle
+name: Build and Release JAR
 
 on:
   push:
     branches: [ main, master ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,87 +16,16 @@ jobs:
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
-        java-version: '21'
+        java-version: '17'
         distribution: 'temurin'
 
-    - name: Install Gradle
-      run: sudo apt-get update && sudo apt-get install -y gradle
-
-    - name: Create Gradle project structure
-      run: |
-        mkdir -p src/main/java
-        mkdir -p src/test/java
-
-    - name: Create build.gradle if missing
-      run: |
-        if [ ! -f "build.gradle" ] && [ ! -f "build.gradle.kts" ]; then
-          cat > build.gradle << 'ENDOFFILE'
-plugins {
-    id 'java'
-    id 'application'
-    id 'org.springframework.boot' version '3.3.0'
-    id 'io.spring.dependency-management' version '1.1.0'
-}
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
-
-application {
-    mainClass = 'com.example.Main'
-}
-
-jar {
-    manifest {
-        attributes 'Main-Class': 'com.example.Main'
-    }
-}
-ENDOFFILE
-          echo "✅ Created build.gradle"
-        fi
-
-    - name: Create sample Main class if missing
-      run: |
-        if [ ! -f "src/main/java/com/example/Main.java" ]; then
-          mkdir -p src/main/java/com/example
-          cat > src/main/java/com/example/Main.java << 'ENDOFFILE'
-package com.example;
-
-public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello from GitHub Actions!");
-        System.out.println("Built successfully at: " + new java.util.Date());
-    }
-}
-ENDOFFILE
-          echo "✅ Created sample Main.java"
-        fi
-
-    - name: Generate Gradle Wrapper
-      run: gradle wrapper --gradle-version=8.10
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
 
     - name: Build with Gradle
       run: ./gradlew clean build
 
-    - name: List all built files
-      run: |
-        echo "=== Built JAR files ==="
-        find build/libs -name "*.jar" -type f
-        echo "=== Build directory structure ==="
-        ls -la build/libs/
-
-    - name: Upload JAR artifact
+    - name: Upload JAR to artifacts
       uses: actions/upload-artifact@v4
       with:
         name: application-jar
@@ -103,13 +33,16 @@ ENDOFFILE
         retention-days: 30
 
     - name: Create GitHub Release
+      id: create_release
       if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
       uses: softprops/action-gh-release@v1
       with:
         files: build/libs/*.jar
-        tag_name: v${{ github.run_number }}
-        name: Release v${{ github.run_number }}
+        tag_name: release-${{ github.run_number }}
+        name: Release ${{ github.run_number }}
         body: |
           Automated release from GitHub Actions
           Build Number: ${{ github.run_number }}
           Commit: ${{ github.sha }}
+        draft: false
+        prerelease: false
