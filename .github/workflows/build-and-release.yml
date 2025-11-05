@@ -23,30 +23,30 @@ jobs:
 
       - name: Install Gradle (if no wrapper)
         run: sudo apt-get update && sudo apt-get install -y gradle
-        if: ${{ !hashFiles('Grohe/Grohe/gradlew') }}
+        if: ${{ !hashFiles('Grohe/gradlew') }}
 
       - name: Grant execute permission for Gradle Wrapper
-        run: chmod +x Grohe/Grohe/gradlew
-        if: ${{ hashFiles('Grohe/Grohe/gradlew') }}
+        run: chmod +x Grohe/gradlew
+        if: ${{ hashFiles('Grohe/gradlew') }}
 
       - name: Build with Gradle Wrapper
-        run: cd Grohe/Grohe && ./gradlew clean build
-        if: ${{ hashFiles('Grohe/Grohe/gradlew') }}
+        run: cd Grohe && ./gradlew clean build
+        if: ${{ hashFiles('Grohe/gradlew') }}
 
       - name: Build with System Gradle
-        run: cd Grohe/Grohe && gradle clean build
-        if: ${{ !hashFiles('Grohe/Grohe/gradlew') }}
+        run: cd Grohe && gradle clean build
+        if: ${{ !hashFiles('Grohe/gradlew') }}
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-jar
-          path: Grohe/Grohe/build/libs/*.jar
+          path: Grohe/build/libs/*.jar
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: Grohe/Grohe/build/libs/*.jar
+          files: Grohe/build/libs/*.jar
           tag_name: v${{ github.run_number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
