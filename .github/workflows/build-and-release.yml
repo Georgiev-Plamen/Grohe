@@ -30,11 +30,11 @@ jobs:
         if: ${{ hashFiles('gradlew') }}
 
       - name: Build with Gradle Wrapper
-        run: cd app && ./gradlew clean build
+        run: cd app/Grohe && ./gradlew clean build
         if: ${{ hashFiles('app/gradlew') }}
 
       - name: Build with System Gradle
-        run: cd app && gradle clean build
+        run: cd app/Grohe && gradle clean build
         if: ${{ !hashFiles('app/gradlew') }}
 
       - name: Upload JAR artifact
