@@ -30,23 +30,23 @@ jobs:
         if: ${{ hashFiles('gradlew') }}
 
       - name: Build with Gradle Wrapper
-        run: ./gradlew clean build
-        if: ${{ hashFiles('gradlew') }}
+        run: cd app && ./gradlew clean build
+        if: ${{ hashFiles('app/gradlew') }}
 
       - name: Build with System Gradle
-        run: gradle clean build
-        if: ${{ !hashFiles('gradlew') }}
+        run: cd app && gradle clean build
+        if: ${{ !hashFiles('app/gradlew') }}
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-jar
-          path: build/libs/*.jar
+          path: app/build/libs/*.jar
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: build/libs/*.jar
+          files: app/build/libs/*.jar
           tag_name: v${{ github.run_number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
