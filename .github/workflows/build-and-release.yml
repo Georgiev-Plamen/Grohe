@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Java
@@ -21,38 +21,23 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Install Gradle
+      - name: Install Gradle (if not using Gradle Wrapper)
         run: sudo apt-get update && sudo apt-get install -y gradle
+        if: ${{ !hashFiles('gradlew') }}
 
-      - name: Create minimal project
-        run: |
-          mkdir -p src/main/java/com/example
+      - name: Grant execute permission for Gradle Wrapper
+        run: chmod +x gradlew
+        if: ${{ hashFiles('gradlew') }}
 
-          echo "plugins {
-              id 'java'
-          }
+      - name: Build with Gradle Wrapper
+        run: ./gradlew clean build
+        if: ${{ hashFiles('gradlew') }}
 
-          repositories {
-              mavenCentral()
-          }
-
-          jar {
-              manifest {
-                  attributes 'Main-Class': 'com.example.Main'
-              }
-          }" > build.gradle
-
-          echo "package com.example;
-          public class Main {
-              public static void main(String[] args) {
-                  System.out.println(\"Hello World!\");
-              }
-          }" > src/main/java/com/example/Main.java
-
-      - name: Build with Gradle
+      - name: Build with System Gradle
         run: gradle clean build
+        if: ${{ !hashFiles('gradlew') }}
 
-      - name: Upload JAR
+      - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-jar
