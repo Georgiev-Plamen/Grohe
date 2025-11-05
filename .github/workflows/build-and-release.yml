@@ -41,12 +41,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-jar
-          path: Grohe/build/libs/*.jar
+          path: Grohe/build/libs/*[!plain].jar
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: Grohe/build/libs/*.jar
+          files: Grohe/build/libs/*[!plain].jar
           tag_name: v${{ github.run_number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
