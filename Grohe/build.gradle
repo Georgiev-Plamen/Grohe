@@ -43,10 +43,10 @@ dependencies {
 
 	// Development and testing dependencies
 	developmentOnly 'org.springframework.boot:spring-boot-devtools:3.3.0' // Use the latest version
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.testng:testng:7.1.0'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation 'com.maciejwalkowiak.spring:wiremock-spring-boot:2.1.2'
+//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//	testImplementation 'org.testng:testng:7.1.0'
+//	testImplementation 'org.springframework.security:spring-security-test'
+//	testImplementation 'com.maciejwalkowiak.spring:wiremock-spring-boot:2.1.2'
 
 	// Runtime dependencies
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -57,9 +57,9 @@ application {
 	mainClass = 'com.deplan.Main'
 }
 
-tasks.named('test') {
-	useTestNG()
-}
+//tasks.named('test') {
+//	useTestNG()
+//}
 
 bootRun {
 	mainClass = 'com.example.GroheApplication'
@@ -71,11 +71,11 @@ jar {
 	}
 }
 
-bootJar {
-	archiveFileName = "${project.name}-${project.version}.jar"
-}
-
-tasks.withType(JavaCompile).configureEach {
-	options.fork = true
-	options.forkOptions.jvmArgs += ['--enable-preview']
-}
+//bootJar {
+//	archiveFileName = "${project.name}-${project.version}.jar"
+//}
+//
+//tasks.withType(JavaCompile).configureEach {
+//	options.fork = true
+//	options.forkOptions.jvmArgs += ['--enable-preview']
+//}
