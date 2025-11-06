@@ -30,7 +30,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
 	// Additional dependencies
-	implementation 'mysql:mysql-connector-java:8.0.33' // Use the latest version
+	implementation 'mysql:mysql-connector-java:8.0.33'
 	implementation 'org.webjars:jquery:3.3.1'
 	implementation 'org.webjars:bootstrap:5.3.3'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
@@ -42,40 +42,34 @@ dependencies {
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
 
 	// Development and testing dependencies
-	developmentOnly 'org.springframework.boot:spring-boot-devtools:3.3.0' // Use the latest version
-//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//	testImplementation 'org.testng:testng:7.1.0'
-//	testImplementation 'org.springframework.security:spring-security-test'
-//	testImplementation 'com.maciejwalkowiak.spring:wiremock-spring-boot:2.1.2'
-
-	// Runtime dependencies
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testRuntimeOnly 'org.hsqldb:hsqldb'
 }
 
 application {
-	mainClass = 'com.deplan.Main'
+	mainClass = 'bg.deplan.Grohe.GroheApplication'
 }
 
-//tasks.named('test') {
-//	useTestNG()
-//}
+springBoot {
+	mainClass = 'bg.deplan.Grohe.GroheApplication'
+}
 
 bootRun {
-	mainClass = 'com.example.GroheApplication'
+	mainClass = 'bg.deplan.Grohe.GroheApplication'
+}
+
+bootJar {
+	archiveFileName = "${project.name}-${project.version}.jar"
+	mainClass = 'bg.deplan.Grohe.GroheApplication'
 }
 
 jar {
-	manifest {
-		attributes 'Main-Class': 'com.deplan.Main'
-	}
+	enabled = true
 }
 
-//bootJar {
-//	archiveFileName = "${project.name}-${project.version}.jar"
-//}
-//
-//tasks.withType(JavaCompile).configureEach {
-//	options.fork = true
-//	options.forkOptions.jvmArgs += ['--enable-preview']
-//}
+// Uncomment if you need TestNG instead of JUnit
+// tasks.named('test') {
+//     useTestNG()
+// }
