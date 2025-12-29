@@ -210,7 +210,8 @@ public class ArticleServiceImpl implements ArticleService {
                 article.getImageUrl(),
                 article.getArtUrl(),
                 article.getBarcode(),
-                article.getQuantityInPallet()
+                article.getQuantityInPallet(),
+                2025
         );
     }
 }

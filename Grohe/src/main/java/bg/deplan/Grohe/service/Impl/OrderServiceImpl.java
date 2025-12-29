@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -148,10 +149,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public List<OrderDTO> findOrdersContainsArt(String artNum) {
+    public List<OrderDTO> findOrdersContainsArt(String artNum, Integer year) {
+
         return orderRepository.findAll()
                 .stream()
                 .map(OrderServiceImpl::toAllOrders)
+                .filter(o -> year == null || o.date().getYear() == year)
                 .filter(o -> o.articleList()
                         .stream()
                         .anyMatch(a -> a.getArticle().getArtNum().contains(artNum)))
@@ -222,7 +225,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public List<ArticleFindDTO> findOnlyArticlesInOrder(String artNum) {
+    public List<ArticleFindDTO> findOnlyArticlesInOrder(String artNum, Integer year) {
 
         List<Long> articleIds = articleService.findArticleIds(artNum);
 
@@ -230,14 +233,16 @@ public class OrderServiceImpl implements OrderService {
 
         return orderItems.stream()
                     .map(this::mapToArticleFindDTO)
+                    .filter(o -> year == null || o.dateOfOrder().getYear() == year)
                     .toList();
     }
 
     @Override
-    public List<ArticleFindDTO> findByOrderBy(String orderBy, String brand) {
+    public List<ArticleFindDTO> findByOrderBy(String orderBy, String brand, Integer year) {
 
          return orderItemRepository.findOrderItemsByOrderBy(orderBy).stream()
                  .map(this::mapToArticleFindDTO)
+                 .filter(o -> year == null || o.dateOfOrder().getYear() == year)
                  .filter(o -> o.brand().equals(brand))
                  .toList();
     }
@@ -288,19 +293,25 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<ArticleFindDTO> findArticlesByComment(String comment, String brand) {
+    public List<ArticleFindDTO> findArticlesByComment(String comment, String brand, Integer year) {
         return orderItemRepository.findOrderItemByComment(comment).stream()
                 .map(this::mapToArticleFindDTO)
+                .filter(o -> year == null || o.dateOfOrder().getYear() == year)
                 .filter(o -> o.brand().equals(brand))
                 .toList();
     }
 
     @Override
-    public List<OrderItem> findArticlesByCommentItems(List<ArticleFindDTO> articleDTOS) {
-        List<OrderItem> orderItemList = orderItemRepository.findOrderItemsByIDs(articleDTOS.stream().map(o -> o.id()).toList());
+    public List<OrderItem> findArticlesByCommentItems(List<ArticleFindDTO> articleDTOS, Integer year) {
+
+        List<OrderItem> orderItemList = orderItemRepository.findOrderItemsByIDs(articleDTOS.stream()
+                .filter(o -> year == null || o.dateOfOrder().getYear() == year)
+                .map(o -> o.id()).toList());
+
         return orderItemList;
     }
 
+//    Old method, currently no usages
     @Override
     public List<OrderTitleDTO> getOrderList(String brand) {
         return orderRepository.findAll()
@@ -309,6 +320,22 @@ public class OrderServiceImpl implements OrderService {
                 .filter(o -> o.brand().equals(brand))
                 .toList();
     }
+
+    @Override
+   public List<OrderTitleDTO> getOrderListByBrandAndByYear (String brand, Integer year) {
+        List<OrderTitleDTO> ordersList = orderRepository.findByBrand(brand).stream()
+                .map(OrderServiceImpl::toAllOrdersTitle).toList();
+
+        if(year== null) {
+            return orderRepository.findByBrand(brand).stream().map(OrderServiceImpl::toAllOrdersTitle).toList();
+        }
+
+        return orderRepository.findByBrandAndDateYear(brand, year)
+                .stream()
+                .filter(o -> year == null || o.getDate().getYear() == year)
+                .map(OrderServiceImpl::toAllOrdersTitle)
+                .toList();
+   }
 
     @Override
     public void service() {
@@ -323,6 +350,22 @@ public class OrderServiceImpl implements OrderService {
                 position++;
             }
         }
+    }
+
+    @Override
+    public List<Integer> yearWithOrder() {
+        int startYear = orderRepository.findAll().getFirst().getDate().getYear();
+        int lastYear = orderRepository.findAll().getLast().getDate().getYear();
+
+        List<Integer> yearWithOrders = new ArrayList<>();
+
+        yearWithOrders.add(null);
+
+        for (int i = startYear; i < lastYear; i++) {
+            yearWithOrders.add(startYear++);
+        }
+        yearWithOrders.add(lastYear);
+    return yearWithOrders;
     }
 
     private int findArticleIndex(Long orderId, Long articleId, Integer index) {
@@ -367,6 +410,14 @@ public class OrderServiceImpl implements OrderService {
                 .stream()
                 .map(OrderServiceImpl::toAllOrders)
                 .filter(o -> o.brand().equals(brand))
+                .toList();
+    }
+
+    @Override
+    public List<OrderDTO> getAllOrdersByBrandAndYear(String brand, Integer year) {
+        return orderRepository.findByBrandAndDateYear(brand, year)
+                .stream()
+                .map(OrderServiceImpl::toAllOrders)
                 .toList();
     }
 

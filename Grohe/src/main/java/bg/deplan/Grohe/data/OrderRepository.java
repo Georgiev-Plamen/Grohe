@@ -1,6 +1,5 @@
 package bg.deplan.Grohe.data;
 
-import bg.deplan.Grohe.model.DTOs.OrderDTO;
 import bg.deplan.Grohe.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,5 +18,10 @@ public interface OrderRepository extends JpaRepository <Order, Long> {
     List<Order> findLastThreeOrdersByBrand(@Param("brand") String brand);
 
     Order getOrdersById(Long id);
-}
 
+    @Query("SELECT o FROM Order o WHERE o.brand = :brand AND YEAR(o.date) = :year")
+    List<Order> findByBrandAndDateYear(@Param("brand") String brand, @Param("year") Integer year);
+
+    @Query("SELECT o FROM Order o WHERE o.brand = :brand")
+    List<Order> findByBrand(@Param("brand") String brand);
+}

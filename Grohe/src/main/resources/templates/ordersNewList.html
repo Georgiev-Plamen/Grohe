@@ -47,114 +47,8 @@
             });
         }
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-    const editedData = new Map();
-
-    function updateHiddenInput(editableDiv) {
-        const hiddenInput = editableDiv.nextElementSibling;
-        if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-            hiddenInput.value = editableDiv.textContent.trim();
-        }
-    }
-
-    function trackEditableChanges(editableDiv) {
-        editableDiv.addEventListener('input', () => {
-            const row = editableDiv.closest('tr');
-            const rowId = row.querySelector('input[name="articleID"]').value;
-            const orderId = row.querySelector('input[name="id"]').value;
-
-            // Get position from the hidden input (if it exists)
-            const positionInput = row.querySelector('input[name="position"]');
-            const position = positionInput ? positionInput.value : null;
-
-            if (!editedData.has(rowId)) {
-                editedData.set(rowId, {});
-            }
-
-            const hiddenInput = editableDiv.nextElementSibling;
-            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-                editedData.get(rowId)[hiddenInput.name] = editableDiv.textContent.trim();
-            }
-
-            // Include orderId and position in the edited data
-            editedData.get(rowId).orderId = orderId;
-            editedData.get(rowId).position = position; // Use position instead of index
-
-            console.log("Edited Data after contenteditable change:", editedData);
-        });
-    }
-
-    function trackInputChanges(input) {
-        input.addEventListener('change', () => {
-            const row = input.closest('tr');
-            const rowId = row.querySelector('input[name="articleID"]').value;
-            const orderId = row.querySelector('input[name="id"]').value;
-
-            // Get position from the hidden input (if it exists)
-            const positionInput = row.querySelector('input[name="position"]');
-            const position = positionInput ? positionInput.value : null;
-
-            if (!editedData.has(rowId)) {
-                editedData.set(rowId, {});
-            }
-
-            editedData.get(rowId)[input.name] = input.value.trim();
-
-            // Include orderId and position in the edited data
-            editedData.get(rowId).orderId = orderId;
-            editedData.get(rowId).position = position; // Use position instead of index
-
-            console.log("Edited Data after input change:", editedData);
-        });
-    }
-
-    // Attach event listeners
-    document.querySelectorAll('[contenteditable="true"]').forEach(trackEditableChanges);
-    document.querySelectorAll('input').forEach(trackInputChanges);
-
-    async function submitAllUpdates() {
-        const updates = Array.from(editedData.entries()).map(([rowId, data]) => {
-            return {
-                articleID: rowId,
-                orderId: data.orderId,
-                position: data.position, // Send position instead of index
-                ...data
-            };
-        });
-
-        console.log("Updates to be submitted:", updates);
-
-        try {
-            const response = await fetch('/api/orders/receive/bulkUpdateOrder', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(updates)
-            });
-
-            const result = await response.text();
-            alert(result);
-            editedData.clear();
-        } catch (error) {
-            console.error('Error sending updates:', error);
-            alert('Failed to send updates');
-        }
-    }
-
-<!--    // Make submitAllUpdates globally available-->
-<!--    window.submitAllUpdates = submitAllUpdates;-->
-
-    document.addEventListener('click', (event) => {
-        if (event.target.classList.contains('fix')) {
-            submitAllUpdates();
-        }
-    });
-
-        });
-    </script>
     <script src="/js/submitAllModalUpdates.js" defer></script>
+    <script src="/js/yearSelector.js" defer></script>
 </head>
 <body>
 
@@ -168,40 +62,47 @@
 <div class="container">
     <!-- container for Search fields -->
     <div class="add-container">
-        <form th:method="POST" th:action="@{/orders/search/*{artNum}}" onsubmit="handleSearchResults()">
+        <form th:method="GET" th:action="@{/orders/search/*{artNum}}" onsubmit="handleSearchResults()">
             <label for="artNum">Заявки включващи артикул:</label>
             <input type="text" name="artNum" id="artNum" th:value="*{artNum}">
             <input type="hidden" name="brand" th:value="${brand}">
+<!--            <input type="hidden" class="year-input" name="year" th:value="${year}">-->
+            <input type="hidden" name="year" th:value="${selectedYear}">
             <button class="pre-order-add-btn" type="submit">Търси</button>
         </form>
 
-        <form th:method="POST" th:action="@{/orders/searchOrderBy/{orderBy}}">
+        <form th:method="GET" th:action="@{/orders/searchOrderBy/{orderBy}}">
             <label for="orderBy">Заявени артикули от потребител:</label>
             <input type="text" name="orderBy" id="orderBy" th:value="*{orderBy}">
             <input type="hidden" name="brand" th:value="${brand}">
+            <input type="hidden" name="year" th:value="${selectedYear}">
             <button class="pre-order-add-btn" type="submit">Търси</button>
         </form>
-        <form th:method="POST" th:action="@{/orders/searchOnlyArticle/*{artNum}}">
+        <form th:method="GET" th:action="@{/orders/searchOnlyArticle/*{artNum}}">
             <label for="artNum">Търсене на артикул:</label>
             <input type="text" name="artNum" id="artNumOnly" th:value="*{artNum}">
             <input type="hidden" name="brand" th:value="${brand}">
+            <input type="hidden" name="year" th:value="${selectedYear}">
             <button class="pre-order-add-btn" type="submit">Търси</button>
         </form>
-        <form th:method="POST" th:action="@{/orders/searchByComment/*{comment}}">
+        <form th:method="GET" th:action="@{/orders/searchByComment/*{comment}}">
             <label for="artNum">Търсене по коментар:</label>
             <input type="text" name="comment" id="comment" th:value="*{comment}">
             <input type="hidden" name="brand" th:value="${brand}">
+            <input type="hidden" name="year" th:value="${selectedYear}">
             <button class="pre-order-add-btn" type="submit">Търси</button>
         </form>
-        <form class="years-selector">
+        <form class="years-selector" method="get" id="yearForm">
             <label for="year">Изберете година:</label>
-            <select id="year" class="year-select">
-                <option value="allYears">всички</option>
-                <option value="2025" selected>2025</option>
-                <option value="2025">2026</option>
+            <select id="year" name="year" class="year-select" onchange="saveAndSubmit(this)">
+                <option th:each="year : ${yearsWithOrder}"
+                        th:value="${year}"
+                        th:text="${year}"
+                        th:selected="${selectedYear == year}">
+                </option>
             </select>
+            <input type="hidden" name="brand" th:value="${brand}" id="brandInput">
         </form>
-
     </div>
 
     <!-- tables for Search details -->
@@ -245,6 +146,7 @@
                 </td>
             </tr>
             </tbody>
+
         </table>
     </div>
     <!--    TEST-->
@@ -364,6 +266,7 @@
             <tr th:each="article : ${orderInfo.articleList}" th:object="${article}">
 
                 <input type="hidden" name="brand" th:value="${brand}">
+                <input type="hidden" name="year" value="">
                 <input type="hidden" name="id" th:value="${orderInfo.id()}">
                 <input type="hidden" name="articleID" th:value="${article.getId()}">
                 <input type="hidden" name="position" th:value="${article.position}">
@@ -450,14 +353,14 @@
             <!-- Actions (Update, Delete, Open) -->
             <td>
                 <div class="action-column">
-                    <form th:method="POST" th:action="@{/orders/orderInfo/{id}(id=${order.id})}" th:object="${order}">
+                    <form th:method="GET" th:action="@{/orders/orderInfo/{id}(id=${order.id})}" th:object="${order}">
                         <input type="hidden" name="brand" th:value="${brand}">
                         <button href="#" type="submit" class="open-button" onsubmit="handleSearchResults()">Отвори</button>
                     </form>
                 </div>
             </td>
             <td>
-                <form id="deleteForm-${order.id}" th:method="POST"
+                <form id="deleteForm-${order.id}" th:method="GET"
                       th:action="@{/orders/deleteOrder/{id}(id=${order.id})}" th:object="${order}">
                     <button class="delete-btn" href="#"
                             onclick="document.getElementById('deleteForm-${order.id}').submit();">x</button>

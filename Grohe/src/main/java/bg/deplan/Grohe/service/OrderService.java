@@ -15,6 +15,8 @@ public interface OrderService {
 
     List<OrderDTO> getAllOrders(String brand);
 
+    List<OrderDTO> getAllOrdersByBrandAndYear(String brand, Integer year);
+
     void editOrder(OrderDTO orderDTO, Long id);
 
     long lastOrderId(String brand);
@@ -27,25 +29,29 @@ public interface OrderService {
 
     String getOrderName(Long orderId);
 
-    List<OrderDTO> findOrdersContainsArt(String artNum);
+    List<OrderDTO> findOrdersContainsArt(String artNum, Integer year);
 
     void bulkUpdateArticle(List<OrderEditArticleDTO> updates);
 
-    List<ArticleFindDTO> findOnlyArticlesInOrder(String artNum);
+    List<ArticleFindDTO> findOnlyArticlesInOrder(String artNum, Integer year);
 
-    List<ArticleFindDTO> findByOrderBy(String orderBy, String brand);
+    List<ArticleFindDTO> findByOrderBy(String orderBy, String brand, Integer year);
 
     String lastOrderNumber(String brand);
 
     String newOrderName(String brand);
 
-    List<ArticleFindDTO> findArticlesByComment(String comment, String brand);
+    List<ArticleFindDTO> findArticlesByComment(String comment, String brand, Integer year);
 
-    List<OrderItem> findArticlesByCommentItems(List<ArticleFindDTO> articleDTOS);
+    List<OrderItem> findArticlesByCommentItems(List<ArticleFindDTO> articleDTOS, Integer year);
 
     List<OrderTitleDTO> getOrderList(String brand);
 
+    List<OrderTitleDTO> getOrderListByBrandAndByYear(String brand, Integer year);
+
     void service();
+
+    List<Integer> yearWithOrder();
 
 //    int findArticleIndex(Long orderId,Long ArticleId);
 }

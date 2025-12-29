@@ -24,6 +24,7 @@ public record OrderEditArticleDTO(
 
         String orderReason,
         String comment,
-        int position
+        int position,
+        int year
 ) {
 }
