@@ -182,7 +182,17 @@
                 <input type="hidden" name="articleID" th:value="${article.id}">
                 <input type="hidden" name="position" th:value="${article.position}">
 
-                <td th:text="${article.orderName}"></td>
+                <td>
+                    <form th:method="GET" th:action="@{/orders/orderInfo/{id}(id=${article.orderId})}"
+                          style="display: inline; margin: 0; padding: 0;">
+                        <input type="hidden" name="brand" th:value="${brand}">
+                        <input type="hidden" name="id" th:value="${article.orderId}">
+                        <button type="submit" class="order-button">
+                            <span th:text="${article.orderName}"></span>
+                        </button>
+                    </form>
+                </td>
+
                 <input type="hidden" name="id" th:value="${article.orderId}">
 
                 <td>
@@ -371,19 +381,6 @@
                             onclick="document.getElementById('deleteForm-${order.id}').submit();">x</button>
                 </form>
             </td>
-            <!--                <td>-->
-            <!--                    <div class="action-column">-->
-            <!--                        <a href="#" class="update-order"-->
-            <!--                           th:attr="onclick='showOrderDetails(' + ${order.id} + '); window.scrollTo(0, 0);'">Отвори</a>-->
-            <!--                    </div>-->
-            <!--                </td>-->
-            <!--                <td>-->
-            <!--                    <form id="deleteForm-${order.id}" th:method="POST"-->
-            <!--                          th:action="@{/orders/deleteOrder/{id}(id=${order.id})}" th:object="${order}">-->
-            <!--                        <button class="delete-btn" href="#"-->
-            <!--                           onclick="document.getElementById('deleteForm-${order.id}').submit();">x</button>-->
-            <!--                    </form>-->
-            <!--                </td>-->
         </tr>
         </tbody>
     </table>
