@@ -19,8 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class PreOrderServiceImpl implements PreOrderService {
@@ -143,7 +142,7 @@ public class PreOrderServiceImpl implements PreOrderService {
         if (preOrderDTO.orderReason() != null && !preOrderDTO.orderReason().isEmpty()) {
             preOrderItem.setOrderReason(preOrderDTO.orderReason());
         }
-        if (preOrderDTO.comment() != null && !preOrderDTO.comment().isEmpty()) {
+        if (preOrderDTO.comment() != null) {
             preOrderItem.setComment(preOrderDTO.comment());
         }
 
@@ -216,6 +215,7 @@ public class PreOrderServiceImpl implements PreOrderService {
     @Transactional
     public boolean createAndExportOrder(String name, String brand, UserDetails userDetails) throws IOException {
 
+
         List<PreOrderItem> PreOrderItem = preOrderItemRepository.findAllByArticle_BrandOrderByPositionAsc(brand);
         orderService.createOrder(PreOrderItem, name, brand, userDetails);
         preOrderItemRepository.deleteAllByArticle_BrandAndIsHoldIsFalse(brand);
@@ -257,6 +257,44 @@ public class PreOrderServiceImpl implements PreOrderService {
                 preOrderItemRepository.save(nextPreOrderItem);
             }
         }
+    }
+
+    @Override
+    public List<ArticleDTO> checkForDuplicates(String brand) {
+        List<PreOrderItem> allArticle = preOrderItemRepository.findAll().stream().filter(a -> a.getArticle().getBrand().equals(brand)).toList();
+
+        List<String> preOrderArticleNumberList = preOrderItemRepository.findAll()
+                                                .stream()
+                                                .filter(a -> a.getArticle().getBrand().equals(brand))
+                                                .map(a -> a.getArticle().getArtNum()).toList();
+
+        HashSet<PreOrderItem> duplicateList = new HashSet<>();
+
+        for(int i = 0; i < allArticle.size(); i++) {
+            String currentPreOrderItemArtNum = allArticle.get(i).getArticle().getArtNum();
+
+            for (int j = i + 1; j < allArticle.size(); j++) {
+                if(currentPreOrderItemArtNum.equals(allArticle.get(j).getArticle().getArtNum())) {
+                    duplicateList.add(allArticle.get(i));
+                    duplicateList.add(allArticle.get(j));
+                }
+            }
+        }
+
+        return duplicateList.stream().map(PreOrderServiceImpl::toAllItem).sorted(Comparator.comparing(
+                item -> item.artNum()
+        )).toList();
+    }
+
+    @Override
+    public boolean isPreOrderHaveArticle(String brand) {
+        List<PreOrderItem> preOrderItemsList = preOrderItemRepository.findAllByArticle_BrandOrderByPositionAsc(brand);
+
+        if(preOrderItemsList.isEmpty()) {
+            return false;
+        }
+
+        return true;
     }
 
     private static ArticleDTO toAllItem(PreOrderItem preOrderItem) {
@@ -402,6 +440,8 @@ public class PreOrderServiceImpl implements PreOrderService {
 
         return "Stocks";
     }
+
+
 
     public static String transliterate(String message){
         char[] abcCyr =   {'-',' ','а','б','в','г','д','е','ё', 'ж','з','и','й','к','л','м','н','о','п','р','с','т','у','ф','х', 'ц','ч', 'ш','щ','ъ','ы','ь','э', 'ю','я','А','Б','В','Г','Д','Е','Ё', 'Ж','З','И','Й','К','Л','М','Н','О','П','Р','С','Т','У','Ф','Х', 'Ц', 'Ч','Ш', 'Щ','Ъ','Ы','Ь','Э','Ю','Я','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2','3','4','5','6','7','8','9'};

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Ensure these are loaded before your script if using jQuery/Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/js/submitAllModalUpdates.js" defer></script>
+    <script src="/js/submitAndRedirect.js" defer></script>
+
+    <link rel="stylesheet" href="/css/modal-table.css">
+</head>
+<body>
+<!-- Popup screen -->
+<div th:fragment="MakeOrder" class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Финализиране на заявка: </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label class="col-form-label">Дублиращи се артикули:</label>
+                <table class="modal-table">
+                    <thead>
+                    <th class="col-1" th:text="#{orders_article_number}">Article</th>
+                    <th class="col-2" th:text="#{orders_article_name}">Name</th>
+                    <th class="col-3" th:text="#{orders_pcs}">Quantity</th>
+                    <th class="col-4" th:text="#{orders_ordered_by}">Ordered By</th>
+                    <th class="col-5" th:text="#{orders_reason}">Order Reason</th>
+                    <th class="col-6" th:text="#{orders_comment}">Comment</th>
+                    </thead>
+                    <tr th:each="preOrder : ${duplicatePreOrderItems}" th:object="${preOrder}">
+                        <!-- Form for each preOrder -->
+                        <td class="col-1">
+                            <div th:text="*{artNum}"></div>
+                        </td>
+                        <td class="col-2">
+                            <div th:text="*{name}"></div>
+                        </td>
+                        <td class="col-3 text-center">
+                            <div th:text="*{quantityForOrder}"></div>
+                        </td>
+                        <td class="col-4">
+                            <div th:text="*{orderBy}"></div>
+                        </td>
+                        <td class="col-5">
+                            <div th:text="*{orderReason}"></div>
+                        </td>
+                        <td class="col-6">
+                            <div th:text="*{comment}"></div>
+                        </td>
+                </table>
+
+                <div class="form-group">
+                    <!-- Make Order Form -->
+
+                    <form id="downloadForm" th:method="POST" th:action="@{/orders/makeOrder}">
+                        <label for="name" class="col-form-label">Въведете име на заявката:</label>
+                        <input type="text" class="form-control" id="name" name="name" th:value="${newOrderName}"
+                               required>
+
+                        <div class="lastOrderList">
+                            <button type="button" class="eBtn" onclick="submitAndRedirect()">Завърши</button>
+                            <input type="hidden" name="makeOrder" th:value="makeOrder">
+                            <input type="hidden" name="brand" th:value="${brand}">
+
+                            <span class="lastOrderPopupTitle">Последни заявки: </span>
+                            <span th:text="${lastThreeOrdersNames}"></span>
+                        </div>
+                    </form>
+
+                    <!--                    <a th:href="${brand == 'Grohe'} ? '/orders/preOrderGrohe' : '/orders/preOrderViega'">Върни се към заявката</a>-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

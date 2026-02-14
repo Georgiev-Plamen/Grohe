@@ -8,18 +8,14 @@ import bg.deplan.Grohe.service.OrderService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -87,10 +83,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public String lastThreeOrderName(String brand) {
+    public String lastFiveOrderName(String brand) {
         StringBuilder ordersNames = new StringBuilder();
 
-        List<Order> orders = orderRepository.findLastThreeOrdersByBrand(brand);
+        List<Order> orders = orderRepository.findLastFiveOrdersByBrand(brand);
 
         for(Order order : orders) {
             ordersNames.append(order.getOrderName());

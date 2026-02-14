@@ -100,7 +100,7 @@ body {
 
 .container {
     width: 100%;
-    max-width: 90%;
+    max-width: 96%;
     margin: 100px auto;
     padding: 20px;
     background-color: #fff;
@@ -429,10 +429,6 @@ svg {
     width: 5em;
 }
 
-.btn {
-    background-color: transparent;
-}
-
 .move-btn {
     background-color: transparent;
     color: #3984be;
@@ -571,14 +567,17 @@ svg {
     background-color: #218838;
 }
 
+.lastOrderPopupTitle {
+    padding-left: 5em;
+}
+
 .lastOrderList {
+    display: -webkit-inline-box;
     font-family: Arial, sans-serif;
     font-size: 12px;
     color: #888888;
     font-style: italic;
     line-height: 1.5;
-    padding-left: 15px;
-    list-style-type: none;
 }
 
 .lastOrderList li {
@@ -632,6 +631,10 @@ svg {
 
 .open-button:hover {
     text-decoration: underline;
+}
+
+.form-group {
+    padding-top: 2em;
 }
 
 footer {

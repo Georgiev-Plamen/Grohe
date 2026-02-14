@@ -56,7 +56,8 @@ public class PreOrderController {
         model.addAttribute("allPreOrderItems", preOrderService.getAllPreOrder(brand));
         model.addAttribute("articleList", preOrderService.getAllArticle(brand));
         model.addAttribute("newOrderName", orderService.newOrderName(brand));
-        model.addAttribute("lastThreeOrdersNames", orderService.lastThreeOrderName(brand));
+        model.addAttribute("lastThreeOrdersNames", orderService.lastFiveOrderName(brand));
+        model.addAttribute("duplicatePreOrderItems", preOrderService.checkForDuplicates(brand));
 
         return "preOrder";
     }
@@ -125,7 +126,10 @@ public class PreOrderController {
                                             @RequestParam("brand") String brand,
                                             @AuthenticationPrincipal UserDetails userDetails) throws IOException {
 
-        // Create the order
+        if(!preOrderService.isPreOrderHaveArticle(brand)) {
+            return ResponseEntity.ok(null);
+        }
+
         boolean isOrderCreated = preOrderService.createAndExportOrder(name, brand, userDetails);
 
         if (!isOrderCreated) {
@@ -189,5 +193,15 @@ public class PreOrderController {
     }
 
 
+    @GetMapping("/checkForDuplicates")
+    public String checkForDuplicates() {
+
+        preOrderService.checkForDuplicates(GROHE);
+
+//        if(brand.equals(VIEGA)) {
+//            return "redirect:/orders/preOrderViega";
+//        }
+        return "redirect:/orders/preOrderGrohe";
+    }
 
 }

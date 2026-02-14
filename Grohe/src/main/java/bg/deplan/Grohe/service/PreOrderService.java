@@ -32,4 +32,8 @@ public interface PreOrderService {
     void moveUpPreOrderItemPosition(int position, String brand);
 
     void moveDownPreOrderItemPosition(int position, String brand);
+
+    List<ArticleDTO> checkForDuplicates (String brand);
+
+    boolean isPreOrderHaveArticle(String brand);
 }

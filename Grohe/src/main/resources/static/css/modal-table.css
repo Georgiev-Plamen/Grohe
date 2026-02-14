@@ -1,0 +1,147 @@
+/* Compact table for modal popup */
+/* Base table styles */
+.modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* This makes column widths respect your settings */
+}
+
+/* Column 1 - Small (ID, index) */
+.modal-table .col-1 {
+    width: 5%;
+}
+
+/* Column 2 - Extra Large (needs more space) */
+.modal-table .col-2 {
+    width: 50%; /* Extra space for content */
+}
+
+/* Column 3 - Extra Small (only one digit) */
+.modal-table .col-3 {
+    width: 3%; /* Very narrow - just for one digit */
+    text-align: center; /* Center the digit */
+}
+
+/* Column 4 - Medium (if you have one) */
+.modal-table .col-4 {
+    width: 5%;
+}
+
+/* Column 5 - Extra Large */
+.modal-table .col-5 {
+    width: 12%; /* Extra space */
+}
+
+/* Column 6 - Extra Large */
+.modal-table .col-6 {
+    width: 12%; /* Extra space */
+}
+
+/* Header styles - ALWAYS HORIZONTAL */
+.modal-table th {
+    background-color: #f8f9fa;
+    font-weight: 500;
+    color: #495057;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-bottom: 2px solid #dee2e6;
+    padding: 8px 6px;
+
+    /* Force horizontal text */
+    writing-mode: horizontal-tb !important;
+    -webkit-writing-mode: horizontal-tb !important;
+    -ms-writing-mode: lr-tb !important;
+    text-orientation: mixed !important;
+    transform: none !important;
+    rotate: none !important;
+
+    /* Prevent text from going vertical */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Cell styles */
+.modal-table td {
+    padding: 3px;
+    border-bottom: 1px solid #e9ecef;
+    word-break: break-word;
+    vertical-align: middle;
+}
+
+/* Last row no border */
+.modal-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Hover effect */
+.modal-table tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Column width classes */
+.modal-table .col-xs { width: 40px; }
+.modal-table .col-sm { width: 70px; }
+.modal-table .col-md { width: 100px; }
+.modal-table .col-lg { width: 150px; }
+.modal-table .col-xl { width: 200px; }
+
+/* Percentage-based widths */
+.modal-table .w-10 { width: 10%; }
+.modal-table .w-15 { width: 25%; }
+.modal-table .w-20 { width: 5%; }
+.modal-table .w-25 { width: 20%; }
+.modal-table .w-30 { width: 30%; }
+    .modal-table .w-40 { width: 40%; }
+.modal-table .w-50 { width: 50%; }
+
+/* Text alignment */
+.modal-table .text-left { text-align: left; }
+.modal-table .text-center { text-align: center; }
+.modal-table .text-right { text-align: right; }
+
+/* Compact badges for status */
+.modal-table .badge {
+    display: inline-block;
+    padding: 2px 6px;
+    font-size: 8px;
+    font-weight: 600;
+    border-radius: 10px;
+    text-transform: uppercase;
+}
+
+.modal-table .badge-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.modal-table .badge-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.modal-table .badge-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.modal-table .badge-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+/* Compact buttons inside table */
+.modal-table .btn-sm-compact {
+    padding: 2px 6px;
+    font-size: 8px;
+    line-height: 1.2;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+.modal-table .btn-sm-compact:hover {
+    background-color: #e2e6ea;
+}

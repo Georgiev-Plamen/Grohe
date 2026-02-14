@@ -21,7 +21,7 @@ public interface OrderService {
 
     long lastOrderId(String brand);
 
-    String lastThreeOrderName(String brand);
+    String lastFiveOrderName(String brand);
 
     void deleteOrder(Long id, UserDetails userDetails);
 
