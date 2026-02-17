@@ -60,16 +60,27 @@
                     <form id="downloadForm" th:method="POST" th:action="@{/orders/makeOrder}">
                         <label for="name" class="col-form-label">Въведете име на заявката:</label>
                         <input type="text" class="form-control" id="name" name="name" th:value="${newOrderName}"
-                               onkeydown="submitAndRedirect()" required>
+                               required>
 
                         <div class="lastOrderList">
-                            <button type="button" class="eBtn" onclick="submitAndRedirect()">Завърши</button>
+                            <button id="finishBtn" type="button" class="eBtn" onclick="submitAndRedirect()">Завърши</button>
                             <input type="hidden" name="makeOrder" th:value="makeOrder">
                             <input type="hidden" name="brand" th:value="${brand}">
 
                             <span class="lastOrderPopupTitle">Последни заявки: </span>
                             <span th:text="${lastThreeOrdersNames}"></span>
                         </div>
+
+                        <script>
+                            var input = document.getElementById("name");
+                            input.addEventListener("keypress", function(event) {
+                              if (event.key === "Enter") {
+                                event.preventDefault();
+                                document.getElementById("finishBtn").click();
+                              }
+                            });
+                        </script>
+
                     </form>
 
                     <!--                    <a th:href="${brand == 'Grohe'} ? '/orders/preOrderGrohe' : '/orders/preOrderViega'">Върни се към заявката</a>-->

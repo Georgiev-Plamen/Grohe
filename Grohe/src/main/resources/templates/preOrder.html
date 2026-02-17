@@ -162,12 +162,12 @@
             <!-- Quantity Field -->
             <div class="preOrder-entity">
                 <label for="quantityForOrder" th:text="#{orders_pcs}">Quantity:</label>
-                <input type="number" id="quantityForOrder" th:field="*{quantityForOrder}" required>
+                <input type="number" id="quantityForOrder" th:field="*{quantityForOrder}" required min="1">
             </div>
             <!-- Order By Field -->
             <div class="preOrder-entity">
                 <label for="orderBy" th:text="#{orders_ordered_by}">Order by:</label>
-                <input type="text" id="orderBy" th:field="*{orderBy}" required>
+                <input type="text" id="orderBy" th:field="*{orderBy}">
             </div>
             <!-- Date Field -->
             <div class="preOrder-entity">

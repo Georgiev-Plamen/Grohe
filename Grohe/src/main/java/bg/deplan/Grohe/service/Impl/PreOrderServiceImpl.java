@@ -42,6 +42,8 @@ public class PreOrderServiceImpl implements PreOrderService {
     private final ExcelImportService excelImportService;
     @Autowired
     private final UserRepository userRepository;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private OrderService orderService;
@@ -83,8 +85,16 @@ public class PreOrderServiceImpl implements PreOrderService {
         preOrderItem.setArticle(optionalArticle.get());
         preOrderItem.setQuantityForOrder(articleDTO.quantityForOrder());
         preOrderItem.setOrderBy(articleDTO.orderBy());
+        if(articleDTO.orderBy().isEmpty()) {
+            if(userDetails instanceof AppUserDetails appUserDetails) {
+                preOrderItem.setOrderBy(appUserDetails.getFullName());
+            }
+        }
         preOrderItem.setDate(articleDTO.date());
         preOrderItem.setOrderReason(articleDTO.orderReason());
+        if(articleDTO.orderReason().isEmpty()) {
+            preOrderItem.setOrderReason("Stocks");
+        }
         preOrderItem.setComment(articleDTO.comment());
         preOrderItem.setHold(false);
         preOrderItem.setUser(userRepository.findByUsername(userDetails.getUsername()).get());
