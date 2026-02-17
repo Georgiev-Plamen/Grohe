@@ -377,11 +377,38 @@
                 </div>
             </td>
             <td>
-                <form id="deleteForm-${order.id}" th:method="GET"
-                      th:action="@{/orders/deleteOrder/{id}(id=${order.id})}" th:object="${order}">
-                    <button class="delete-btn" href="#"
-                            onclick="document.getElementById('deleteForm-${order.id}').submit();">x</button>
-                </form>
+<!--                <form id="deleteForm-${order.id}" th:method="GET"-->
+<!--                      th:action="@{/orders/deleteOrder/{id}(id=${order.id})}" th:object="${order}">-->
+<!--                    <button class="delete-btn" href="#"-->
+<!--                            onclick="document.getElementById('deleteForm-${order.id}').submit();">x</button>-->
+<!--                </form>-->
+                <button type="button" class="delete-btn" data-toggle="modal"
+                        th:attr="data-target='#confirmation-' + ${order.id()}">
+                    x
+                </button>
+
+                <div class="modal" th:id="'confirmation-' + ${order.id()}" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Искате ли да изтриете завката?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-footer">
+                                <!-- Delete form adapted to your button structure -->
+                                <form th:id="'deleteForm-' + ${order.id()}"
+                                      th:method="GET"
+                                      th:action="@{/orders/deleteOrder/{id}(id=${order.id()})}"
+                                      th:object="${order}">
+                                    <button class="delete-master-btn" type="submit">Изтриване</button>
+                                </form>
+                                <button type="button" class="button" data-dismiss="modal">Отказ</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </td>
         </tr>
         </tbody>
