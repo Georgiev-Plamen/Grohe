@@ -112,6 +112,7 @@
             <thead>
             <tr>
                 <th th:text="${order.orderName()}"></th>
+                <th th:text="${order.date()}"></th>
                 <th><a href="#" class="update-order"
                        th:attr="onclick='showOrderDetails(' + ${order.id} + ')'">Затвори</a></th>
             </tr>
@@ -256,6 +257,7 @@
             <thead>
             <tr>
                 <th th:text="${order.orderName()}"></th>
+                <th th:text="${order.date()}"></th>
                 <th>
                     <input type="hidden" name="brand" th:value="${order.brand}">
                     <a th:method="GET"

@@ -60,7 +60,7 @@
                     <form id="downloadForm" th:method="POST" th:action="@{/orders/makeOrder}">
                         <label for="name" class="col-form-label">Въведете име на заявката:</label>
                         <input type="text" class="form-control" id="name" name="name" th:value="${newOrderName}"
-                               required>
+                               onkeydown="submitAndRedirect()" required>
 
                         <div class="lastOrderList">
                             <button type="button" class="eBtn" onclick="submitAndRedirect()">Завърши</button>
