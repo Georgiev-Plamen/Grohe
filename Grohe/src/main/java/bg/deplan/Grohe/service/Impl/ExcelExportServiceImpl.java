@@ -17,8 +17,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.time.format.DateTimeFormatter;
+
+import static org.thymeleaf.util.StringUtils.substring;
 
 @Service
 @Transactional
@@ -250,8 +253,10 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         cell.setCellValue("Number of the order");
         cell.setCellStyle(cellStyle);
 
+        String lastDigitOfYear = substring(Integer.toString(LocalDate.now().getYear()), 2) ;
+
         cell = row.createCell(1);
-        cell.setCellValue("D/" + orderNum + "/25");
+        cell.setCellValue("D/" + orderNum + "/" + lastDigitOfYear);
         cell.setCellStyle(cellStyle);
 
         row = sheet.createRow(rowIndex++);
