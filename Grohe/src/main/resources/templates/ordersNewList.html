@@ -259,6 +259,13 @@
                 <th th:text="${order.orderName()}"></th>
                 <th th:text="${order.date()}"></th>
                 <th>
+                    <a th:method="GET"
+                       th:href="@{/orders/export/{id}(id=${order.id()})}"
+                       class="update-order">
+                        Export
+                    </a>
+                </th>
+                <th>
                     <input type="hidden" name="brand" th:value="${order.brand}">
                     <a th:method="GET"
                        th:href="@{${order.brand == 'Grohe' ? '/orders/allNewGrohe' : '/orders/allNewViega'}}"

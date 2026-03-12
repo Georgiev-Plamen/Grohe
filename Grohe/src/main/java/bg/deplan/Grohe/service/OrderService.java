@@ -39,6 +39,8 @@ public interface OrderService {
 
     String lastOrderNumber(String brand);
 
+    String orderNumberById(Long Id);
+
     String newOrderName(String brand);
 
     List<ArticleFindDTO> findArticlesByComment(String comment, String brand, Integer year);
@@ -52,6 +54,8 @@ public interface OrderService {
     void service();
 
     List<Integer> yearWithOrder();
+
+    String orderNumber(Long id);
 
 //    int findArticleIndex(Long orderId,Long ArticleId);
 }

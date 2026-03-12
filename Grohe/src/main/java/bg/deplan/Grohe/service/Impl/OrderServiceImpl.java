@@ -259,6 +259,21 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public String orderNumberById(Long Id) {
+            Order order = orderRepository.getReferenceById(Id);
+            String orderName = order.getOrderName();
+
+            String orderNum = orderName.split(" ")[1];
+
+            try {
+                int num = Integer.parseInt(orderNum);
+                return String.valueOf(num);
+            } catch (NumberFormatException nfe) {
+                return "";
+            }
+        }
+
+    @Override
     public String newOrderName(String brand) {
 
 //        Optional<Order> orderOptional = orderRepository.getReferenceById(lastOrderId(brand));
@@ -362,6 +377,11 @@ public class OrderServiceImpl implements OrderService {
         }
         yearWithOrders.add(lastYear);
     return yearWithOrders;
+    }
+
+    @Override
+    public String orderNumber(Long id) {
+        return orderRepository.getOrdersById(id).getOrderName();
     }
 
     private int findArticleIndex(Long orderId, Long articleId, Integer index) {

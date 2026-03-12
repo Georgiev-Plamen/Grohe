@@ -1,16 +1,23 @@
 package bg.deplan.Grohe.web;
 
 import bg.deplan.Grohe.model.DTOs.OrderDTO;
+import bg.deplan.Grohe.service.ExcelExportService;
 import bg.deplan.Grohe.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
+
+import static org.thymeleaf.util.StringUtils.substring;
 
 @Controller
 @RequestMapping("/orders")
@@ -18,6 +25,9 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private ExcelExportService excelExportService;
 
     @ModelAttribute("orderDto")
     public OrderDTO orderDTO() { return new OrderDTO(0L, "","", LocalDate.now(),null);}
@@ -169,6 +179,25 @@ public class OrderController {
         orderService.deleteOrder(id, userDetails);
 
         return "redirect:/orders/allNew";
+    }
+
+    @GetMapping("/export/{id}")
+    public ResponseEntity<byte[]> orderExport(@PathVariable ("id") Long id,
+                                              @AuthenticationPrincipal UserDetails userDetails) throws IOException {
+
+        String orderName = orderService.orderNumber(id);
+        String orderNum = orderService.orderNumberById(id);
+        byte [] excelFile;
+        excelFile = excelExportService.exportOrderToExcel(id,orderNum);
+
+        if (excelFile == null ) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + orderName + ".xlsx")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(excelFile);
     }
 
     @GetMapping("/service")

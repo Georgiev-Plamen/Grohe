@@ -123,7 +123,9 @@ public class ExcelExportServiceImpl implements ExcelExportService {
             int rowIndex = 0;
 
             Order order = orderRepository.getReferenceById(id);
-            order.setItems(orderItemRepository.findAllByOrderId(id));
+            if(order.getItems() == null) {
+                order.setItems(orderItemRepository.findAllByOrderId(id));
+            }
 
             // Header: Order Information
             rowIndex = createOrderHeader(sheet, order, rowIndex, cellStyle, orderNum);
@@ -253,7 +255,7 @@ public class ExcelExportServiceImpl implements ExcelExportService {
         cell.setCellValue("Number of the order");
         cell.setCellStyle(cellStyle);
 
-        String lastDigitOfYear = substring(Integer.toString(LocalDate.now().getYear()), 2) ;
+        String lastDigitOfYear = substring(Integer.toString(LocalDate.now().getYear()), 2);
 
         cell = row.createCell(1);
         cell.setCellValue("D/" + orderNum + "/" + lastDigitOfYear);
