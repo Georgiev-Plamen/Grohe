@@ -71,7 +71,10 @@ public class ExcelExportServiceImpl implements ExcelExportService {
             cell.setCellValue("Order qtt");
 
             Order order = orderRepository.getReferenceById(id);
-            order.setItems(orderItemRepository.findAllByOrderId(id));
+
+            if(order.getItems() == null) {
+                order.setItems(orderItemRepository.findAllByOrderId(id));
+            }
 
             for (OrderItem article : order.getItems()) {
                 row = sheet.createRow(rowIndex++);

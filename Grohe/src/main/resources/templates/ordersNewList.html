@@ -111,8 +111,8 @@
 
             <thead>
             <tr>
-                <th th:text="${order.orderName()}"></th>
                 <th th:text="${order.date()}"></th>
+                <th th:text="${order.orderName()}"></th>
                 <th><a href="#" class="update-order"
                        th:attr="onclick='showOrderDetails(' + ${order.id} + ')'">Затвори</a></th>
             </tr>
@@ -256,11 +256,12 @@
         <table th:attr="id='orderDetails-' + ${order.id}" class="search-result-table-by-param">
             <thead>
             <tr>
-                <th th:text="${order.orderName()}"></th>
                 <th th:text="${order.date()}"></th>
+                <th th:text="${order.orderName()}"></th>
                 <th>
+                    <input type="hidden" name="brand" th:value="${order.brand()}">
                     <a th:method="GET"
-                       th:href="@{/orders/export/{id}(id=${order.id()})}"
+                       th:href="@{/orders/export/{id}(id=${order.id()}, brand=${brand})}"
                        class="update-order">
                         Export
                     </a>

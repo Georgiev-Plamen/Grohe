@@ -183,12 +183,18 @@ public class OrderController {
 
     @GetMapping("/export/{id}")
     public ResponseEntity<byte[]> orderExport(@PathVariable ("id") Long id,
+                                              @RequestParam ("brand") String brand,
                                               @AuthenticationPrincipal UserDetails userDetails) throws IOException {
 
         String orderName = orderService.orderNumber(id);
         String orderNum = orderService.orderNumberById(id);
         byte [] excelFile;
-        excelFile = excelExportService.exportOrderToExcel(id,orderNum);
+
+        if(brand.equals(GROHE)) {
+            excelFile = excelExportService.exportOrderToExcel(id,orderNum);
+        } else {
+            excelFile = excelExportService.exportOrderToExcelViega(id, orderNum);
+        }
 
         if (excelFile == null ) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

@@ -263,12 +263,11 @@ public class OrderServiceImpl implements OrderService {
             Order order = orderRepository.getReferenceById(Id);
             String orderName = order.getOrderName();
 
-            String orderNum = orderName.split(" ")[1];
-
             try {
+                String orderNum = orderName.split(" ")[1];
                 int num = Integer.parseInt(orderNum);
                 return String.valueOf(num);
-            } catch (NumberFormatException nfe) {
+            } catch (ArrayIndexOutOfBoundsException | NumberFormatException ex) {
                 return "";
             }
         }
