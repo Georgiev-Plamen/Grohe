@@ -420,6 +420,10 @@ public class PreOrderServiceImpl implements PreOrderService {
                 return "Promo offer";
             }
 
+            if (currentWord.contains("prom")) {
+                return "Promo offer";
+            }
+
             if (currentWord.contains("samples")) {
                 return "Samples " + translateComment;
             }

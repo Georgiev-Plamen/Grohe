@@ -68,8 +68,16 @@ public class ExcelImportServiceImpl implements ExcelImportService {
 
                     // Read comment
                     DataFormatter dataFormatter = new DataFormatter();
-                    Cell cell = row.getCell(commentRow);
-                    String comment = dataFormatter.formatCellValue(cell);
+                    Cell cell;
+                    String comment;
+
+                    if(commentRow > 0) {
+                        cell = row.getCell(commentRow);
+                        comment = dataFormatter.formatCellValue(cell);
+                    } else {
+                        cell = row.getCell(0);
+                        comment = "";
+                    }
 
                    LocalDate date = null;
 
