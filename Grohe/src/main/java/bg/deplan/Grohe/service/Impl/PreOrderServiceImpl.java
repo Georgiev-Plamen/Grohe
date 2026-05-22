@@ -158,7 +158,9 @@ public class PreOrderServiceImpl implements PreOrderService {
 
         if(preOrderDTO.isHold()){
             preOrderItem.setHold(true);
+            preOrderItem.setPosition(setHoldPosition(preOrderItem, preOrderDTO.brand()));
 //            holdPreOrderItemsSort(preOrderDTO.brand());
+
         } else {
             preOrderItem.setHold(false);
             positionSort(preOrderDTO.brand());
@@ -188,9 +190,20 @@ public class PreOrderServiceImpl implements PreOrderService {
                 .get().getPosition();
 
         for(PreOrderItem preOrderItem : preOrderItemList) {
-            preOrderItem.setPosition(i);
             i--;
+            preOrderItem.setPosition(i);
         }
+    }
+
+    @Override
+    public int setHoldPosition(PreOrderItem preOrderItem, String brand) {
+        List<PreOrderItem> preOrderItemList = preOrderItemRepository.findAllByArticle_BrandOrderByPositionAsc(brand);
+        int position = preOrderItemList.stream()
+                .sorted((a, b) -> Integer.compare(a.getPosition(), b.getPosition()))
+                .findFirst()
+                .get().getPosition();
+
+        return position - 1;
     }
 
     private void positionSort(String brand) {
@@ -270,7 +283,7 @@ public class PreOrderServiceImpl implements PreOrderService {
     }
 
     @Override
-    public List<ArticleDTO> checkForDuplicates(String brand) {
+    public List<PreOrderDTO> checkForDuplicates(String brand) {
         List<PreOrderItem> allArticle = preOrderItemRepository.findAll().stream().filter(a -> a.getArticle().getBrand().equals(brand)).toList();
 
         List<String> preOrderArticleNumberList = preOrderItemRepository.findAll()
@@ -291,7 +304,7 @@ public class PreOrderServiceImpl implements PreOrderService {
             }
         }
 
-        return duplicateList.stream().map(PreOrderServiceImpl::toAllItem).sorted(Comparator.comparing(
+        return duplicateList.stream().map(PreOrderServiceImpl::toAllPreOrderItem).sorted(Comparator.comparing(
                 item -> item.artNum()
         )).toList();
     }

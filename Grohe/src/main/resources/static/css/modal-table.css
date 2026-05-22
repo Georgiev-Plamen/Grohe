@@ -13,7 +13,7 @@
 
 /* Column 2 - Extra Large (needs more space) */
 .modal-table .col-2 {
-    width: 50%; /* Extra space for content */
+    width: 50.5%; /* Extra space for content */
 }
 
 /* Column 3 - Extra Small (only one digit) */
@@ -29,12 +29,16 @@
 
 /* Column 5 - Extra Large */
 .modal-table .col-5 {
-    width: 12%; /* Extra space */
+    width: 10%; /* Extra space */
 }
 
 /* Column 6 - Extra Large */
 .modal-table .col-6 {
     width: 12%; /* Extra space */
+}
+
+.modal-table .col-7 {
+    width: 1.5%;
 }
 
 /* Header styles - ALWAYS HORIZONTAL */
@@ -144,4 +148,8 @@
 
 .modal-table .btn-sm-compact:hover {
     background-color: #e2e6ea;
+}
+
+.modal-table-update-btn {
+    align: left;
 }

@@ -6,6 +6,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="/js/submitAllModalUpdates.js" defer></script>
     <script src="/js/submitAndRedirect.js" defer></script>
+    <script src="/js/deletePreOrder.js"></script>
 
     <link rel="stylesheet" href="/css/modal-table.css">
 </head>
@@ -25,42 +26,81 @@
                 <label class="col-form-label">Дублиращи се артикули:</label>
                 <table class="modal-table">
                     <thead>
-                    <th class="col-1" th:text="#{orders_article_number}">Article</th>
-                    <th class="col-2" th:text="#{orders_article_name}">Name</th>
-                    <th class="col-3" th:text="#{orders_pcs}">Quantity</th>
-                    <th class="col-4" th:text="#{orders_ordered_by}">Ordered By</th>
-                    <th class="col-5" th:text="#{orders_reason}">Order Reason</th>
-                    <th class="col-6" th:text="#{orders_comment}">Comment</th>
+                    <tr>
+                        <th class="col-1" th:text="#{orders_article_number}">Article</th>
+                        <th class="col-2" th:text="#{orders_article_name}">Name</th>
+                        <th class="col-3" th:text="#{orders_pcs}">Quantity</th>
+                        <th class="col-4" th:text="#{orders_ordered_by}">Ordered By</th>
+                        <th class="col-5" th:text="#{orders_reason}">Order Reason</th>
+                        <th class="col-6" th:text="#{orders_comment}">Comment</th>
+                        <th class="col-7" th:text="x">X</th>
+                    </tr>
                     </thead>
+                    <tbody>
                     <tr th:each="preOrder : ${duplicatePreOrderItems}" th:object="${preOrder}">
-                        <!-- Form for each preOrder -->
+                        <input type="hidden" name="id" th:value="*{id}">
                         <td class="col-1">
                             <div th:text="*{artNum}"></div>
+                            <input type="hidden" name="artNum" th:value="*{artNum}">
                         </td>
                         <td class="col-2">
                             <div th:text="*{name}"></div>
+                            <input type="hidden" name="name" th:value="*{name}">
                         </td>
                         <td class="col-3 text-center">
-                            <div th:text="*{quantityForOrder}"></div>
+                            <div contenteditable="true" data-field="codeDeplan">
+                                <span th:text="*{quantityForOrder}"></span>
+                            </div>
+                            <input type="hidden" name="quantityForOrder" th:value="*{quantityForOrder}"/>
                         </td>
                         <td class="col-4">
                             <div th:text="*{orderBy}"></div>
+                            <input type="hidden" name="orderBy" th:value="*{orderBy}">
                         </td>
                         <td class="col-5">
                             <div th:text="*{orderReason}"></div>
+                            <input type="hidden" name="orderReason" th:value="*{orderReason}">
                         </td>
                         <td class="col-6">
-                            <div th:text="*{comment}"></div>
+                            <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}"></div>
+                            <input type="hidden" name="comment" th:value="*{comment}">
                         </td>
+                        <td class="col-7">
+                            <button type="button" class="delete-btn"
+                                    th:onclick="'confirmDelete(' + ${preOrder.id()} + ')'">
+                                x
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
                 </table>
 
-                <div class="form-group">
-                    <!-- Make Order Form -->
+                <!-- DELETE CONFIRMATION MODAL - ADD THIS HERE -->
+                <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Искате ли да изтриете позицията ?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Изтриване</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отказ</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="form-group">
+                    <button th:text="#{btn_Update}" class="modal-table-update-btn" type="button" onclick="submitAllUpdates()">Update All</button>
+                </div>
+
+                <div class="form-group">
                     <form id="downloadForm" th:method="POST" th:action="@{/orders/makeOrder}">
                         <label for="name" class="col-form-label">Въведете име на заявката:</label>
-                        <input type="text" class="form-control" id="name" name="name" th:value="${newOrderName}"
-                               required>
+                        <input type="text" class="form-control" id="name" name="name" th:value="${newOrderName}" required>
 
                         <div class="lastOrderList">
                             <button id="finishBtn" type="button" class="eBtn" onclick="submitAndRedirect()">Завърши</button>
@@ -74,18 +114,14 @@
                         <script>
                             var input = document.getElementById("name");
                             input.addEventListener("keypress", function(event) {
-                              if (event.key === "Enter") {
-                                event.preventDefault();
-                                document.getElementById("finishBtn").click();
-                              }
+                                if (event.key === "Enter") {
+                                    event.preventDefault();
+                                    document.getElementById("finishBtn").click();
+                                }
                             });
                         </script>
-
                     </form>
-
-                    <!--                    <a th:href="${brand == 'Grohe'} ? '/orders/preOrderGrohe' : '/orders/preOrderViega'">Върни се към заявката</a>-->
                 </div>
-
             </div>
         </div>
     </div>
