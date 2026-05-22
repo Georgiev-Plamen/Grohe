@@ -124,7 +124,7 @@
                     <input type="hidden" name="orderBy" th:value="*{orderBy}">
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)"></div>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"></div>
                     <input type="hidden" name="date" th:value="*{date}">
                 </td>
                 <td>
