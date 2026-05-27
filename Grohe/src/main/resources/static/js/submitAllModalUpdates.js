@@ -74,11 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Save button handler for modal
     document.addEventListener('click', (event) => {
         if (event.target.classList.contains('save-modal-changes')) {
-            submitAllModalUpdates();
+            submitArticleModalUpdates();
+            console.log("save modal")
         }
     });
 
-    async function submitAllModalUpdates() {
+    async function submitArticleModalUpdates() {
         try {
             // Get URL parameters
             const urlParams = getUrlParams();
@@ -125,7 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         method: 'POST',
                         headers: headers,
                         body: JSON.stringify(cleanedPayload)
-                         window.location.reload();
                     });
 
                     if (!response.ok) {
@@ -306,7 +306,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(updates) // Send array directly
-                window.location.reload();
             });
 
             if (!response.ok) {

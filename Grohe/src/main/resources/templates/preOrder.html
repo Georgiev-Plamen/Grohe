@@ -19,6 +19,7 @@
     <script src="/js/submitAndRedirect.js" defer></script>
     <script src="/js/preOrderScripts.js" defer></script>
     <script src="/js/deletePreOrder.js"></script>
+    <script src="/js/makeOrderPopupScripts.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -108,31 +109,31 @@
                 <input type="hidden" name="id" th:value="${preOrder.id()}">
                 <td th:text="${stat.index + 1}">1</td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}"></div>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{artNum}" class="main-table"></div>
                     <input type="hidden" name="artNum" th:value="*{artNum}">
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{name}"></div>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{name}" class="main-table"></div>
                     <input type="hidden" name="name" th:value="*{name}">
                 </td>
                 <td class="quantity">
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantityForOrder}"></div>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{quantityForOrder}" class="main-table"></div>
                     <input type="hidden" name="quantityForOrder" th:value="*{quantityForOrder}">
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderBy}"></div>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderBy}" class="main-table"></div>
                     <input type="hidden" name="orderBy" th:value="*{orderBy}">
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}"></div>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{date}" class="main-table"></div>
                     <input type="hidden" name="date" th:value="*{date}">
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderReason}"></div>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderReason}" class="main-table"></div>
                     <input type="hidden" name="orderReason" th:value="*{orderReason}">
                 </td>
                 <td>
-                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}"></div>
+                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}" class="main-table"></div>
                     <input type="hidden" name="comment" th:value="*{comment}">
                 </td>
                 <td>
@@ -194,6 +195,7 @@
 
     <!-- Single Update Button -->
     <button th:text="#{btn_Update}" type="button" class="button fix" onclick="submitAllUpdates()">Update All</button>
+<!--    <button th:text="#{btn_Update}" type="button" class="button fix save-table-changes">Update All</button>-->
 
     <!-- Import Form -->
 

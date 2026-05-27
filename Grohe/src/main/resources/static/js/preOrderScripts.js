@@ -39,10 +39,10 @@
 
         // Function to sync contenteditable divs with hidden inputs
         function updateHiddenInput(element) {
-            if (element.tagName === 'DIV') {
+            if (element.tagName === 'DIV' && element.className === "main-table") {
                 // Handle contenteditable div
                 const hiddenInput = element.nextElementSibling;
-                if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                if (hiddenInput && hiddenInput.tagName === 'INPUT' && element.className === "main-table") {
                     hiddenInput.value = element.innerText.trim();
                 }
             } else if (element.tagName === 'INPUT' && element.type === 'checkbox') {
@@ -54,12 +54,12 @@
             }
         }
 
-        // Function to submit all updates
+//         Function to submit all updates
         async function submitAllUpdates() {
             const allRows = document.querySelectorAll('tbody tr');
             const rows = Array.from(allRows).filter(row =>
-                row.querySelector('[contenteditable="true"]') !== null
-                );
+                row.querySelector('[contenteditable="true"].main-table') !== null
+            );
             const updates = [];
 
             rows.forEach(row => {
@@ -73,14 +73,14 @@
                     }
                 });
 
-                // Collect contenteditable divs
-                const editableDivs = row.querySelectorAll('[contenteditable="true"]');
-                editableDivs.forEach(div => {
-                    const hiddenInput = div.nextElementSibling;
-                    if (hiddenInput && hiddenInput.tagName === 'INPUT') {
-                        update[hiddenInput.name] = div.textContent.trim();
-                    }
-                });
+                // Collect contenteditable divs with class "main-table"
+                 const editableDivs = row.querySelectorAll('div[contenteditable="true"].main-table');
+                        editableDivs.forEach(div => {
+                            const hiddenInput = div.nextElementSibling;
+                            if (hiddenInput && hiddenInput.tagName === 'INPUT') {
+                                update[hiddenInput.name] = div.textContent.trim();
+                            }
+                        });
 
                 // Collect checkbox value (isHold)
                 const checkbox = row.querySelector('input[type="checkbox"][name="isHold"]');
@@ -103,6 +103,7 @@
 
                 const result = await response.text();
                 alert(result);
+                window.location.reload();
             } catch (error) {
                 console.error('Error sending PreOrder:', error);
                 alert('Failed to send PreOrder');
@@ -113,3 +114,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('.delete-master-btn').focus();
         });
+
+
+const closeButton = document.querySelector('#modalCloseButton'); // Replace with your button selector
+closeButton.addEventListener('click', function() {
+    window.location.reload();
+});

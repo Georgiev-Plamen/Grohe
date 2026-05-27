@@ -4,7 +4,8 @@
     <!-- Ensure these are loaded before your script if using jQuery/Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="/js/submitAllModalUpdates.js" defer></script>
+
+    <script src="/js/makeOrderPopupScripts.js" defer></script>
     <script src="/js/submitAndRedirect.js" defer></script>
     <script src="/js/deletePreOrder.js"></script>
 
@@ -48,7 +49,7 @@
                             <input type="hidden" name="name" th:value="*{name}">
                         </td>
                         <td class="col-3 text-center">
-                            <div contenteditable="true" data-field="codeDeplan">
+                            <div contenteditable="true" data-field="codeDeplan" class="modal-table">
                                 <span th:text="*{quantityForOrder}"></span>
                             </div>
                             <input type="hidden" name="quantityForOrder" th:value="*{quantityForOrder}"/>
@@ -62,7 +63,7 @@
                             <input type="hidden" name="orderReason" th:value="*{orderReason}">
                         </td>
                         <td class="col-6">
-                            <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}"></div>
+                            <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}" class="modal-table"></div>
                             <input type="hidden" name="comment" th:value="*{comment}">
                         </td>
                         <td class="col-7">
@@ -94,7 +95,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button th:text="#{btn_Update}" class="modal-table-update-btn" type="button" onclick="submitAllUpdates()">Update All</button>
+                    <button th:text="#{btn_Update}" class="modal-table-update-btn" type="button" onclick="submitAllModalUpdates()">Update All</button>
                 </div>
 
                 <div class="form-group">
