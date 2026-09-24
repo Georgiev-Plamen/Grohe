@@ -51,7 +51,7 @@
             <input type="hidden" name="brand" th:value="${brand}">
             <div class="preOrder-entity">
                 <label for="artNum" th:text="#{orders_article_number}">Article:</label>
-                <input type="text" id="artNum" th:field="*{artNum}" required>
+                <input type="text" id="artNum" th:field="*{artNum}" required autofocus>
             </div>
             <!-- Quantity Field -->
             <div class="preOrder-entity">

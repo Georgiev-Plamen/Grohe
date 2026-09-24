@@ -33,7 +33,7 @@ public class ArticleServiceImpl implements ArticleService {
         mappedArticle.setImageUrl(addArticleDTO.imageUrl());
         mappedArticle.setArtUrl(addArticleDTO.artUrl());
         mappedArticle.setBarcode(addArticleDTO.barcode());
-        mappedArticle.setQuantityInPallet(addArticleDTO.quantityInPallet());
+        mappedArticle.setQuantityInPallet(addArticleDTO.quantityInPallet() == null ? 0 : addArticleDTO.quantityInPallet());
         mappedArticle.setQuantityInPacket(1);
 
         articleRepository.save(mappedArticle);
@@ -63,7 +63,9 @@ public class ArticleServiceImpl implements ArticleService {
         article.setDescription(addArticleDTO.description());
         article.setImageUrl(addArticleDTO.imageUrl());
         article.setBarcode(addArticleDTO.barcode());
-        article.setQuantityInPallet(addArticleDTO.quantityInPallet());
+        if (addArticleDTO.quantityInPallet() != null) {
+            article.setQuantityInPallet(addArticleDTO.quantityInPallet());
+        }
 
         articleRepository.save(article);
     }
@@ -211,7 +213,7 @@ public class ArticleServiceImpl implements ArticleService {
                 article.getArtUrl(),
                 article.getBarcode(),
                 article.getQuantityInPallet(),
-                2025
+                2026
         );
     }
 }

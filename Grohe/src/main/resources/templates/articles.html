@@ -53,11 +53,22 @@
             document.querySelectorAll('[contenteditable="true"]').forEach(trackEditableChanges);
             document.querySelectorAll('input').forEach(trackInputChanges);
 
+            // Drop empty/null/undefined values so we never send "" for a numeric column
+            function cleanDataObject(obj) {
+                const cleaned = {};
+                for (const [key, value] of Object.entries(obj)) {
+                    if (value !== undefined && value !== null && value !== '') {
+                        cleaned[key] = value;
+                    }
+                }
+                return cleaned;
+            }
+
             async function submitAllUpdates() {
                 const updates = Array.from(editedData.entries()).map(([id, changes]) => {
                     return {
                         id,
-                        ...changes
+                        ...cleanDataObject(changes)
                     };
                 });
 

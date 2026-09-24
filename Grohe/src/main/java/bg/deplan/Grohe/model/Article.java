@@ -30,7 +30,7 @@ public class Article extends BaseEntity{
     @Column(name = "barcodes")
     private String barcode;
 
-    @Column(name = "quantity_in_pallet")
+    @Column(name = "quantity_in_pallet", nullable = false, columnDefinition = "int default 0")
     private int quantityInPallet;
 
     @Column(name = "quantity_in_packet")
