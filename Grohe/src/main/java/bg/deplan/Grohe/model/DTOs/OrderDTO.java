@@ -13,6 +13,7 @@ public record OrderDTO(
         Long id,
         String brand,
         String orderName,
+        String comment,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         LocalDate date,

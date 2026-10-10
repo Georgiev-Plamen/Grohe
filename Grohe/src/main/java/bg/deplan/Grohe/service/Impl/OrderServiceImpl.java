@@ -44,12 +44,13 @@ public class OrderServiceImpl implements OrderService {
     private ArticleService articleService;
 
     @Override
-    public Order createOrder(List<PreOrderItem> preOrderItems, String name, String brand, UserDetails userDetails) {
+    public Order createOrder(List<PreOrderItem> preOrderItems, String name, String brand, String comment, UserDetails userDetails) {
 
         Order order = new Order();
         order.setDate(LocalDate.now());
         order.setOrderName(name);
         order.setBrand(brand);
+        order.setComment(comment);
         order.setUser(userRepository.findByUsername(userDetails.getUsername()).get());
         orderRepository.save(order);
 
@@ -456,6 +457,7 @@ public class OrderServiceImpl implements OrderService {
                 order.getId(),
                 order.getBrand(),
                 order.getOrderName(),
+                order.getComment(),
                 order.getDate(),
                 order.getItems()
                 );
@@ -466,6 +468,7 @@ public class OrderServiceImpl implements OrderService {
                 order.getId(),
                 order.getBrand(),
                 order.getOrderName(),
+                order.getComment(),
                 order.getDate()
         );
     }

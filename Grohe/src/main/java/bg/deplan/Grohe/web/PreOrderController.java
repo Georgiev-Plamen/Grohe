@@ -124,13 +124,14 @@ public class PreOrderController {
     @PostMapping("/makeOrder")
     public ResponseEntity<byte[]> makeOrder(@RequestParam("name") String name,
                                             @RequestParam("brand") String brand,
+                                            @RequestParam("comment") String comment,
                                             @AuthenticationPrincipal UserDetails userDetails) throws IOException {
 
         if(!preOrderService.isPreOrderHaveArticle(brand)) {
             return ResponseEntity.ok(null);
         }
 
-        boolean isOrderCreated = preOrderService.createAndExportOrder(name, brand, userDetails);
+        boolean isOrderCreated = preOrderService.createAndExportOrder(name, brand, comment, userDetails);
 
         if (!isOrderCreated) {
             // Handle the case where the order creation failed

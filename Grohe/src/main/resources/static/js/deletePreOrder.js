@@ -3,6 +3,10 @@ let preOrderItemToDelete = null;
 // Function to show confirmation modal
 function confirmDelete(preOrderItemId) {
     console.log('Delete clicked for ID:', preOrderItemId);
+    if (preOrderItemId == null || preOrderItemId === '' || preOrderItemId === 'undefined') {
+        console.error('confirmDelete called with invalid id:', preOrderItemId);
+        return;
+    }
     preOrderItemToDelete = preOrderItemId;
     $('#deleteConfirmationModal').modal('show');
 }
@@ -138,13 +142,27 @@ function showTemporaryMessage(message, type) {
 // Setup event listeners when document is ready
 $(document).ready(function() {
     console.log('Delete script loaded');
+    // Delegate clicks on delete buttons (works even after rows/fragments re-render)
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('#exampleModal .delete-btn');
+        if (!btn) return;
+        e.preventDefault();
+        const id = btn.getAttribute('data-id');
+        if (!id || id === 'undefined') {
+            console.error('Delete button is missing a valid data-id', btn);
+            return;
+        }
+        confirmDelete(id);
+    });
 
     // Confirm delete button
     $('#confirmDeleteBtn').click(function(e) {
         e.preventDefault();
-        if (preOrderItemToDelete) {
-            deletePreOrderItem(preOrderItemToDelete);
+        if (preOrderItemToDelete == null || preOrderItemToDelete === '' || preOrderItemToDelete === 'undefined') {
+            console.error('No preOrderItemToDelete selected');
+            return;
         }
+        deletePreOrderItem(preOrderItemToDelete);
     });
 
     // Cancel button - just close modal

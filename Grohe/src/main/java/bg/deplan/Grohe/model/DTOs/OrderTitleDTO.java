@@ -13,6 +13,7 @@ public record OrderTitleDTO(
         Long id,
         String brand,
         String name,
+        String comment,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") // Match your frontend format
         LocalDate date

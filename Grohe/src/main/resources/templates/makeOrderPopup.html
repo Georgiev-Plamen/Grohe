@@ -5,11 +5,14 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <script src="/js/makeOrderPopupScripts.js" defer></script>
     <script src="/js/submitAndRedirect.js" defer></script>
     <script src="/js/deletePreOrder.js"></script>
+    <script src="/js/makeOrderPopupScripts.js"></script>
 
     <link rel="stylesheet" href="/css/modal-table.css">
+
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 <!-- Popup screen -->
@@ -68,7 +71,7 @@
                         </td>
                         <td class="col-7">
                             <button type="button" class="delete-btn"
-                                    th:onclick="'confirmDelete(' + ${preOrder.id()} + ')'">
+                                    th:attr="data-id=${preOrder.id()}">
                                 x
                             </button>
                         </td>
@@ -100,6 +103,9 @@
 
                 <div class="form-group">
                     <form id="downloadForm" th:method="POST" th:action="@{/orders/makeOrder}">
+                        <label for="comment" class="col-form-label">Въведете коментар на заявката:</label>
+                        <input type="text" placeholder="Коментар.." class="form-control" id="comment" name="comment" th:value="${comment}">
+
                         <label for="name" class="col-form-label">Въведете име на заявката:</label>
                         <input type="text" class="form-control" id="name" name="name" th:value="${newOrderName}" required>
 

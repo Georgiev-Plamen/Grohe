@@ -30,10 +30,10 @@ public class OrderController {
     private ExcelExportService excelExportService;
 
     @ModelAttribute("orderDto")
-    public OrderDTO orderDTO() { return new OrderDTO(0L, "","", LocalDate.now(),null);}
+    public OrderDTO orderDTO() { return new OrderDTO(0L, "","", "",LocalDate.now(),null);}
 
     @ModelAttribute("orderInfo")
-    public OrderDTO orderInfo() { return new OrderDTO(0L, "","", LocalDate.now(),null);}
+    public OrderDTO orderInfo() { return new OrderDTO(0L, "","", "",LocalDate.now(),null);}
 
     private static final String GROHE = "Grohe";
     private static final String VIEGA = "Viega";

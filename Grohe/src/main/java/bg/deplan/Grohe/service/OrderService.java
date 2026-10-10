@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface OrderService {
 
-    Order createOrder(List<PreOrderItem> preOrderItems, String name, String brand, UserDetails userDetails) ;
+    Order createOrder(List<PreOrderItem> preOrderItems, String name, String brand, String comment, UserDetails userDetails) ;
 
     List<OrderDTO> getAllOrders(String brand);
 

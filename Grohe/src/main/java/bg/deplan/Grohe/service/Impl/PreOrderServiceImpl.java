@@ -236,11 +236,11 @@ public class PreOrderServiceImpl implements PreOrderService {
 
     @Override
     @Transactional
-    public boolean createAndExportOrder(String name, String brand, UserDetails userDetails) throws IOException {
+    public boolean createAndExportOrder(String name, String brand, String comment, UserDetails userDetails) throws IOException {
 
 
         List<PreOrderItem> PreOrderItem = preOrderItemRepository.findAllByArticle_BrandOrderByPositionAsc(brand);
-        orderService.createOrder(PreOrderItem, name, brand, userDetails);
+        orderService.createOrder(PreOrderItem, name, brand, comment, userDetails);
         preOrderItemRepository.deleteAllByArticle_BrandAndIsHoldIsFalse(brand);
 //        excelExportService.exportOrderToExcel(orderService.lastOrderId());
 

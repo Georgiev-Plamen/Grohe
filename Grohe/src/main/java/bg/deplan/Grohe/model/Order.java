@@ -24,6 +24,9 @@ public class Order extends BaseEntity {
     @ManyToOne
     private User user;
 
+    @Column(name = "comment")
+    private String comment;
+
     public Order() {
     }
 
@@ -65,5 +68,13 @@ public class Order extends BaseEntity {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

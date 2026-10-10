@@ -77,13 +77,14 @@
             <tr>
                 <th th:text="${order.date()}"></th>
                 <th th:text="${order.orderName()}"></th>
+                <th th:text="${order.comment()}"></th>
                 <th><a href="#" class="update-order"
                        th:attr="onclick='showOrderDetails(' + ${order.id} + ')'">Затвори</a></th>
             </tr>
             <tr>
                 <th th:text="#{article_number}">Article Number</th>
-                <th th:text="#{orders_pcs}">Quantity</th>
                 <th th:text="#{article_name}">Name</th>
+                <th th:text="#{orders_pcs}">Quantity</th>
                 <th th:text="#{orders_ordered_by}">Ordered By</th>
                 <th th:text="#{orders_date}">Date of Order</th>
                 <th th:text="#{orders_confirmation}">Date of Delivery</th>
@@ -222,6 +223,7 @@
             <tr>
                 <th th:text="${order.date()}"></th>
                 <th th:text="${order.orderName()}"></th>
+                <th th:text="${order.comment()}"></th>
                 <th>
                     <input type="hidden" name="brand" th:value="${order.brand()}">
                     <a th:method="GET"
@@ -320,6 +322,7 @@
         <tr>
             <th th:text="#{orders_name}">Order name</th>
             <th th:text="#{orders_date}">Order date</th>
+            <th th:text="#{orders_comment}">Order comment</th>
             <th></th>
             <th class="action-title">🗑</th>
         </tr>
