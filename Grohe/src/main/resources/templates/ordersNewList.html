@@ -321,8 +321,8 @@
         <thead>
         <tr>
             <th th:text="#{orders_name}">Order name</th>
-            <th th:text="#{orders_date}">Order date</th>
             <th th:text="#{orders_comment}">Order comment</th>
+            <th th:text="#{orders_date}">Order date</th>
             <th></th>
             <th class="action-title">🗑</th>
         </tr>
@@ -334,6 +334,13 @@
                 <div th:text="*{name}"></div>
                 <!--                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{orderName}"></div>-->
                 <!--                    <input type="hidden" th:field="*{orderName}">-->
+            </td>
+
+            <!-- Order comment -->
+            <td>
+                <div th:text="*{comment}"></div>
+<!--                                    <div contenteditable="true" oninput="updateHiddenInput(this)" th:text="*{comment}"></div>-->
+<!--                                    <input type="hidden" th:field="*{comment}">-->
             </td>
 
             <!-- Date -->
