@@ -91,7 +91,7 @@ public class PreOrderServiceImpl implements PreOrderService {
             }
         }
         preOrderItem.setDate(articleDTO.date());
-        preOrderItem.setOrderReason(articleDTO.orderReason());
+        preOrderItem.setOrderReason(checkComment(articleDTO.orderReason()));
         if(articleDTO.orderReason().isEmpty()) {
             preOrderItem.setOrderReason("Stocks");
         }
@@ -442,6 +442,10 @@ public class PreOrderServiceImpl implements PreOrderService {
             }
 
             if (currentWord.contains("bff")) {
+                return "Project BFF " + translateComment;
+            }
+
+            if (currentWord.contains("бфф")) {
                 return "Project BFF " + translateComment;
             }
 
