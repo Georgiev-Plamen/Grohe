@@ -385,6 +385,16 @@ public class PreOrderServiceImpl implements PreOrderService {
                 optionalArticle = articleRepository.findByAccurateArtNum(preOrderExcelItems.artNum().trim());
             }
 
+            //check article have code deplan
+            if (!preOrderExcelItems.artNumDeplan().isEmpty() && optionalArticle.get().getCodeDeplan() == null) {
+
+                Article article = articleRepository.findByAccurateArtNum(preOrderExcelItems.artNum()).get();
+                article.setCodeDeplan(preOrderExcelItems.artNumDeplan());
+
+                articleRepository.save(article);
+
+            }
+
             preOrderItem.setArticle(optionalArticle.get());
             preOrderItem.setQuantityForOrder(preOrderExcelItems.quantityForOrder());
             if(preOrderExcelItems.brand().equals("Grohe")) {
