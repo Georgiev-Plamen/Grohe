@@ -44,7 +44,7 @@
         </form>
         <form th:method="GET" th:action="@{/orders/searchOnlyArticle/*{artNum}}">
             <label for="artNum">Търсене на артикул:</label>
-            <input type="text" name="artNum" id="artNumOnly" th:value="*{artNum}">
+            <input type="text" name="artNum" id="artNumOnly" th:value="*{artNum}" class="artSearch" autofocus>
             <input type="hidden" name="brand" th:value="${brand}">
             <input type="hidden" name="year" th:value="${selectedYear}">
             <button class="pre-order-add-btn" type="submit">Търси</button>

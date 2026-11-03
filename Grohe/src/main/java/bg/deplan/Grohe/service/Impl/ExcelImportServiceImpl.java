@@ -21,7 +21,9 @@ public class ExcelImportServiceImpl implements ExcelImportService {
         // List to store the parsed DTOs
         List<PreOrderExcelDTO> preOrderExcelDTOList = new ArrayList<>();
 
-        String artNumName = "Код на производител";
+        String artNumNameTitle = "Код на производител";
+        String artNumDeplanTitle = "Ном. номер";
+        String artNameDeplanTitle = "Артикул";
         String quantityName = "Количество";
         String commentName = "Забележка";
         String hardCodeDate = "HardDate";
@@ -34,9 +36,11 @@ public class ExcelImportServiceImpl implements ExcelImportService {
             int lastRow = sheet.getLastRowNum() - 3;
 
             // Find index of : artNumCell / quantityCell / commentCell
-            int artNumRow = findColumnIndex(sheet, targetRowIndex, artNumName);
+            int artNumRow = findColumnIndex(sheet, targetRowIndex, artNumNameTitle);
             int quantityRow = findColumnIndex(sheet, targetRowIndex, quantityName);
             int commentRow = findColumnIndex(sheet, targetRowIndex, commentName);
+            int artNumDeplanRow = findColumnIndex(sheet,targetRowIndex, artNumDeplanTitle);
+            int artNameRow = findColumnIndex(sheet,targetRowIndex, artNameDeplanTitle);
             int hardCodeDateRow = findColumnIndex(sheet, targetRowIndex, hardCodeDate);
 
             // Iterate over rows, starting from the 10th row (skip the header)
@@ -55,6 +59,35 @@ public class ExcelImportServiceImpl implements ExcelImportService {
                         artNum = String.valueOf((long) artNumCell.getNumericCellValue());
                     } else {
                         artNum = artNumCell.getStringCellValue();
+                    }
+
+                    //Read deplan article name
+
+                    Cell artNameDeplanCell = row.getCell(artNameRow);
+                    String artNameDeplan;
+                    if(artNameDeplanCell == null) {
+                        artNameDeplan = "";
+                    }
+
+                    if(artNameDeplanCell.getCellType() == CellType.NUMERIC) {
+                        artNameDeplan = String.valueOf((long) artNameDeplanCell.getNumericCellValue());
+                    } else {
+                        artNameDeplan = artNameDeplanCell.getStringCellValue();
+                    }
+
+                    //Read deplan article number
+
+                    Cell artNumDeplanCell = row.getCell(artNumDeplanRow);
+                    String artNumDeplan;
+
+                    if(artNumDeplanCell == null || artNumDeplanCell.getStringCellValue().isEmpty()) {
+                        artNumDeplan = "";
+                    }
+
+                    if (artNumDeplanCell.getCellType() == CellType.NUMERIC) {
+                        artNumDeplan = String.valueOf((long) artNumDeplanCell.getNumericCellValue());
+                    } else {
+                        artNumDeplan = artNumDeplanCell.getStringCellValue();
                     }
 
                     // Read quantity for order
@@ -103,6 +136,8 @@ public class ExcelImportServiceImpl implements ExcelImportService {
                             brand,
                             artNum,
                             quantityForOrder,
+                            artNumDeplan,
+                            artNameDeplan,
                             date,
                             comment
                     );

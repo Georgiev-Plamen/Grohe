@@ -6,6 +6,8 @@ public record PreOrderExcelDTO (
     String brand,
     String artNum,
     String quantityForOrder,
+    String artNumDeplan,
+    String artNameDeplan,
     LocalDate date,
     String comment
 ){

@@ -377,6 +377,9 @@ public class PreOrderServiceImpl implements PreOrderService {
             if (optionalArticle.isEmpty()) {
                 Article article = new Article();
                 article.setArtNum(preOrderExcelItems.artNum().trim());
+                article.setCodeDeplan(preOrderExcelItems.artNumDeplan());
+                article.setName(preOrderExcelItems.artNameDeplan());
+                article.setCodeDeplan(preOrderExcelItems.artNumDeplan());
                 article.setBrand(preOrderExcelItems.brand());
                 articleRepository.save(article);
                 optionalArticle = articleRepository.findByAccurateArtNum(preOrderExcelItems.artNum().trim());
